@@ -1,13 +1,16 @@
-import buildService from 'services/build-service';
+import {BuildService} from 'services/build-service';
+import {inject} from 'aurelia-framework';
 
 function setAllBuilds(app) {
-  buildService
+  app.service
   .getAllBuilds("http://localhost:8111")
   .then(builds => {app.builds = builds;} ) 
 }
 
+@inject(BuildService)
 export class App {
-  constructor() {
+  constructor(service) {
+    this.service = service;
     setAllBuilds(this);
   }
 }

@@ -93,7 +93,6 @@ describe('the buildService getAllFailedBuilds method', () => {
             .then(returnedBuilds => expect(returnedBuilds).toEqual([]))
             .catch(error => expect(error).toBeUndefined())
             .finally(done);
-
     });
 
     it('returns the failed builds even if are no builds in some of the buildTypes', (done) => {
@@ -139,7 +138,6 @@ describe('the buildService getAllFailedBuilds method', () => {
             .then(returnedBuilds => expect(returnedBuilds).toEqual(onlyTheFailedBuilds))
             .catch(error => expect(error).toBeUndefined())
             .finally(done);
-
     });
 });
 

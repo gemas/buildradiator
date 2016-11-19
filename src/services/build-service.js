@@ -13,14 +13,8 @@ function getAllBuilds(baseUrl) {
       })
     };
     
-    let response = {};
-
-    client.fetch(url, init)
-    .then(response => response.json())
-    .then(body => {
-      response.body = body;
-    });
-    return response;
+    return client.fetch(url, init)
+    .then(response => response.json());
 }
 
 export default {getAllBuilds: getAllBuilds};

@@ -20,10 +20,16 @@ define('app',["exports", "services/build-service"], function (exports, _buildSer
     }
   }
 
+  function setAllBuilds(app) {
+    _buildService2.default.getAllBuilds("http://localhost:8111").then(function (builds) {
+      app.builds = builds;
+    });
+  }
+
   var App = exports.App = function App() {
     _classCallCheck(this, App);
 
-    this.message = _buildService2.default.getAllBuilds("http://localhost:8111");
+    setAllBuilds(this);
   };
 });
 define('environment',["exports"], function (exports) {
@@ -105,17 +111,12 @@ define('services/build-service',['exports', 'aurelia-fetch-client'], function (e
       })
     };
 
-    var response = {};
-
-    client.fetch(url, init).then(function (response) {
+    return client.fetch(url, init).then(function (response) {
       return response.json();
-    }).then(function (body) {
-      response.body = body;
     });
-    return response;
   }
 
   exports.default = { getAllBuilds: getAllBuilds };
 });
-define('text!app.html', ['module'], function(module) { module.exports = "<template>\n  <h1>${message.body.buildType[0].id}</h1>\n</template>\n"; });
+define('text!app.html', ['module'], function(module) { module.exports = "<template>\n  <h1>${builds.buildType[0].id}</h1>\n</template>\n"; });
 //# sourceMappingURL=app-bundle.js.map

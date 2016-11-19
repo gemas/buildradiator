@@ -1,9 +1,6 @@
 import {HttpClient} from 'aurelia-fetch-client';
 import {inject} from 'aurelia-framework';
 
-
-let client = new HttpClient();
-
 @inject(HttpClient)
 export class BuildService {
   constructor(client) {

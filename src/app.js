@@ -1,8 +1,8 @@
 import {BuildService} from 'services/build-service';
 import {inject} from 'aurelia-framework';
 
-function setAllBuilds(app) {
-  app.service
+function setAllBuilds(app, service) {
+  service
   .getAllFailedBuilds("http://localhost:8111")
   .then(builds => {app.builds = builds;} ) 
 }
@@ -10,7 +10,6 @@ function setAllBuilds(app) {
 @inject(BuildService)
 export class App {
   constructor(service) {
-    this.service = service;
-    setAllBuilds(this);
+    setAllBuilds(this, service);
   }
 }

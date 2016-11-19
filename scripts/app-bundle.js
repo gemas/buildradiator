@@ -14,8 +14,8 @@ define('app',['exports', 'services/build-service', 'aurelia-framework'], functio
 
   var _dec, _class;
 
-  function setAllBuilds(app) {
-    app.service.getAllFailedBuilds("http://localhost:8111").then(function (builds) {
+  function setAllBuilds(app, service) {
+    service.getAllFailedBuilds("http://localhost:8111").then(function (builds) {
       app.builds = builds;
     });
   }
@@ -23,8 +23,7 @@ define('app',['exports', 'services/build-service', 'aurelia-framework'], functio
   var App = exports.App = (_dec = (0, _aureliaFramework.inject)(_buildService.BuildService), _dec(_class = function App(service) {
     _classCallCheck(this, App);
 
-    this.service = service;
-    setAllBuilds(this);
+    setAllBuilds(this, service);
   }) || _class);
 });
 define('environment',["exports"], function (exports) {
@@ -100,8 +99,6 @@ define('services/build-service',['exports', 'aurelia-fetch-client', 'aurelia-fra
   }
 
   var _dec, _class;
-
-  var client = new _aureliaFetchClient.HttpClient();
 
   var BuildService = exports.BuildService = (_dec = (0, _aureliaFramework.inject)(_aureliaFetchClient.HttpClient), _dec(_class = function () {
     function BuildService(client) {

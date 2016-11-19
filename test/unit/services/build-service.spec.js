@@ -1,141 +1,32 @@
-import {BuildService} from '../../../src/services/build-service';
+import { BuildService } from '../../../src/services/build-service';
 
-describe('the buildService getAllFailedBuilds method', () => {
-    it('returns only the failed builds when given a response with failed an successfull builds', (done) => {
-        let fetchResponse = {
-            "buildType": [{
-                "name": "Build1",
-                "builds": {
-                    "build": [
-                        {
-                            "status": "SUCCESS",
-                            "statusText": "Tests passed: 198, ignored: 9"
-                        }
-                    ]
-                }
-            },
-            {
-                "name": "Build2",
-                "builds": {
-                    "build": [
-                        {
-                            "status": "FAILURE",
-                            "statusText": "Tests failed: 4 (1 new), passed: 31"
-                        }
-                    ]
-                }
-            },
-            {
-                "name": "Build3",
-                "builds": {
-                    "build": [
-                        {
-                            "status": "FAILURE",
-                            "statusText": "Tests failed: 8 (2 new), passed: 29"
-                        }
-                    ]
-                }
-            }
-            ]
-        };
+describe('the BuildService getAllFailedBuilds method', () => {
+    let realBuilds = ['realBuild'];
+    let fakeBuilds = ['fakeBuild'];
+    let realBuildService = {
+        getAllFailedBuilds: (baseUrl) => {
+            if (baseUrl === 'something.else.then.mock.com') {
+                return Promise.resolve(realBuilds)
+            } else {
+                throw 'GetAllFailedBuilds is not stubbed on the real buildservice for: ' + baseUrl;
+            };
+        }
+    }
+    let mockBuildService = { getAllFailedBuilds: () => Promise.resolve(fakeBuilds) };
+    let buildService = new BuildService(realBuildService, mockBuildService);
 
-        let onlyTheFailedBuilds = [
-            {
-                "name": "Build2",
-                "builds": {
-                    "build": [
-                        {
-                            "status": "FAILURE",
-                            "statusText": "Tests failed: 4 (1 new), passed: 31"
-                        }
-                    ]
-                }
-            },
-            {
-                "name": "Build3",
-                "builds": {
-                    "build": [
-                        {
-                            "status": "FAILURE",
-                            "statusText": "Tests failed: 8 (2 new), passed: 29"
-                        }
-                    ]
-                }
-            }
-        ];
-
-        let clientStub = { fetch: () => Promise.resolve({ json: () => fetchResponse }) }
-        new BuildService(clientStub)
-            .getAllFailedBuilds()
-            .then(returnedBuilds => expect(returnedBuilds).toEqual(onlyTheFailedBuilds))
+    it('returns the failed builds from the mockBuildService when baseUrl is mock', (done) => {
+        buildService
+            .getAllFailedBuilds('mock')
+            .then(returnedBuilds => expect(returnedBuilds).toBe(fakeBuilds))
             .catch(error => expect(error).toBeUndefined())
             .finally(done);
     });
 
-    it('returns an empty array when there are no failed builds', (done) => {
-        let fetchResponse = {
-            "buildType": [{
-                "name": "Build1",
-                "builds": {
-                    "build": [
-                        {
-                            "status": "SUCCESS",
-                            "statusText": "Tests passed: 198, ignored: 9"
-                        }
-                    ]
-                }
-            }]
-        };
-
-        let clientStub = { fetch: () => Promise.resolve({ json: () => fetchResponse }) }
-        new BuildService(clientStub)
-            .getAllFailedBuilds()
-            .then(returnedBuilds => expect(returnedBuilds).toEqual([]))
-            .catch(error => expect(error).toBeUndefined())
-            .finally(done);
-    });
-
-    it('returns the failed builds even if are no builds in some of the buildTypes', (done) => {
-        let fetchResponse = {
-            "buildType": [
-                {
-                    "name": "Build1",
-                    "builds": {
-                        "build": []
-                    }
-                },
-                {
-                    "name": "Build2",
-                    "builds": {
-                        "build": [
-                            {
-                                "status": "FAILURE",
-                                "statusText": "Tests failed: 8 (2 new), passed: 29"
-                            }
-                        ]
-                    }
-                }
-            ]
-        };
-
-        let onlyTheFailedBuilds = [
-            {
-                "name": "Build2",
-                "builds": {
-                    "build": [
-                        {
-                            "status": "FAILURE",
-                            "statusText": "Tests failed: 8 (2 new), passed: 29"
-                        }
-                    ]
-                }
-            }
-        ];
-
-        let clientStub = { fetch: () => Promise.resolve({ json: () => fetchResponse }) }
-        new BuildService(clientStub)
-            .getAllFailedBuilds()
-            .then(returnedBuilds => expect(returnedBuilds).toEqual(onlyTheFailedBuilds))
+    it('returns the failed builds from the realBuildService when baseUrl is not mock', (done) => {
+        buildService
+            .getAllFailedBuilds('something.else.then.mock.com')
+            .then(returnedBuilds => expect(returnedBuilds).toBe(realBuilds))
             .catch(error => expect(error).toBeUndefined())
             .finally(done);
     });

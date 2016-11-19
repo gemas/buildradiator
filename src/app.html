@@ -1,8 +1,8 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-12 bg-danger text-center">
-            <p>${builds.buildType[0].id}</p> 
+      <div class="col-12 bg-danger text-center" repeat.for="build of builds">
+            <p>${build.name}</p> 
       </div>
     </div>
   </div>

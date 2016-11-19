@@ -118,5 +118,5 @@ define('services/build-service',['exports', 'aurelia-fetch-client'], function (e
 
   exports.default = { getAllBuilds: getAllBuilds };
 });
-define('text!app.html', ['module'], function(module) { module.exports = "<template>\n  <h1>${builds.buildType[0].id}</h1>\n</template>\n"; });
+define('text!app.html', ['module'], function(module) { module.exports = "<template>\n  <div class=\"container-fluid\">\n    <div class=\"row\">\n      <div class=\"col-12 bg-danger text-center\">\n            <p>${builds.buildType[0].id}</p> \n      </div>\n    </div>\n  </div>\n</template>\n"; });
 //# sourceMappingURL=app-bundle.js.map

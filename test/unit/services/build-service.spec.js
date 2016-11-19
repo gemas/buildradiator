@@ -1,4 +1,4 @@
-import { BuildService } from '../../../src/services/build-service';
+import {BuildService} from '../../../src/services/build-service';
 
 describe('the buildService getAllFailedBuilds method', () => {
     it('returns only the failed builds when given a response with failed an successfull builds', (done) => {

@@ -20,7 +20,7 @@ describe('the buildService', () => {
                     "build": [
                         {
                             "status": "FAILURE",
-                            "statusText": "Tests passed: 198, ignored: 9"
+                            "statusText": "Tests failed: 4 (1 new), passed: 31"
                         }
                     ]
                 }
@@ -31,7 +31,7 @@ describe('the buildService', () => {
                     "build": [
                         {
                             "status": "FAILURE",
-                            "statusText": "Tests passed: 198, ignored: 9"
+                            "statusText": "Tests failed: 8 (2 new), passed: 29"
                         }
                     ]
                 }
@@ -46,7 +46,7 @@ describe('the buildService', () => {
                     "build": [
                         {
                             "status": "FAILURE",
-                            "statusText": "Tests passed: 198, ignored: 9"
+                            "statusText": "Tests failed: 4 (1 new), passed: 31"
                         }
                     ]
                 }
@@ -57,7 +57,7 @@ describe('the buildService', () => {
                     "build": [
                         {
                             "status": "FAILURE",
-                            "statusText": "Tests passed: 198, ignored: 9"
+                            "statusText": "Tests failed: 8 (2 new), passed: 29"
                         }
                     ]
                 }

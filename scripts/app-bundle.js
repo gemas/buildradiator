@@ -15,7 +15,7 @@ define('app',['exports', 'services/build-service', 'aurelia-framework'], functio
   var _dec, _class;
 
   function setAllBuilds(app) {
-    app.service.getAllBuilds("http://localhost:8111").then(function (builds) {
+    app.service.getAllFailedBuilds("http://localhost:8111").then(function (builds) {
       app.builds = builds;
     });
   }
@@ -110,7 +110,7 @@ define('services/build-service',['exports', 'aurelia-fetch-client', 'aurelia-fra
       this.client = client;
     }
 
-    BuildService.prototype.getAllBuilds = function getAllBuilds(baseUrl) {
+    BuildService.prototype.getAllFailedBuilds = function getAllFailedBuilds(baseUrl) {
       var url = baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))';
 
       var init = {
@@ -123,6 +123,12 @@ define('services/build-service',['exports', 'aurelia-fetch-client', 'aurelia-fra
 
       return this.client.fetch(url, init).then(function (response) {
         return response.json();
+      }).then(function (jsonResponse) {
+        return jsonResponse.buildType.filter(function (buildType) {
+          return buildType.builds.some(function (build) {
+            return build.status === 'FAILURE';
+          });
+        });
       });
     };
 

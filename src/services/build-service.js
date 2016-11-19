@@ -10,7 +10,7 @@ export class BuildService {
     this.client = client;
   }
 
-  getAllBuilds(baseUrl) {
+  getAllFailedBuilds(baseUrl) {
     let url =  baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))';
     
     let init =  {
@@ -22,6 +22,7 @@ export class BuildService {
     };
     
     return this.client.fetch(url, init)
-    .then(response => response.json());
+    .then(response => response.json())
+    .then(jsonResponse => jsonResponse.buildType.filter(buildType => buildType.builds.some(build => build.status === 'FAILURE')));
   }
 }

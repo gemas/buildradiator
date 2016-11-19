@@ -3,7 +3,7 @@ import {inject} from 'aurelia-framework';
 
 function setAllBuilds(app) {
   app.service
-  .getAllBuilds("http://localhost:8111")
+  .getAllFailedBuilds("http://localhost:8111")
   .then(builds => {app.builds = builds;} ) 
 }
 

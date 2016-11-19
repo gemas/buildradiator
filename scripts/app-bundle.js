@@ -1,9 +1,18 @@
-define('app',['exports'], function (exports) {
-  'use strict';
+define('app',["exports", "services/build-service"], function (exports, _buildService) {
+  "use strict";
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
+  exports.App = undefined;
+
+  var _buildService2 = _interopRequireDefault(_buildService);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -14,7 +23,7 @@ define('app',['exports'], function (exports) {
   var App = exports.App = function App() {
     _classCallCheck(this, App);
 
-    this.message = 'Hello World!';
+    this.message = _buildService2.default.getAllBuilds("http://localhost:8111");
   };
 });
 define('environment',["exports"], function (exports) {
@@ -75,5 +84,38 @@ define('resources/index',["exports"], function (exports) {
   exports.configure = configure;
   function configure(config) {}
 });
-define('text!app.html', ['module'], function(module) { module.exports = "<template>\n  <h1>${message}</h1>\n</template>\n"; });
+define('services/build-service',['exports', 'aurelia-fetch-client'], function (exports, _aureliaFetchClient) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+
+  var client = new _aureliaFetchClient.HttpClient();
+
+  function getAllBuilds(baseUrl) {
+    var url = baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))';
+
+    var init = {
+      method: 'GET',
+      headers: new Headers({
+        'Accept': 'application/json',
+        'X-Requested-With': 'Fetch'
+      })
+    };
+
+    var response = {};
+
+    client.fetch(url, init).then(function (response) {
+      return response.json();
+    }).then(function (body) {
+      response.body = body;
+    });
+    return response;
+  }
+
+  exports.default = { getAllBuilds: getAllBuilds };
+});
+define('text!app.html', ['module'], function(module) { module.exports = "<template>\n  <h1>${message.body.buildType[0].id}</h1>\n</template>\n"; });
 //# sourceMappingURL=app-bundle.js.map

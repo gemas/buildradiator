@@ -125,7 +125,7 @@ define('services/build-service',['exports', 'aurelia-fetch-client', 'aurelia-fra
         return response.json();
       }).then(function (jsonResponse) {
         return jsonResponse.buildType.filter(function (buildType) {
-          return buildType.builds.some(function (build) {
+          return buildType.builds.build.some(function (build) {
             return build.status === 'FAILURE';
           });
         });

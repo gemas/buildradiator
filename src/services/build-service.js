@@ -23,6 +23,6 @@ export class BuildService {
     
     return this.client.fetch(url, init)
     .then(response => response.json())
-    .then(jsonResponse => jsonResponse.buildType.filter(buildType => buildType.builds.some(build => build.status === 'FAILURE')));
+    .then(jsonResponse => jsonResponse.buildType.filter(buildType => buildType.builds.build.some(build => build.status === 'FAILURE')));
   }
 }

@@ -561,5 +561,136 @@ define('services/teamcity-mock',["exports"], function (exports) {
     return HttpClient;
   }();
 });
+define('services/mock-teamcity-service',[], function () {});
+define('services/mock-build-service',['exports', './fixed-array-of-failed-builds'], function (exports, _fixedArrayOfFailedBuilds) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.MockBuildService = undefined;
+
+  var _fixedArrayOfFailedBuilds2 = _interopRequireDefault(_fixedArrayOfFailedBuilds);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  var MockBuildService = exports.MockBuildService = function () {
+    function MockBuildService() {
+      _classCallCheck(this, MockBuildService);
+    }
+
+    MockBuildService.prototype.getAllFailedBuilds = function getAllFailedBuilds() {
+      return Promise.resolve(_fixedArrayOfFailedBuilds2.default);
+    };
+
+    return MockBuildService;
+  }();
+});
+define('services/fixed-array-of-failed-builds',["exports"], function (exports) {
+    "use strict";
+
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+    exports.default = [{
+        "name": "Build2",
+        "builds": {
+            "build": [{
+                "status": "FAILURE",
+                "statusText": "Tests failed: 4 (1 new), passed: 31"
+            }]
+        }
+    }, {
+        "name": "Build8",
+        "builds": {
+            "build": [{
+                "status": "FAILURE",
+                "statusText": "Tests failed: 18 (0 new), passed: 7"
+            }]
+        }
+    }, {
+        "name": "Build12",
+        "builds": {
+            "build": [{
+                "status": "FAILURE",
+                "statusText": "Tests failed: 258 (52 new), passed: 0"
+            }]
+        }
+    }, {
+        "name": "Build15",
+        "builds": {
+            "build": [{
+                "status": "FAILURE",
+                "statusText": "Tests failed: 1 (1 new), passed: 4"
+            }]
+        }
+    }, {
+        "name": "Build18",
+        "builds": {
+            "build": [{
+                "status": "FAILURE",
+                "statusText": "Tests failed: 8 (2 new), passed: 29"
+            }]
+        }
+    }];
+});
+define('fixed-array-of-failed-builds',["exports"], function (exports) {
+    "use strict";
+
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+    exports.default = [{
+        "name": "Build2",
+        "builds": {
+            "build": [{
+                "status": "FAILURE",
+                "statusText": "Tests failed: 4 (1 new), passed: 31"
+            }]
+        }
+    }, {
+        "name": "Build8",
+        "builds": {
+            "build": [{
+                "status": "FAILURE",
+                "statusText": "Tests failed: 18 (0 new), passed: 7"
+            }]
+        }
+    }, {
+        "name": "Build12",
+        "builds": {
+            "build": [{
+                "status": "FAILURE",
+                "statusText": "Tests failed: 258 (52 new), passed: 0"
+            }]
+        }
+    }, {
+        "name": "Build15",
+        "builds": {
+            "build": [{
+                "status": "FAILURE",
+                "statusText": "Tests failed: 1 (1 new), passed: 4"
+            }]
+        }
+    }, {
+        "name": "Build18",
+        "builds": {
+            "build": [{
+                "status": "FAILURE",
+                "statusText": "Tests failed: 8 (2 new), passed: 29"
+            }]
+        }
+    }];
+});
 define('text!app.html', ['module'], function(module) { module.exports = "<template>\r\n  <div class=\"container-fluid\">\r\n    <div class=\"row\">\r\n      <div class=\"col-12 bg-danger text-center\">\r\n            <p>${builds.buildType[0].id}</p> \r\n      </div>\r\n    </div>\r\n  </div>\r\n</template>\r\n"; });
 //# sourceMappingURL=app-bundle.js.map

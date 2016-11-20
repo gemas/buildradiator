@@ -1,5 +1,5 @@
-import teamCityBuildsResponse from '../../../src/services/team-city-builds-response';
-import {TeamCityHttpClientStub} from '../../../src/services/team-city-http-client-stub';
+import teamCityBuildsResponse from '../../../../src/services/teamcitystub/team-city-builds-response';
+import { TeamCityHttpClientStub } from '../../../../src/services/teamcitystub/team-city-http-client-stub';
 
 describe('the teamCityHttpClientStub fetch method', () => {
     it('returns a promise with an object with a json method that returns the teamCityBuildsResponse', (done) => { 

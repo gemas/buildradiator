@@ -1,5 +1,5 @@
 import { HttpClient } from 'aurelia-fetch-client';
-import { TeamCityHttpClientStub } from './team-city-http-client-stub';
+import { TeamCityHttpClientStub } from './teamcitystub/team-city-http-client-stub';
 import { inject } from 'aurelia-framework';
 
 @inject(HttpClient, TeamCityHttpClientStub)

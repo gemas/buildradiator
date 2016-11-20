@@ -245,5 +245,133 @@ define('services/real-build-service',['exports', 'aurelia-fetch-client', 'aureli
     return RealBuildService;
   }()) || _class);
 });
+define('services/team-city-builds-response',["exports"], function (exports) {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = {
+    "buildType": [{
+      "name": "build 1",
+      "builds": {
+        "build": [{
+          "status": "SUCCESS",
+          "statusText": "Tests passed: 198, ignored: 9"
+        }]
+      }
+    }, {
+      "name": "build 2",
+      "builds": {
+        "build": [{
+          "status": "SUCCESS",
+          "statusText": "Tests passed: 2391, ignored: 6"
+        }]
+      }
+    }, {
+      "name": "build 3",
+      "builds": {
+        "build": [{
+          "status": "SUCCESS",
+          "statusText": "Tests passed: 35"
+        }]
+      }
+    }, {
+      "name": "build 4",
+      "builds": {
+        "build": [{
+          "status": "SUCCESS",
+          "statusText": "Tests passed: 35"
+        }]
+      }
+    }, {
+      "name": "build 5",
+      "builds": {
+        "build": [{
+          "status": "FAILURE",
+          "statusText": "Tests failed: 4 (1 new), passed: 31"
+        }]
+      }
+    }, {
+      "name": "build 6",
+      "builds": {
+        "build": [{
+          "status": "FAILURE",
+          "statusText": "Tests failed: 2, passed: 33; snapshot dependency failed: Main :: Data Quality Tests :: 03. Great Brittain"
+        }]
+      }
+    }, {
+      "name": "build 7",
+      "builds": {
+        "build": [{
+          "status": "FAILURE",
+          "statusText": "Tests failed: 3, passed: 32; snapshot dependency failed: Main :: Data Quality Tests :: 04. Finland"
+        }]
+      }
+    }, {
+      "name": "build 8",
+      "builds": {
+        "build": [{
+          "status": "FAILURE",
+          "statusText": "Tests failed: 8 (1 new), passed: 27; snapshot dependency failed: Main :: Data Quality Tests :: 05. Denmark"
+        }]
+      }
+    }, {
+      "name": "build 9",
+      "builds": {
+        "build": [{
+          "status": "FAILURE",
+          "statusText": "Tests failed: 13, passed: 22; snapshot dependency failed: Main :: Data Quality Tests :: 06. Norway"
+        }]
+      }
+    }, {
+      "name": "build 10",
+      "builds": {
+        "build": [{
+          "status": "FAILURE",
+          "statusText": "Tests failed: 10, passed: 25"
+        }]
+      }
+    }]
+  };
+});
+define('services/team-city-http-client-stub',['exports', './team-city-builds-response'], function (exports, _teamCityBuildsResponse) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.TeamCityHttpClientStub = undefined;
+
+  var _teamCityBuildsResponse2 = _interopRequireDefault(_teamCityBuildsResponse);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  var TeamCityHttpClientStub = exports.TeamCityHttpClientStub = function () {
+    function TeamCityHttpClientStub() {
+      _classCallCheck(this, TeamCityHttpClientStub);
+    }
+
+    TeamCityHttpClientStub.prototype.fetch = function fetch() {
+      return Promise.resolve({ json: function json() {
+          return _teamCityBuildsResponse2.default;
+        } });
+    };
+
+    return TeamCityHttpClientStub;
+  }();
+
+  ;
+});
 define('text!app.html', ['module'], function(module) { module.exports = "<template>\r\n  <div class=\"container-fluid\">\r\n    <div class=\"row\">\r\n      <div class=\"col-12 bg-danger text-center\" repeat.for=\"build of builds\">\r\n            <p>${build.name}</p> \r\n      </div>\r\n    </div>\r\n  </div>\r\n</template>\r\n"; });
 //# sourceMappingURL=app-bundle.js.map

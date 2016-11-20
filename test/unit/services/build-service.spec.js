@@ -1,4 +1,21 @@
-import {BuildService} from '../../../src/services/build-service';
+import { BuildService } from '../../../src/services/build-service';
+
+function makeClientStub(baseUrl, fetchResponse) {
+    return {
+        fetch: function (url, init) {
+            expect(url).toEqual(baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))')
+            expect(init).toEqual({
+                method: 'GET',
+                headers: new Headers({
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'Fetch',
+                })
+            })
+            return Promise.resolve({ json: () => fetchResponse })
+        }
+    };
+}
+
 
 describe('the buildService getAllFailedBuilds method', () => {
     it('returns only the failed builds when given a response with failed an successfull builds', (done) => {
@@ -64,9 +81,8 @@ describe('the buildService getAllFailedBuilds method', () => {
             }
         ];
 
-        let clientStub = { fetch: () => Promise.resolve({ json: () => fetchResponse }) }
-        new BuildService(clientStub)
-            .getAllFailedBuilds()
+        new BuildService(makeClientStub("test.com", fetchResponse))
+            .getAllFailedBuilds("test.com")
             .then(returnedBuilds => expect(returnedBuilds).toEqual(onlyTheFailedBuilds))
             .catch(error => expect(error).toBeUndefined())
             .finally(done);
@@ -87,9 +103,8 @@ describe('the buildService getAllFailedBuilds method', () => {
             }]
         };
 
-        let clientStub = { fetch: () => Promise.resolve({ json: () => fetchResponse }) }
-        new BuildService(clientStub)
-            .getAllFailedBuilds()
+        new BuildService(makeClientStub("test.com", fetchResponse))
+            .getAllFailedBuilds("test.com")
             .then(returnedBuilds => expect(returnedBuilds).toEqual([]))
             .catch(error => expect(error).toBeUndefined())
             .finally(done);
@@ -132,9 +147,8 @@ describe('the buildService getAllFailedBuilds method', () => {
             }
         ];
 
-        let clientStub = { fetch: () => Promise.resolve({ json: () => fetchResponse }) }
-        new BuildService(clientStub)
-            .getAllFailedBuilds()
+        new BuildService(makeClientStub("test.com", fetchResponse))
+            .getAllFailedBuilds("test.com")
             .then(returnedBuilds => expect(returnedBuilds).toEqual(onlyTheFailedBuilds))
             .catch(error => expect(error).toBeUndefined())
             .finally(done);

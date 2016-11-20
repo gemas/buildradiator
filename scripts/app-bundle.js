@@ -108,6 +108,15 @@ define('main',['exports', './environment'], function (exports, _environment) {
     });
   }
 });
+define('resources/index',["exports"], function (exports) {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.configure = configure;
+  function configure(config) {}
+});
 define('services/build-service',['exports', './http-client-router', 'aurelia-framework'], function (exports, _httpClientRouter, _aureliaFramework) {
   'use strict';
 
@@ -192,15 +201,6 @@ define('services/http-client-router',['exports', 'aurelia-fetch-client', './team
 
         return HttpClientRouter;
     }()) || _class);
-});
-define('resources/index',["exports"], function (exports) {
-  "use strict";
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.configure = configure;
-  function configure(config) {}
 });
 define('services/teamcitystub/team-city-builds-response',["exports"], function (exports) {
   "use strict";

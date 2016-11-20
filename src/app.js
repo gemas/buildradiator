@@ -1,15 +1,9 @@
-import {BuildService} from 'services/build-service';
-import {inject} from 'aurelia-framework';
-
-function setAllBuilds(app, service) {
-  service
-  .getAllFailedBuilds('stub')
-  .then(builds => {app.builds = builds;} ) 
-}
-
-@inject(BuildService)
 export class App {
-  constructor(service) {
-    setAllBuilds(this, service);
+  configureRouter(config, router) {
+    this.router = router;
+    config.title = 'Teamcity radiator';
+    config.map([
+      { route: ':baseUrl', name: 'Build Overview', moduleId: 'build-overview' },
+    ]);
   }
 }

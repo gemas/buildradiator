@@ -50,6 +50,6 @@
     "karma-babel-preprocessor": "^6.0.1"
   },
   "scripts": {
-    "test": "./node_modules/.bin/karma start --browsers Firefox --single-run"
+    "test": "au test"
   }
 }

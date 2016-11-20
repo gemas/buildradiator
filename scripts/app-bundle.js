@@ -25,6 +25,40 @@ define('app',['exports'], function (exports) {
     return App;
   }();
 });
+define('build-overview',['exports', 'services/build-service', 'aurelia-framework'], function (exports, _buildService, _aureliaFramework) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.BuildOverview = undefined;
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  var _dec, _class;
+
+  var BuildOverview = exports.BuildOverview = (_dec = (0, _aureliaFramework.inject)(_buildService.BuildService), _dec(_class = function () {
+    function BuildOverview(service) {
+      _classCallCheck(this, BuildOverview);
+
+      this.service = service;
+    }
+
+    BuildOverview.prototype.activate = function activate(params) {
+      var _this = this;
+
+      this.service.getAllFailedBuilds(params.baseUrl).then(function (builds) {
+        _this.builds = builds;
+      });
+    };
+
+    return BuildOverview;
+  }()) || _class);
+});
 define('environment',["exports"], function (exports) {
   "use strict";
 
@@ -73,15 +107,6 @@ define('main',['exports', './environment'], function (exports, _environment) {
       return aurelia.setRoot();
     });
   }
-});
-define('resources/index',["exports"], function (exports) {
-  "use strict";
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.configure = configure;
-  function configure(config) {}
 });
 define('services/build-service',['exports', './http-client-router', 'aurelia-framework'], function (exports, _httpClientRouter, _aureliaFramework) {
   'use strict';
@@ -167,6 +192,15 @@ define('services/http-client-router',['exports', 'aurelia-fetch-client', './team
 
         return HttpClientRouter;
     }()) || _class);
+});
+define('resources/index',["exports"], function (exports) {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.configure = configure;
+  function configure(config) {}
 });
 define('services/teamcitystub/team-city-builds-response',["exports"], function (exports) {
   "use strict";
@@ -296,70 +330,6 @@ define('services/teamcitystub/team-city-http-client-stub',['exports', './team-ci
 
   ;
 });
-define('builds',['exports', 'services/build-service', 'aurelia-framework'], function (exports, _buildService, _aureliaFramework) {
-  'use strict';
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.Builds = undefined;
-
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  var _dec, _class;
-
-  function setAllBuilds(builds, service) {
-    service.getAllFailedBuilds('stub').then(function (builds) {
-      builds.builds = builds;
-    });
-  }
-
-  var Builds = exports.Builds = (_dec = (0, _aureliaFramework.inject)(_buildService.BuildService), _dec(_class = function Builds(service) {
-    _classCallCheck(this, Builds);
-
-    setAllBuilds(this, service);
-  }) || _class);
-});
-define('build-overview',['exports', 'services/build-service', 'aurelia-framework'], function (exports, _buildService, _aureliaFramework) {
-  'use strict';
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.BuildOverview = undefined;
-
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  var _dec, _class;
-
-  var BuildOverview = exports.BuildOverview = (_dec = (0, _aureliaFramework.inject)(_buildService.BuildService), _dec(_class = function () {
-    function BuildOverview(service) {
-      _classCallCheck(this, BuildOverview);
-
-      this.service = service;
-    }
-
-    BuildOverview.prototype.activate = function activate(params) {
-      var _this = this;
-
-      this.service.getAllFailedBuilds(params.baseUrl).then(function (builds) {
-        _this.builds = builds;
-      });
-    };
-
-    return BuildOverview;
-  }()) || _class);
-});
 define('text!app.html', ['module'], function(module) { module.exports = "<template>\r\n  <router-view></router-view>\r\n</template>"; });
-define('text!builds.html', ['module'], function(module) { module.exports = "<template>\r\n  <div class=\"container-fluid\">\r\n    <div class=\"row\">\r\n      <div class=\"col-12 bg-danger text-center\" repeat.for=\"build of builds\">\r\n            <p>${build.name} - ${build.status} - ${build.statusText}</p> \r\n      </div>\r\n    </div>\r\n  </div>\r\n</template>\r\n"; });
-define('text!overview-builds.html', ['module'], function(module) { module.exports = "<template>\r\n  <div class=\"container-fluid\">\r\n    <div class=\"row\">\r\n      <div class=\"col-12 bg-danger text-center\" repeat.for=\"build of builds\">\r\n            <p>${build.name} - ${build.status} - ${build.statusText}</p> \r\n      </div>\r\n    </div>\r\n  </div>\r\n</template>\r\n"; });
 define('text!build-overview.html', ['module'], function(module) { module.exports = "<template>\r\n  <div class=\"container-fluid\">\r\n    <div class=\"row\">\r\n      <div class=\"col-12 bg-danger text-center\" repeat.for=\"build of builds\">\r\n            <p>${build.name} - ${build.status} - ${build.statusText}</p> \r\n      </div>\r\n    </div>\r\n  </div>\r\n</template>\r\n"; });
 //# sourceMappingURL=app-bundle.js.map

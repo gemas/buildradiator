@@ -373,5 +373,36 @@ define('services/team-city-http-client-stub',['exports', './team-city-builds-res
 
   ;
 });
+define('services/http-client-router',['exports', 'aurelia-fetch-client', './team-city-http-client-stub', 'aurelia-framework'], function (exports, _aureliaFetchClient, _teamCityHttpClientStub, _aureliaFramework) {
+    'use strict';
+
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+    exports.HttpClientRouter = undefined;
+
+    function _classCallCheck(instance, Constructor) {
+        if (!(instance instanceof Constructor)) {
+            throw new TypeError("Cannot call a class as a function");
+        }
+    }
+
+    var _dec, _class;
+
+    var HttpClientRouter = exports.HttpClientRouter = (_dec = (0, _aureliaFramework.inject)(_aureliaFetchClient.HttpClient, _teamCityHttpClientStub.TeamCityHttpClientStub), _dec(_class = function () {
+        function HttpClientRouter(realHttpClient, teamCityHttpClientStub) {
+            _classCallCheck(this, HttpClientRouter);
+
+            this.realHttpClient = realHttpClient;
+            this.teamCityHttpClientStub = teamCityHttpClientStub;
+        }
+
+        HttpClientRouter.prototype.fetch = function fetch(url, init) {
+            return url === 'stub' ? this.teamCityHttpClientStub.fetch() : this.realHttpClient.fetch(url, init);
+        };
+
+        return HttpClientRouter;
+    }()) || _class);
+});
 define('text!app.html', ['module'], function(module) { module.exports = "<template>\r\n  <div class=\"container-fluid\">\r\n    <div class=\"row\">\r\n      <div class=\"col-12 bg-danger text-center\" repeat.for=\"build of builds\">\r\n            <p>${build.name}</p> \r\n      </div>\r\n    </div>\r\n  </div>\r\n</template>\r\n"; });
 //# sourceMappingURL=app-bundle.js.map

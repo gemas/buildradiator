@@ -3,7 +3,7 @@ import { BuildService } from '../../../src/services/build-service';
 function makeClientStub(baseUrl, fetchResponse) {
     return {
         fetch: function (url, init) {
-            expect(url).toEqual(baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))')
+            expect(url).toEqual('http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))')
             expect(init).toEqual({
                 method: 'GET',
                 headers: new Headers({

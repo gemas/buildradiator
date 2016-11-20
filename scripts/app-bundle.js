@@ -107,7 +107,7 @@ define('services/build-service',['exports', './http-client-router', 'aurelia-fra
     }
 
     BuildService.prototype.getAllFailedBuilds = function getAllFailedBuilds(baseUrl) {
-      var url = baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))';
+      var url = 'http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))';
 
       var init = {
         method: 'GET',

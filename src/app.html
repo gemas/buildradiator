@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-12 bg-danger text-center" repeat.for="build of builds">
-            <p>${build.name}</p> 
+            <p>${build.name} - ${build.status} - ${build.statusText}</p> 
       </div>
     </div>
   </div>

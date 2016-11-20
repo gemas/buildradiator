@@ -61,7 +61,7 @@ export default {
         "build": [
           {
             "status": "FAILURE",
-            "statusText": "Tests failed: 2, passed: 33; snapshot dependency failed: Main :: Data Quality Tests :: 03. Great Brittain"
+            "statusText": "Tests failed: 2, passed: 33; snapshot dependency failed: Main :: Data Quality Tests :: build 6"
           }
         ]
       }
@@ -72,7 +72,7 @@ export default {
         "build": [
           {
             "status": "FAILURE",
-            "statusText": "Tests failed: 3, passed: 32; snapshot dependency failed: Main :: Data Quality Tests :: 04. Finland"
+            "statusText": "Tests failed: 3, passed: 32; snapshot dependency failed: Main :: Data Quality Tests :: build 7"
           }
         ]
       }
@@ -83,7 +83,7 @@ export default {
         "build": [
           {
             "status": "FAILURE",
-            "statusText": "Tests failed: 8 (1 new), passed: 27; snapshot dependency failed: Main :: Data Quality Tests :: 05. Denmark"
+            "statusText": "Tests failed: 8 (1 new), passed: 27; snapshot dependency failed: Main :: Data Quality Tests :: build 8"
           }
         ]
       }
@@ -94,7 +94,7 @@ export default {
         "build": [
           {
             "status": "FAILURE",
-            "statusText": "Tests failed: 13, passed: 22; snapshot dependency failed: Main :: Data Quality Tests :: 06. Norway"
+            "statusText": "Tests failed: 13, passed: 22; snapshot dependency failed: Main :: Data Quality Tests :: build 9"
           }
         ]
       }

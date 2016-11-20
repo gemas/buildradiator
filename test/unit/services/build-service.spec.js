@@ -59,25 +59,13 @@ describe('the buildService getAllFailedBuilds method', () => {
         let onlyTheFailedBuilds = [
             {
                 "name": "Build2",
-                "builds": {
-                    "build": [
-                        {
-                            "status": "FAILURE",
-                            "statusText": "Tests failed: 4 (1 new), passed: 31"
-                        }
-                    ]
-                }
+                "status": "FAILURE",
+                "statusText": "Tests failed: 4 (1 new), passed: 31"
             },
             {
                 "name": "Build3",
-                "builds": {
-                    "build": [
-                        {
-                            "status": "FAILURE",
-                            "statusText": "Tests failed: 8 (2 new), passed: 29"
-                        }
-                    ]
-                }
+                "status": "FAILURE",
+                "statusText": "Tests failed: 8 (2 new), passed: 29"
             }
         ];
 
@@ -136,14 +124,8 @@ describe('the buildService getAllFailedBuilds method', () => {
         let onlyTheFailedBuilds = [
             {
                 "name": "Build2",
-                "builds": {
-                    "build": [
-                        {
-                            "status": "FAILURE",
-                            "statusText": "Tests failed: 8 (2 new), passed: 29"
-                        }
-                    ]
-                }
+                "status": "FAILURE",
+                "statusText": "Tests failed: 8 (2 new), passed: 29"
             }
         ];
 

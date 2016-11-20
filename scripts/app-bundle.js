@@ -121,10 +121,16 @@ define('services/build-service',['exports', './http-client-router', 'aurelia-fra
       return this.clientRouter.fetch(url, init).then(function (response) {
         return response.json();
       }).then(function (jsonResponse) {
-        return jsonResponse.buildType.filter(function (buildType) {
-          return buildType.builds.build.some(function (build) {
-            return build.status === 'FAILURE';
-          });
+        return jsonResponse.buildType.filter(function (buildTypeElement) {
+          return buildTypeElement.builds.build.length > 0;
+        }).map(function (buildTypeElement) {
+          return {
+            "name": buildTypeElement.name,
+            "status": buildTypeElement.builds.build[0].status,
+            "statusText": buildTypeElement.builds.build[0].statusText
+          };
+        }).filter(function (build) {
+          return build.status === 'FAILURE';
         });
       });
     };
@@ -215,7 +221,7 @@ define('services/teamcitystub/team-city-builds-response',["exports"], function (
       "builds": {
         "build": [{
           "status": "FAILURE",
-          "statusText": "Tests failed: 2, passed: 33; snapshot dependency failed: Main :: Data Quality Tests :: 03. Great Brittain"
+          "statusText": "Tests failed: 2, passed: 33; snapshot dependency failed: Main :: Data Quality Tests :: build 6"
         }]
       }
     }, {
@@ -223,7 +229,7 @@ define('services/teamcitystub/team-city-builds-response',["exports"], function (
       "builds": {
         "build": [{
           "status": "FAILURE",
-          "statusText": "Tests failed: 3, passed: 32; snapshot dependency failed: Main :: Data Quality Tests :: 04. Finland"
+          "statusText": "Tests failed: 3, passed: 32; snapshot dependency failed: Main :: Data Quality Tests :: build 7"
         }]
       }
     }, {
@@ -231,7 +237,7 @@ define('services/teamcitystub/team-city-builds-response',["exports"], function (
       "builds": {
         "build": [{
           "status": "FAILURE",
-          "statusText": "Tests failed: 8 (1 new), passed: 27; snapshot dependency failed: Main :: Data Quality Tests :: 05. Denmark"
+          "statusText": "Tests failed: 8 (1 new), passed: 27; snapshot dependency failed: Main :: Data Quality Tests :: build 8"
         }]
       }
     }, {
@@ -239,7 +245,7 @@ define('services/teamcitystub/team-city-builds-response',["exports"], function (
       "builds": {
         "build": [{
           "status": "FAILURE",
-          "statusText": "Tests failed: 13, passed: 22; snapshot dependency failed: Main :: Data Quality Tests :: 06. Norway"
+          "statusText": "Tests failed: 13, passed: 22; snapshot dependency failed: Main :: Data Quality Tests :: build 9"
         }]
       }
     }, {
@@ -291,5 +297,5 @@ define('services/teamcitystub/team-city-http-client-stub',['exports', './team-ci
 
   ;
 });
-define('text!app.html', ['module'], function(module) { module.exports = "<template>\r\n  <div class=\"container-fluid\">\r\n    <div class=\"row\">\r\n      <div class=\"col-12 bg-danger text-center\" repeat.for=\"build of builds\">\r\n            <p>${build.name}</p> \r\n      </div>\r\n    </div>\r\n  </div>\r\n</template>\r\n"; });
+define('text!app.html', ['module'], function(module) { module.exports = "<template>\r\n  <div class=\"container-fluid\">\r\n    <div class=\"row\">\r\n      <div class=\"col-12 bg-danger text-center\" repeat.for=\"build of builds\">\r\n            <p>${build.name} - ${build.status} - ${build.statusText}</p> \r\n      </div>\r\n    </div>\r\n  </div>\r\n</template>\r\n"; });
 //# sourceMappingURL=app-bundle.js.map

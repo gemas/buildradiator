@@ -10,6 +10,6 @@ export class HttpClientRouter {
     }
 
     fetch(url, init) {
-        return url === 'stub' ? this.teamCityHttpClientStub.fetch() : this.realHttpClient.fetch(url, init);
+        return url.includes('stub') ? this.teamCityHttpClientStub.fetch() : this.realHttpClient.fetch(url, init);
     }
 }

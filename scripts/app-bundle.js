@@ -15,7 +15,7 @@ define('app',['exports', 'services/build-service', 'aurelia-framework'], functio
   var _dec, _class;
 
   function setAllBuilds(app, service) {
-    service.getAllFailedBuilds("mock").then(function (builds) {
+    service.getAllFailedBuilds('stub').then(function (builds) {
       app.builds = builds;
     });
   }
@@ -84,7 +84,7 @@ define('resources/index',["exports"], function (exports) {
   exports.configure = configure;
   function configure(config) {}
 });
-define('services/build-service',['exports', './real-build-service', './mock-build-service', 'aurelia-framework'], function (exports, _realBuildService, _mockBuildService, _aureliaFramework) {
+define('services/build-service',['exports', './http-client-router', 'aurelia-framework'], function (exports, _httpClientRouter, _aureliaFramework) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -100,16 +100,33 @@ define('services/build-service',['exports', './real-build-service', './mock-buil
 
   var _dec, _class;
 
-  var BuildService = exports.BuildService = (_dec = (0, _aureliaFramework.inject)(_realBuildService.RealBuildService, _mockBuildService.MockBuildService), _dec(_class = function () {
-    function BuildService(realBuildService, mockBuildService) {
+  var BuildService = exports.BuildService = (_dec = (0, _aureliaFramework.inject)(_httpClientRouter.HttpClientRouter), _dec(_class = function () {
+    function BuildService(clientRouter) {
       _classCallCheck(this, BuildService);
 
-      this.realBuildService = realBuildService;
-      this.mockBuildService = mockBuildService;
+      this.clientRouter = clientRouter;
     }
 
     BuildService.prototype.getAllFailedBuilds = function getAllFailedBuilds(baseUrl) {
-      return baseUrl === 'mock' ? this.mockBuildService.getAllFailedBuilds() : this.realBuildService.getAllFailedBuilds(baseUrl);
+      var url = baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))';
+
+      var init = {
+        method: 'GET',
+        headers: new Headers({
+          'Accept': 'application/json',
+          'X-Requested-With': 'Fetch'
+        })
+      };
+
+      return this.clientRouter.fetch(url, init).then(function (response) {
+        return response.json();
+      }).then(function (jsonResponse) {
+        return jsonResponse.buildType.filter(function (buildType) {
+          return buildType.builds.build.some(function (build) {
+            return build.status === 'FAILURE';
+          });
+        });
+      });
     };
 
     return BuildService;
@@ -197,7 +214,7 @@ define('services/mock-build-service',['exports', './fixed-array-of-failed-builds
     return MockBuildService;
   }();
 });
-define('services/real-build-service',['exports', 'aurelia-fetch-client', 'aurelia-framework'], function (exports, _aureliaFetchClient, _aureliaFramework) {
+define('services/real-build-service',['exports', './http-client-router', 'aurelia-framework'], function (exports, _httpClientRouter, _aureliaFramework) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -213,11 +230,11 @@ define('services/real-build-service',['exports', 'aurelia-fetch-client', 'aureli
 
   var _dec, _class;
 
-  var RealBuildService = exports.RealBuildService = (_dec = (0, _aureliaFramework.inject)(_aureliaFetchClient.HttpClient), _dec(_class = function () {
-    function RealBuildService(client) {
+  var RealBuildService = exports.RealBuildService = (_dec = (0, _aureliaFramework.inject)(_httpClientRouter.HttpClientRouter), _dec(_class = function () {
+    function RealBuildService(clientRouter) {
       _classCallCheck(this, RealBuildService);
 
-      this.client = client;
+      this.clientRouter = clientRouter;
     }
 
     RealBuildService.prototype.getAllFailedBuilds = function getAllFailedBuilds(baseUrl) {
@@ -231,7 +248,7 @@ define('services/real-build-service',['exports', 'aurelia-fetch-client', 'aureli
         })
       };
 
-      return this.client.fetch(url, init).then(function (response) {
+      return this.clientRouter.fetch(url, init).then(function (response) {
         return response.json();
       }).then(function (jsonResponse) {
         return jsonResponse.buildType.filter(function (buildType) {
@@ -398,7 +415,7 @@ define('services/http-client-router',['exports', 'aurelia-fetch-client', './team
         }
 
         HttpClientRouter.prototype.fetch = function fetch(url, init) {
-            return url === 'stub' ? this.teamCityHttpClientStub.fetch() : this.realHttpClient.fetch(url, init);
+            return url.includes('stub') ? this.teamCityHttpClientStub.fetch() : this.realHttpClient.fetch(url, init);
         };
 
         return HttpClientRouter;

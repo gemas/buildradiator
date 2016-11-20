@@ -5,7 +5,7 @@ describe('the httpClientRouter fetch method', () => {
     let fakeResponse = ['fakeResponse'];
     let realHttpClient = {
         fetch: (baseUrl, init) => {
-            if (baseUrl === 'something.else.then.stub.com' && init === 'initobject') {
+            if (baseUrl === 'something.else.com' && init === 'initobject') {
                 return Promise.resolve(realResponse)
             } else {
                 throw 'GetAllFailedBuilds is not stubbed on the real buildservice for: ' + baseUrl + ' and init parameter: ' + init;
@@ -15,17 +15,17 @@ describe('the httpClientRouter fetch method', () => {
     let stubHttpClient = { fetch: () => Promise.resolve(fakeResponse) };
     let httpCLientRouter = new HttpClientRouter(realHttpClient, stubHttpClient);
 
-    it('returns the failed builds from the mockBuildService when baseUrl is stub', (done) => {
+    it('returns the failed builds from the mockBuildService when baseUrl contains stub', (done) => {
         httpCLientRouter
-            .fetch('stub')
+            .fetch('url/stub/blabla')
             .then(returnedResponse => expect(returnedResponse).toBe(fakeResponse))
             .catch(error => expect(error).toBeUndefined())
             .finally(done);
     });
 
-    it('returns the failed builds from the realBuildService when baseUrl is not stub', (done) => {
+    it('returns the failed builds from the realBuildService when baseUrl contains not stub', (done) => {
         httpCLientRouter
-            .fetch('something.else.then.stub.com', 'initobject')
+            .fetch('something.else.com', 'initobject')
             .then(returnedResponse => expect(returnedResponse).toBe(realResponse))
             .catch(error => expect(error).toBeUndefined())
             .finally(done);

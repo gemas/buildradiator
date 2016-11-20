@@ -1,15 +1,25 @@
-import {RealBuildService} from './real-build-service';
-import {MockBuildService} from './mock-build-service';
+import {HttpClientRouter} from './http-client-router';
 import {inject} from 'aurelia-framework';
 
-@inject(RealBuildService, MockBuildService)
+@inject(HttpClientRouter)
 export class BuildService {
-  constructor(realBuildService, mockBuildService) {
-    this.realBuildService = realBuildService;
-    this.mockBuildService = mockBuildService;
+  constructor(clientRouter) {
+    this.clientRouter = clientRouter;
   }
 
   getAllFailedBuilds(baseUrl) {
-    return baseUrl === 'mock' ? this.mockBuildService.getAllFailedBuilds() : this.realBuildService.getAllFailedBuilds(baseUrl);
+    let url =  baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))';
+    
+    let init =  {
+      method: 'GET',
+      headers: new Headers({
+        'Accept': 'application/json',
+        'X-Requested-With': 'Fetch',
+      })
+    };
+    
+    return this.clientRouter.fetch(url, init)
+    .then(response => response.json())
+    .then(jsonResponse => jsonResponse.buildType.filter(buildType => buildType.builds.build.some(build => build.status === 'FAILURE')));
   }
 }

@@ -3,7 +3,7 @@ import {inject} from 'aurelia-framework';
 
 function setAllBuilds(app, service) {
   service
-  .getAllFailedBuilds("mock")
+  .getAllFailedBuilds('stub')
   .then(builds => {app.builds = builds;} ) 
 }
 

@@ -1,9 +1,12 @@
 <template>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-12 bg-danger text-center" repeat.for="build of builds">
-            <p>${build.name} - ${build.status} - ${build.statusText}</p> 
-      </div>
-    </div>
-  </div>
+	<div class="container">
+		<div class="row">
+			<div class="col-12 text-center" repeat.for="build of builds">
+				<div class="alert alert-danger" role="alert">
+					<h1>${build.name}</h1>
+					<p>${build.statusText}</p>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>

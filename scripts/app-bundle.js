@@ -330,6 +330,7 @@ define('services/teamcitystub/team-city-http-client-stub',['exports', './team-ci
 
   ;
 });
-define('text!app.html', ['module'], function(module) { module.exports = "<template>\r\n  <router-view></router-view>\r\n</template>"; });
-define('text!build-overview.html', ['module'], function(module) { module.exports = "<template>\r\n  <div class=\"container-fluid\">\r\n    <div class=\"row\">\r\n      <div class=\"col-12 bg-danger text-center\" repeat.for=\"build of builds\">\r\n            <p>${build.name} - ${build.status} - ${build.statusText}</p> \r\n      </div>\r\n    </div>\r\n  </div>\r\n</template>\r\n"; });
+define('text!app.html', ['module'], function(module) { module.exports = "<template>\r\n  <require from=\"css/custom.css\"></require>\r\n  <router-view></router-view>\r\n</template>"; });
+define('text!css/custom.css', ['module'], function(module) { module.exports = "\r\n\r\n"; });
+define('text!build-overview.html', ['module'], function(module) { module.exports = "<template>\r\n\t<div class=\"container\">\r\n\t\t<div class=\"row\">\r\n\t\t\t<div class=\"col-12 text-center\" repeat.for=\"build of builds\">\r\n\t\t\t\t<div class=\"alert alert-danger\" role=\"alert\">\r\n\t\t\t\t\t<h1>${build.name}</h1>\r\n\t\t\t\t\t<p>${build.statusText}</p>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</template>"; });
 //# sourceMappingURL=app-bundle.js.map

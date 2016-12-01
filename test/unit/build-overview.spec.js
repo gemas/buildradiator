@@ -23,11 +23,11 @@ describe('the build overview', () => {
     buildOverview.activate({ baseUrl: "baseUrl" });
     putFunctionOnJobQueue(() => expect(buildOverview.builds).toEqual(['a1', 'b1', 'c1']));
 
-    jasmine.clock().tick(5000);
+    jasmine.clock().tick(30000);
 
     putFunctionOnJobQueue(() => expect(buildOverview.builds).toEqual(['a2', 'b2', 'c2']))
 
-    jasmine.clock().tick(4999);
+    jasmine.clock().tick(29999);
 
     putFunctionOnJobQueue(() => expect(buildOverview.builds).toEqual(['a2', 'b2', 'c2']))
 

@@ -15,6 +15,6 @@ export class BuildOverview {
 
   activate(params) {
     setAllFailedBuilds.bind(this)(params);
-    setInterval(setAllFailedBuilds.bind(this), 5000, params);
+    setInterval(setAllFailedBuilds.bind(this), 30000, params);
   }
 }

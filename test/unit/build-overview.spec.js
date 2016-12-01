@@ -4,20 +4,28 @@ function putFunctionOnJobQueue(expectFunction) {
   Promise.resolve().then(expectFunction);
 }
 
+function makeBuildServiceStub() {
+  let count = 0;
+
+  function getAllFailedBuilds(baseUrl) {
+    count++;
+    expect(baseUrl).toEqual("baseUrl");
+    return Promise.resolve(['a' + count, 'b' + count, 'c' + count]);
+  }
+  return { getAllFailedBuilds: getAllFailedBuilds };
+}
+
 describe('the build overview', () => {
-  it('should ask and save the failedbuilds from the buildservice using the baseUrl from the parameters every 5 seconds', (done) => {
-    function makeBuildServiceStub() {
-      let count = 0;
-
-      function getAllFailedBuilds(baseUrl) {
-        count++;
-        expect(baseUrl).toEqual("baseUrl");
-        return Promise.resolve(['a' + count, 'b' + count, 'c' + count])
-      }
-      return { getAllFailedBuilds: getAllFailedBuilds }
-    }
-
+  beforeEach(() => {
     jasmine.clock().install();
+  });
+
+  afterEach(() => {
+    jasmine.clock().uninstall();
+  });
+
+  it('should ask and save the failedbuilds from the buildservice using the baseUrl from the parameters every 5 seconds', (done) => {
+
     let buildOverview = new BuildOverview(makeBuildServiceStub());
 
     buildOverview.activate({ baseUrl: "baseUrl" });
@@ -36,7 +44,6 @@ describe('the build overview', () => {
     putFunctionOnJobQueue(() => expect(buildOverview.builds).toEqual(['a3', 'b3', 'c3']))
 
     putFunctionOnJobQueue(done);
-    jasmine.clock().uninstall();
-  })
+  });
 });
 

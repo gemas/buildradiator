@@ -41,6 +41,14 @@ define('build-overview',['exports', 'services/build-service', 'aurelia-framework
 
   var _dec, _class;
 
+  function setAllFailedBuilds(params) {
+    var _this = this;
+
+    this.service.getAllFailedBuilds(params.baseUrl).then(function (builds) {
+      _this.builds = builds;
+    });
+  }
+
   var BuildOverview = exports.BuildOverview = (_dec = (0, _aureliaFramework.inject)(_buildService.BuildService), _dec(_class = function () {
     function BuildOverview(service) {
       _classCallCheck(this, BuildOverview);
@@ -49,11 +57,8 @@ define('build-overview',['exports', 'services/build-service', 'aurelia-framework
     }
 
     BuildOverview.prototype.activate = function activate(params) {
-      var _this = this;
-
-      this.service.getAllFailedBuilds(params.baseUrl).then(function (builds) {
-        _this.builds = builds;
-      });
+      setAllFailedBuilds.bind(this)(params);
+      setInterval(setAllFailedBuilds.bind(this), 5000, params);
     };
 
     return BuildOverview;

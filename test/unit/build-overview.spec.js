@@ -33,15 +33,15 @@ describe('the build overview', () => {
 
     jasmine.clock().tick(30000);
 
-    putFunctionOnJobQueue(() => expect(buildOverview.builds).toEqual(['a2', 'b2', 'c2']))
+    putFunctionOnJobQueue(() => expect(buildOverview.builds).toEqual(['a2', 'b2', 'c2']));
 
     jasmine.clock().tick(29999);
 
-    putFunctionOnJobQueue(() => expect(buildOverview.builds).toEqual(['a2', 'b2', 'c2']))
+    putFunctionOnJobQueue(() => expect(buildOverview.builds).toEqual(['a2', 'b2', 'c2']));
 
     jasmine.clock().tick(1);
 
-    putFunctionOnJobQueue(() => expect(buildOverview.builds).toEqual(['a3', 'b3', 'c3']))
+    putFunctionOnJobQueue(() => expect(buildOverview.builds).toEqual(['a3', 'b3', 'c3']));
 
     putFunctionOnJobQueue(done);
   });

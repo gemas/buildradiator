@@ -355,7 +355,7 @@ define('services/teamcitystub/team-city-latest-builds-response',["exports"], fun
       "builds": {
         "build": [{
           "number": "3.1.70.17327",
-          "status": "SUCCESS",
+          "status": "FAILURE",
           "statusText": "Tests passed: 198, ignored: 9"
         }]
       }
@@ -418,7 +418,7 @@ define('services/teamcitystub/team-city-latest-builds-response',["exports"], fun
       "builds": {
         "build": [{
           "number": "3.5.87.17287",
-          "status": "FAILURE",
+          "status": "SUCCESS",
           "statusText": "Tests failed: 8 (1 new), passed: 27; snapshot dependency failed: Main :: Data Quality Tests :: build 8"
         }]
       }
@@ -490,6 +490,6 @@ define('services/teamcitystub/team-city-latest-running-builds-response',["export
   };
 });
 define('text!app.html', ['module'], function(module) { module.exports = "<template>\r\n  <require from=\"css/custom.css\"></require>\r\n  <router-view></router-view>\r\n</template>"; });
-define('text!css/custom.css', ['module'], function(module) { module.exports = "\r\n\r\n"; });
-define('text!build-overview.html', ['module'], function(module) { module.exports = "<template>\r\n\t<div class=\"container\">\r\n\t\t<div class=\"row\">\r\n\t\t\t<div class=\"col-md-4 text-center\" repeat.for=\"build of builds\">\r\n\t\t\t\t<div class=\"alert alert-danger\" role=\"alert\">\r\n\t\t\t\t\t<h1>${build.name}</h1>\r\n\t\t\t\t\t<p>${build.statusText}</p>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</template>"; });
+define('text!css/custom.css', ['module'], function(module) { module.exports = "@keyframes fadeIn { \r\n  from { opacity: 0; } \r\n}\r\n\r\n.running {\r\n    animation: fadeIn 1s infinite alternate;\r\n}"; });
+define('text!build-overview.html', ['module'], function(module) { module.exports = "<template>\r\n\t<div class=\"container\">\r\n\t\t<div class=\"row\">\r\n\t\t\t<div class=\"col-md-4 text-center\" repeat.for=\"build of builds\">\r\n\t\t\t\t<div class=\"alert alert-danger  ${build.newBuildRunning ? 'running' : ''}\" role=\"alert\">\r\n\t\t\t\t\t<h1>${build.name}</h1>\r\n\t\t\t\t\t<p>${build.statusText}</p>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</template>"; });
 //# sourceMappingURL=app-bundle.js.map

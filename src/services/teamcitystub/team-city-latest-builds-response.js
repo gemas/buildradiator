@@ -6,7 +6,7 @@ export default {
         "build": [
           {
             "number": "3.1.70.17327",
-            "status": "SUCCESS",
+            "status": "FAILURE",
             "statusText": "Tests passed: 198, ignored: 9"
           }
         ]
@@ -90,7 +90,7 @@ export default {
         "build": [
           {
             "number": "3.5.87.17287",
-            "status": "FAILURE",
+            "status": "SUCCESS",
             "statusText": "Tests failed: 8 (1 new), passed: 27; snapshot dependency failed: Main :: Data Quality Tests :: build 8"
           }
         ]

@@ -25,7 +25,7 @@ define('app',['exports'], function (exports) {
     return App;
   }();
 });
-define('build-overview',['exports', 'services/build-service', 'aurelia-framework'], function (exports, _buildService, _aureliaFramework) {
+define('build-overview',['exports', 'services/build-factory', 'aurelia-framework'], function (exports, _buildFactory, _aureliaFramework) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -41,22 +41,22 @@ define('build-overview',['exports', 'services/build-service', 'aurelia-framework
 
   var _dec, _class;
 
-  function setAllFailedBuilds(params) {
-    var _this = this;
-
-    this.service.getAllFailedBuilds(params.baseUrl).then(function (builds) {
-      _this.builds = builds;
-    });
-  }
-
-  var BuildOverview = exports.BuildOverview = (_dec = (0, _aureliaFramework.inject)(_buildService.BuildService), _dec(_class = function () {
-    function BuildOverview(service) {
+  var BuildOverview = exports.BuildOverview = (_dec = (0, _aureliaFramework.inject)(_buildFactory.BuildFactory), _dec(_class = function () {
+    function BuildOverview(factory) {
       _classCallCheck(this, BuildOverview);
 
-      this.service = service;
+      this.factory = factory;
     }
 
     BuildOverview.prototype.activate = function activate(params) {
+      function setAllFailedBuilds(params) {
+        var _this = this;
+
+        this.factory.constructFailedBuildObjects(params.baseUrl).then(function (builds) {
+          _this.builds = builds;
+        });
+      }
+
       setAllFailedBuilds.bind(this)(params);
       setInterval(setAllFailedBuilds.bind(this), 30000, params);
     };

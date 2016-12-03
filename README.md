@@ -1,4 +1,4 @@
-# teamcity-radiator
+# buildradiator
 ## Getting started
 * Install aurelia: http://aurelia.io/hub.html#/doc/article/aurelia/framework/latest/the-aurelia-cli/1
 * Do a git clone

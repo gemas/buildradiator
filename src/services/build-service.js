@@ -26,6 +26,7 @@ export class BuildService {
           .map(buildTypeElement => {
             return {
               "name": buildTypeElement.name,
+              "buildNumber": buildTypeElement.builds.build[0].number,
               "status": buildTypeElement.builds.build[0].status,
               "statusText": buildTypeElement.builds.build[0].statusText
             }

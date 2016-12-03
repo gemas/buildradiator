@@ -113,6 +113,90 @@ define('main',['exports', './environment'], function (exports, _environment) {
     });
   }
 });
+define('resources/index',["exports"], function (exports) {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.configure = configure;
+  function configure(config) {}
+});
+define('services/build-factory',['exports', './build-service', 'aurelia-framework'], function (exports, _buildService, _aureliaFramework) {
+    'use strict';
+
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+    exports.BuildFactory = undefined;
+
+    function _classCallCheck(instance, Constructor) {
+        if (!(instance instanceof Constructor)) {
+            throw new TypeError("Cannot call a class as a function");
+        }
+    }
+
+    var _dec, _class;
+
+    var BuildFactory = exports.BuildFactory = (_dec = (0, _aureliaFramework.inject)(_buildService.BuildService), _dec(_class = function () {
+        function BuildFactory(buildService) {
+            _classCallCheck(this, BuildFactory);
+
+            this.buildService = buildService;
+        }
+
+        BuildFactory.prototype.constructFailedBuildObjects = function constructFailedBuildObjects(baseUrl) {
+            return Promise.all([this.buildService.getAllFailedBuilds(baseUrl), this.buildService.getAllLatestRunningBuilds(baseUrl)]).then(function (buildArrays) {
+
+                var failedBuilds = buildArrays[0];
+                var latestRunningBuilds = buildArrays[1];
+
+                function validateFailedBuilds() {
+                    if (duplicateNamesInBuildArray(failedBuilds)) {
+                        throw new Error("There are failed builds with the same name. We didn't foresee this to happen. Sorry. Please contact us");
+                    }
+                }
+
+                function validateRunningBuilds() {
+                    if (duplicateNamesInBuildArray(latestRunningBuilds)) {
+                        throw new Error("There are running builds with the same name. We didn't foresee this to happen. Sorry. Please contact us");
+                    }
+                }
+
+                function duplicateNamesInBuildArray(buildArray) {
+                    return buildArray.map(function (failedBuild1) {
+                        return buildArray.filter(function (failedBuild2) {
+                            return failedBuild1.name === failedBuild2.name;
+                        }).length;
+                    }).filter(function (occurancesOfName) {
+                        return occurancesOfName > 1;
+                    }).length > 1;
+                }
+
+                validateFailedBuilds();
+                validateRunningBuilds();
+                return failedBuilds.map(function (failedBuild) {
+
+                    failedBuild.newBuildRunning = isNewBuildRunning();
+                    return failedBuild;
+
+                    function isNewBuildRunning() {
+
+                        function getCorrespondingBuild() {
+                            return latestRunningBuilds.filter(function (latestRunningBuild) {
+                                return latestRunningBuild.name === failedBuild.name;
+                            })[0];
+                        }
+
+                        return getCorrespondingBuild() !== undefined && getCorrespondingBuild().buildNumber > failedBuild.buildNumber;
+                    }
+                });
+            });
+        };
+
+        return BuildFactory;
+    }()) || _class);
+});
 define('services/build-service',['exports', './http-client-router', 'aurelia-framework'], function (exports, _httpClientRouter, _aureliaFramework) {
   'use strict';
 
@@ -210,15 +294,6 @@ define('services/http-client-router',['exports', 'aurelia-fetch-client', './team
 
         return HttpClientRouter;
     }()) || _class);
-});
-define('resources/index',["exports"], function (exports) {
-  "use strict";
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.configure = configure;
-  function configure(config) {}
 });
 define('services/teamcitystub/team-city-http-client-stub',['exports', './team-city-latest-builds-response', './team-city-latest-running-builds-response'], function (exports, _teamCityLatestBuildsResponse, _teamCityLatestRunningBuildsResponse) {
   'use strict';

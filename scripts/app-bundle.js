@@ -138,6 +138,31 @@ define('services/build-service',['exports', './http-client-router', 'aurelia-fra
 
   var _dec, _class;
 
+  function fetchBuildArray(clientRouter, url) {
+    var init = {
+      method: 'GET',
+      headers: new Headers({
+        'Accept': 'application/json',
+        'X-Requested-With': 'Fetch'
+      })
+    };
+
+    return clientRouter.fetch(url, init).then(function (response) {
+      return response.json();
+    }).then(function (jsonResponse) {
+      return jsonResponse.buildType.filter(function (buildTypeElement) {
+        return buildTypeElement.builds.build.length > 0;
+      }).map(function (buildTypeElement) {
+        return {
+          "name": buildTypeElement.name,
+          "buildNumber": buildTypeElement.builds.build[0].number,
+          "status": buildTypeElement.builds.build[0].status,
+          "statusText": buildTypeElement.builds.build[0].statusText
+        };
+      });
+    });
+  }
+
   var BuildService = exports.BuildService = (_dec = (0, _aureliaFramework.inject)(_httpClientRouter.HttpClientRouter), _dec(_class = function () {
     function BuildService(clientRouter) {
       _classCallCheck(this, BuildService);
@@ -148,30 +173,17 @@ define('services/build-service',['exports', './http-client-router', 'aurelia-fra
     BuildService.prototype.getAllFailedBuilds = function getAllFailedBuilds(baseUrl) {
       var url = 'http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))';
 
-      var init = {
-        method: 'GET',
-        headers: new Headers({
-          'Accept': 'application/json',
-          'X-Requested-With': 'Fetch'
-        })
-      };
-
-      return this.clientRouter.fetch(url, init).then(function (response) {
-        return response.json();
-      }).then(function (jsonResponse) {
-        return jsonResponse.buildType.filter(function (buildTypeElement) {
-          return buildTypeElement.builds.build.length > 0;
-        }).map(function (buildTypeElement) {
-          return {
-            "name": buildTypeElement.name,
-            "buildNumber": buildTypeElement.builds.build[0].number,
-            "status": buildTypeElement.builds.build[0].status,
-            "statusText": buildTypeElement.builds.build[0].statusText
-          };
-        }).filter(function (build) {
+      return fetchBuildArray(this.clientRouter, url).then(function (buildArray) {
+        return buildArray.filter(function (build) {
           return build.status === 'FAILURE';
         });
       });
+    };
+
+    BuildService.prototype.getAllLatestRunningBuilds = function getAllLatestRunningBuilds(baseUrl) {
+      var url = 'http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:true,canceled:false,count:1),build(number,status,statusText)))';
+
+      return fetchBuildArray(this.clientRouter, url);
     };
 
     return BuildService;
@@ -219,6 +231,7 @@ define('services/teamcitystub/team-city-builds-response',["exports"], function (
       "name": "build 1",
       "builds": {
         "build": [{
+          "number": "3.1.70.17327",
           "status": "SUCCESS",
           "statusText": "Tests passed: 198, ignored: 9"
         }]
@@ -227,6 +240,7 @@ define('services/teamcitystub/team-city-builds-response',["exports"], function (
       "name": "build 2",
       "builds": {
         "build": [{
+          "number": "3.1.6965.17318",
           "status": "SUCCESS",
           "statusText": "Tests passed: 2391, ignored: 6"
         }]
@@ -235,6 +249,7 @@ define('services/teamcitystub/team-city-builds-response',["exports"], function (
       "name": "build 3",
       "builds": {
         "build": [{
+          "number": "123",
           "status": "SUCCESS",
           "statusText": "Tests passed: 35"
         }]
@@ -243,6 +258,7 @@ define('services/teamcitystub/team-city-builds-response',["exports"], function (
       "name": "build 4",
       "builds": {
         "build": [{
+          "number": "3.1.54.17253",
           "status": "SUCCESS",
           "statusText": "Tests passed: 35"
         }]
@@ -251,6 +267,7 @@ define('services/teamcitystub/team-city-builds-response',["exports"], function (
       "name": "build 5",
       "builds": {
         "build": [{
+          "number": "3.1.54.17287",
           "status": "FAILURE",
           "statusText": "Tests failed: 4 (1 new), passed: 31"
         }]
@@ -259,6 +276,7 @@ define('services/teamcitystub/team-city-builds-response',["exports"], function (
       "name": "build 6",
       "builds": {
         "build": [{
+          "number": "1.2.54.17287",
           "status": "FAILURE",
           "statusText": "Tests failed: 2, passed: 33; snapshot dependency failed: Main :: Data Quality Tests :: build 6"
         }]
@@ -267,6 +285,7 @@ define('services/teamcitystub/team-city-builds-response',["exports"], function (
       "name": "build 7",
       "builds": {
         "build": [{
+          "number": "3.5.54.17287",
           "status": "FAILURE",
           "statusText": "Tests failed: 3, passed: 32; snapshot dependency failed: Main :: Data Quality Tests :: build 7"
         }]
@@ -275,6 +294,7 @@ define('services/teamcitystub/team-city-builds-response',["exports"], function (
       "name": "build 8",
       "builds": {
         "build": [{
+          "number": "3.5.87.17287",
           "status": "FAILURE",
           "statusText": "Tests failed: 8 (1 new), passed: 27; snapshot dependency failed: Main :: Data Quality Tests :: build 8"
         }]
@@ -283,6 +303,7 @@ define('services/teamcitystub/team-city-builds-response',["exports"], function (
       "name": "build 9",
       "builds": {
         "build": [{
+          "number": "3.5.99.17287",
           "status": "FAILURE",
           "statusText": "Tests failed: 13, passed: 22; snapshot dependency failed: Main :: Data Quality Tests :: build 9"
         }]
@@ -291,6 +312,7 @@ define('services/teamcitystub/team-city-builds-response',["exports"], function (
       "name": "build 10",
       "builds": {
         "build": [{
+          "number": "3.5.99.21",
           "status": "FAILURE",
           "statusText": "Tests failed: 10, passed: 25"
         }]

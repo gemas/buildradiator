@@ -5,6 +5,7 @@
 * Go in the cloned folder
 * Execute `npm install`
 * Execute `au run --watch`
-* Open localhost:9000/#/stub (you can replace stub with the url of your TeamCity server)
+* Open http://localhost:9000/#/stub (you can replace stub with the url of your TeamCity server)
+
 ## Url Travis-CI
 https://travis-ci.org/robisrob/buildradiator

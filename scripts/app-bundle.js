@@ -151,6 +151,26 @@ define('services/build-factory',['exports', './build-service', 'aurelia-framewor
                 var failedBuilds = buildArrays[0];
                 var latestRunningBuilds = buildArrays[1];
 
+                validateFailedBuilds();
+                validateRunningBuilds();
+
+                return failedBuilds.map(function (failedBuild) {
+
+                    failedBuild.newBuildRunning = isNewBuildRunning();
+                    return failedBuild;
+
+                    function isNewBuildRunning() {
+
+                        function getCorrespondingBuild() {
+                            return latestRunningBuilds.filter(function (latestRunningBuild) {
+                                return latestRunningBuild.name === failedBuild.name;
+                            })[0];
+                        }
+
+                        return getCorrespondingBuild() !== undefined && getCorrespondingBuild().buildNumber > failedBuild.buildNumber;
+                    }
+                });
+
                 function validateFailedBuilds() {
                     if (duplicateNamesInBuildArray(failedBuilds)) {
                         throw new Error("There are failed builds with the same name. We didn't foresee this to happen. Sorry. Please contact us");
@@ -172,25 +192,6 @@ define('services/build-factory',['exports', './build-service', 'aurelia-framewor
                         return occurancesOfName > 1;
                     }).length > 1;
                 }
-
-                validateFailedBuilds();
-                validateRunningBuilds();
-                return failedBuilds.map(function (failedBuild) {
-
-                    failedBuild.newBuildRunning = isNewBuildRunning();
-                    return failedBuild;
-
-                    function isNewBuildRunning() {
-
-                        function getCorrespondingBuild() {
-                            return latestRunningBuilds.filter(function (latestRunningBuild) {
-                                return latestRunningBuild.name === failedBuild.name;
-                            })[0];
-                        }
-
-                        return getCorrespondingBuild() !== undefined && getCorrespondingBuild().buildNumber > failedBuild.buildNumber;
-                    }
-                });
             });
         };
 

@@ -3,7 +3,7 @@ export class App {
     this.router = router;
     config.title = 'Teamcity radiator';
     config.map([
-      { route: ':baseUrl', name: 'Build Overview', moduleId: 'build-overview' },
+      { route: 'failed/:baseUrl', name: 'Faled Build Overview', moduleId: 'failed-build-overview' },
     ]);
   }
 }

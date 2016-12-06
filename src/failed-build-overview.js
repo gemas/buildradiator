@@ -2,7 +2,7 @@ import { BuildFactory } from 'services/build-factory';
 import { inject } from 'aurelia-framework';
 
 @inject(BuildFactory)
-export class BuildOverview {
+export class FailedBuildOverview {
   constructor(factory) {
     this.factory = factory;
   }

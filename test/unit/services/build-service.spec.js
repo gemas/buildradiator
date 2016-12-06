@@ -29,7 +29,7 @@ function makeClientStub(expectedUrl, fetchResponse) {
 
 describe('the buildService ', () => {
     describe('the buildService getAllFailedBuilds method', () => {
-        it('returns only the failed builds when given a response with failed an successfull builds', (done) => {
+        it('returns only the failed builds when given a response with failed and successfull builds', (done) => {
             let fetchResponse = {
                 "buildType": [{
                     "name": "Build1",

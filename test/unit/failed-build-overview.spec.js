@@ -24,7 +24,7 @@ describe('the failed build overview', () => {
     jasmine.clock().uninstall();
   });
 
-  it('should ask and save the failedbuilds from the buildFactory using the baseUrl from the parameters every 5 seconds', (done) => {
+  it('should ask and save the failedbuilds from the buildFactory using the baseUrl from the parameters every 30 seconds', (done) => {
 
     let failedBuildOverview = new FailedBuildOverview(makeBuildFactoryStub());
 

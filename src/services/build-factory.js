@@ -19,7 +19,7 @@ export class BuildFactory {
                 
                 return failedBuilds.map(failedBuild => {
 
-                    failedBuild.newBuildRunning = isNewBuildRunning();
+                    failedBuild.drawAttention = isNewBuildRunning();
                     return failedBuild;
 
                     function isNewBuildRunning() {

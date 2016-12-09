@@ -2,6 +2,6 @@
   from { opacity: 0; } 
 }
 
-.running {
+.draw-attention {
     animation: fadeIn 1s infinite alternate;
 }

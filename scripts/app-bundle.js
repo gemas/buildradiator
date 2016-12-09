@@ -25,13 +25,24 @@ define('app',['exports'], function (exports) {
     return App;
   }();
 });
-define('build-overview',['exports', 'services/build-factory', 'aurelia-framework'], function (exports, _buildFactory, _aureliaFramework) {
+define('environment',["exports"], function (exports) {
+  "use strict";
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.default = {
+    debug: true,
+    testing: true
+  };
+});
+define('failed-build-overview',['exports', 'services/build-factory', 'aurelia-framework'], function (exports, _buildFactory, _aureliaFramework) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.BuildOverview = undefined;
+  exports.FailedBuildOverview = undefined;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -41,14 +52,14 @@ define('build-overview',['exports', 'services/build-factory', 'aurelia-framework
 
   var _dec, _class;
 
-  var BuildOverview = exports.BuildOverview = (_dec = (0, _aureliaFramework.inject)(_buildFactory.BuildFactory), _dec(_class = function () {
-    function BuildOverview(factory) {
-      _classCallCheck(this, BuildOverview);
+  var FailedBuildOverview = exports.FailedBuildOverview = (_dec = (0, _aureliaFramework.inject)(_buildFactory.BuildFactory), _dec(_class = function () {
+    function FailedBuildOverview(factory) {
+      _classCallCheck(this, FailedBuildOverview);
 
       this.factory = factory;
     }
 
-    BuildOverview.prototype.activate = function activate(params) {
+    FailedBuildOverview.prototype.activate = function activate(params) {
       function setAllFailedBuilds(params) {
         var _this = this;
 
@@ -61,19 +72,8 @@ define('build-overview',['exports', 'services/build-factory', 'aurelia-framework
       setInterval(setAllFailedBuilds.bind(this), 30000, params);
     };
 
-    return BuildOverview;
+    return FailedBuildOverview;
   }()) || _class);
-});
-define('environment',["exports"], function (exports) {
-  "use strict";
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.default = {
-    debug: true,
-    testing: true
-  };
 });
 define('main',['exports', './environment'], function (exports, _environment) {
   'use strict';
@@ -113,6 +113,46 @@ define('main',['exports', './environment'], function (exports, _environment) {
     });
   }
 });
+define('running-build-overview',['exports', 'services/build-service', 'aurelia-framework'], function (exports, _buildService, _aureliaFramework) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.RunningBuildOverview = undefined;
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  var _dec, _class;
+
+  var RunningBuildOverview = exports.RunningBuildOverview = (_dec = (0, _aureliaFramework.inject)(_buildService.BuildService), _dec(_class = function () {
+    function RunningBuildOverview(buildService) {
+      _classCallCheck(this, RunningBuildOverview);
+
+      this.buildService = buildService;
+    }
+
+    RunningBuildOverview.prototype.activate = function activate(params) {
+      function setAllRunningBuilds(params) {
+        var _this = this;
+
+        this.buildService.getAllLatestRunningBuilds(params.baseUrl).then(function (builds) {
+          _this.builds = builds;
+        });
+      }
+
+      setAllRunningBuilds.bind(this)(params);
+      setInterval(setAllRunningBuilds.bind(this), 30000, params);
+    };
+
+    return RunningBuildOverview;
+  }()) || _class);
+});
+define('elements/build-overview',[], function () {});
 define('resources/index',["exports"], function (exports) {
   "use strict";
 
@@ -156,7 +196,7 @@ define('services/build-factory',['exports', './build-service', 'aurelia-framewor
 
                 return failedBuilds.map(function (failedBuild) {
 
-                    failedBuild.newBuildRunning = isNewBuildRunning();
+                    failedBuild.drawAttention = isNewBuildRunning();
                     return failedBuild;
 
                     function isNewBuildRunning() {
@@ -214,7 +254,7 @@ define('services/build-service',['exports', './http-client-router', 'aurelia-fra
 
   var _dec, _class;
 
-  function fetchBuildArray(clientRouter, url) {
+  function fetchBuildArray(clientRouter, url, drawAttention) {
     var init = {
       method: 'GET',
       headers: new Headers({
@@ -233,7 +273,8 @@ define('services/build-service',['exports', './http-client-router', 'aurelia-fra
           "name": buildTypeElement.name,
           "buildNumber": buildTypeElement.builds.build[0].number,
           "status": buildTypeElement.builds.build[0].status,
-          "statusText": buildTypeElement.builds.build[0].statusText
+          "statusText": buildTypeElement.builds.build[0].statusText,
+          "drawAttention": drawAttention
         };
       });
     });
@@ -249,7 +290,7 @@ define('services/build-service',['exports', './http-client-router', 'aurelia-fra
     BuildService.prototype.getAllFailedBuilds = function getAllFailedBuilds(baseUrl) {
       var url = 'http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))';
 
-      return fetchBuildArray(this.clientRouter, url).then(function (buildArray) {
+      return fetchBuildArray(this.clientRouter, url, false).then(function (buildArray) {
         return buildArray.filter(function (build) {
           return build.status === 'FAILURE';
         });
@@ -259,7 +300,7 @@ define('services/build-service',['exports', './http-client-router', 'aurelia-fra
     BuildService.prototype.getAllLatestRunningBuilds = function getAllLatestRunningBuilds(baseUrl) {
       var url = 'http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:true,canceled:false,count:1),build(number,status,statusText)))';
 
-      return fetchBuildArray(this.clientRouter, url);
+      return fetchBuildArray(this.clientRouter, url, true);
     };
 
     return BuildService;
@@ -490,128 +531,9 @@ define('services/teamcitystub/team-city-latest-running-builds-response',["export
     }]
   };
 });
-define('running-build-overview',['exports', 'services/build-service', 'aurelia-framework'], function (exports, _buildService, _aureliaFramework) {
-  'use strict';
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.RunningBuildOverview = undefined;
-
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  var _dec, _class;
-
-  var RunningBuildOverview = exports.RunningBuildOverview = (_dec = (0, _aureliaFramework.inject)(_buildService.BuildService), _dec(_class = function () {
-    function RunningBuildOverview(buildService) {
-      _classCallCheck(this, RunningBuildOverview);
-
-      this.buildService = buildService;
-    }
-
-    RunningBuildOverview.prototype.activate = function activate(params) {
-      function setAllRunningBuilds(params) {
-        var _this = this;
-
-        this.buildService.getAllLatestRunningBuilds(params.baseUrl).then(function (builds) {
-          _this.builds = builds;
-        });
-      }
-
-      setAllRunningBuilds.bind(this)(params);
-      setInterval(setAllRunningBuilds.bind(this), 30000, params);
-    };
-
-    return RunningBuildOverview;
-  }()) || _class);
-});
-define('failed-build-overview',['exports', 'services/build-factory', 'aurelia-framework'], function (exports, _buildFactory, _aureliaFramework) {
-  'use strict';
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.FailedBuildOverview = undefined;
-
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  var _dec, _class;
-
-  var FailedBuildOverview = exports.FailedBuildOverview = (_dec = (0, _aureliaFramework.inject)(_buildFactory.BuildFactory), _dec(_class = function () {
-    function FailedBuildOverview(factory) {
-      _classCallCheck(this, FailedBuildOverview);
-
-      this.factory = factory;
-    }
-
-    FailedBuildOverview.prototype.activate = function activate(params) {
-      function setAllFailedBuilds(params) {
-        var _this = this;
-
-        this.factory.constructFailedBuildObjects(params.baseUrl).then(function (builds) {
-          _this.builds = builds;
-        });
-      }
-
-      setAllFailedBuilds.bind(this)(params);
-      setInterval(setAllFailedBuilds.bind(this), 30000, params);
-    };
-
-    return FailedBuildOverview;
-  }()) || _class);
-});
-define('failed-build-overview.1',['exports', 'services/build-factory', 'aurelia-framework'], function (exports, _buildFactory, _aureliaFramework) {
-  'use strict';
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.FailedBuildOverview = undefined;
-
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  var _dec, _class;
-
-  var FailedBuildOverview = exports.FailedBuildOverview = (_dec = (0, _aureliaFramework.inject)(_buildFactory.BuildFactory), _dec(_class = function () {
-    function FailedBuildOverview(factory) {
-      _classCallCheck(this, FailedBuildOverview);
-
-      this.factory = factory;
-    }
-
-    FailedBuildOverview.prototype.activate = function activate(params) {
-      function setAllFailedBuilds(params) {
-        var _this = this;
-
-        this.factory.constructFailedBuildObjects(params.baseUrl).then(function (builds) {
-          _this.builds = builds;
-        });
-      }
-
-      setAllFailedBuilds.bind(this)(params);
-      setInterval(setAllFailedBuilds.bind(this), 30000, params);
-    };
-
-    return FailedBuildOverview;
-  }()) || _class);
-});
 define('text!app.html', ['module'], function(module) { module.exports = "<template>\r\n  <require from=\"css/custom.css\"></require>\r\n  <router-view></router-view>\r\n</template>"; });
-define('text!css/custom.css', ['module'], function(module) { module.exports = "@keyframes fadeIn { \r\n  from { opacity: 0; } \r\n}\r\n\r\n.running {\r\n    animation: fadeIn 1s infinite alternate;\r\n}"; });
-define('text!build-overview.html', ['module'], function(module) { module.exports = "<template>\r\n\t<div class=\"container\">\r\n\t\t<div class=\"row\">\r\n\t\t\t<div class=\"col-md-4 text-center\" repeat.for=\"build of builds\">\r\n\t\t\t\t<div class=\"alert alert-danger  ${build.newBuildRunning ? 'running' : ''}\" role=\"alert\">\r\n\t\t\t\t\t<h1>${build.name}</h1>\r\n\t\t\t\t\t<p>${build.statusText}</p>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</template>"; });
-define('text!running-build-overview.html', ['module'], function(module) { module.exports = "<template>\r\n\t<div class=\"container\">\r\n\t\t<div class=\"row\">\r\n\t\t\t<div class=\"col-md-4 text-center\" repeat.for=\"build of builds\">\r\n\t\t\t\t<div class=\"running alert ${build.status === 'SUCCESS' ? 'alert-success' : 'alert-danger'}\" role=\"alert\">\r\n\t\t\t\t\t<h1>${build.name}</h1>\r\n\t\t\t\t\t<p>${build.statusText}</p>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</template>"; });
-define('text!failed-build-overview.html', ['module'], function(module) { module.exports = "<template>\r\n\t<div class=\"container\">\r\n\t\t<div class=\"row\">\r\n\t\t\t<div class=\"col-md-4 text-center\" repeat.for=\"build of builds\">\r\n\t\t\t\t<div class=\"alert alert-danger  ${build.newBuildRunning ? 'running' : ''}\" role=\"alert\">\r\n\t\t\t\t\t<h1>${build.name}</h1>\r\n\t\t\t\t\t<p>${build.statusText}</p>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</template>"; });
-define('text!failed-build-overview.1.html', ['module'], function(module) { module.exports = "<template>\r\n\t<div class=\"container\">\r\n\t\t<div class=\"row\">\r\n\t\t\t<div class=\"col-md-4 text-center\" repeat.for=\"build of builds\">\r\n\t\t\t\t<div class=\"alert alert-danger  ${build.newBuildRunning ? 'running' : ''}\" role=\"alert\">\r\n\t\t\t\t\t<h1>${build.name}</h1>\r\n\t\t\t\t\t<p>${build.statusText}</p>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</template>"; });
-define('text!running-build-overview.1.html', ['module'], function(module) { module.exports = "<template>\r\n\t<div class=\"container\">\r\n\t\t<div class=\"row\">\r\n\t\t\t<div class=\"col-md-4 text-center\" repeat.for=\"build of builds\">\r\n\t\t\t\t<div class=\"alert alert-danger  ${build.newBuildRunning ? 'running' : ''}\" role=\"alert\">\r\n\t\t\t\t\t<h1>${build.name}</h1>\r\n\t\t\t\t\t<p>${build.statusText}</p>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</template>"; });
+define('text!css/custom.css', ['module'], function(module) { module.exports = "@keyframes fadeIn { \r\n  from { opacity: 0; } \r\n}\r\n\r\n.draw-attention {\r\n    animation: fadeIn 1s infinite alternate;\r\n}"; });
+define('text!failed-build-overview.html', ['module'], function(module) { module.exports = "<template>\r\n\t<div class=\"container\">\r\n\t\t<div class=\"row\">\r\n\t\t\t<div class=\"col-md-4 text-center\" repeat.for=\"build of builds\">\r\n\t\t\t\t<div class=\"alert alert-danger  ${build.drawAttention ? 'draw-attention' : ''}\" role=\"alert\">\r\n\t\t\t\t\t<h1>${build.name}</h1>\r\n\t\t\t\t\t<p>${build.statusText}</p>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</template>"; });
+define('text!running-build-overview.html', ['module'], function(module) { module.exports = "<template>\r\n\t<div class=\"container\">\r\n\t\t<div class=\"row\">\r\n\t\t\t<div class=\"col-md-4 text-center\" repeat.for=\"build of builds\">\r\n\t\t\t\t<div class=\"draw-attention alert ${build.status === 'SUCCESS' ? 'alert-success' : 'alert-danger'}\" role=\"alert\">\r\n\t\t\t\t\t<h1>${build.name}</h1>\r\n\t\t\t\t\t<p>${build.statusText}</p>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</template>"; });
+define('text!elements/build-overview.html', ['module'], function(module) { module.exports = ""; });
 //# sourceMappingURL=app-bundle.js.map

@@ -11,7 +11,7 @@ function makeClientStubForGettingAllLatestRunningBuilds(baseUrl, fetchResponse) 
 }
 
 function makeClientStub(expectedUrl, fetchResponse) {
-    
+
     return {
         fetch: function (actualUrl, init) {
             expect(actualUrl).toEqual(expectedUrl);
@@ -75,13 +75,15 @@ describe('the buildService ', () => {
                     "name": "Build2",
                     "buildNumber": "2931",
                     "status": "FAILURE",
-                    "statusText": "Tests failed: 4 (1 new), passed: 31"
+                    "statusText": "Tests failed: 4 (1 new), passed: 31",
+                    "drawAttention": false
                 },
                 {
                     "name": "Build3",
                     "buildNumber": "121",
                     "status": "FAILURE",
-                    "statusText": "Tests failed: 8 (2 new), passed: 29"
+                    "statusText": "Tests failed: 8 (2 new), passed: 29",
+                    "drawAttention": false
                 }
             ];
 
@@ -145,6 +147,7 @@ describe('the buildService ', () => {
                     "buildNumber": "123",
                     "status": "FAILURE",
                     "statusText": "Tests failed: 8 (2 new), passed: 29",
+                    "drawAttention": false
                 }
             ];
 
@@ -197,13 +200,15 @@ describe('the buildService ', () => {
                     "name": "Build1",
                     "buildNumber": "183",
                     "status": "SUCCESS",
-                    "statusText": "Tests passed: 198, ignored: 9"
+                    "statusText": "Tests passed: 198, ignored: 9",
+                    "drawAttention": true
                 },
                 {
                     "name": "Build3",
                     "buildNumber": "121",
                     "status": "FAILURE",
-                    "statusText": "Tests failed: 8 (2 new), passed: 29"
+                    "statusText": "Tests failed: 8 (2 new), passed: 29",
+                    "drawAttention": true
                 }
             ];
 

@@ -64,28 +64,28 @@ describe('the buildService getAllFailedBuilds method', () => {
                     "buildNumber": "3.1.70.17327",
                     "status": "FAILURE",
                     "statusText": "Tests failed: 8 (2 new), passed: 29",
-                    "newBuildRunning": false
+                    "drawAttention": false
                 },
                 {
                     "name": "Build2",
                     "buildNumber": "2.1.75.17327",
                     "status": "FAILURE",
                     "statusText": "Tests failed: 8 (2 new), passed: 29",
-                    "newBuildRunning": false
+                    "drawAttention": false
                 },
                 {
                     "name": "Build3",
                     "buildNumber": "123",
                     "status": "FAILURE",
                     "statusText": "Tests failed: 8 (2 new), passed: 29",
-                    "newBuildRunning": true
+                    "drawAttention": true
                 },
                 {
                     "name": "Build4",
                     "buildNumber": "3.1.70.23",
                     "status": "FAILURE",
                     "statusText": "Tests failed: 8 (2 new), passed: 29",
-                    "newBuildRunning": true
+                    "drawAttention": true
                 }
             ]))
             .catch(error => expect(error).toBeUndefined())

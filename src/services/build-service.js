@@ -1,7 +1,7 @@
 import { HttpClientRouter } from './http-client-router';
 import { inject } from 'aurelia-framework';
 
-function fetchBuildArray(clientRouter, url) {
+function fetchBuildArray(clientRouter, url, drawAttention) {
   let init = {
     method: 'GET',
     headers: new Headers({
@@ -16,11 +16,12 @@ function fetchBuildArray(clientRouter, url) {
       jsonResponse.buildType
         .filter(buildTypeElement => buildTypeElement.builds.build.length > 0)
         .map(buildTypeElement => {
-          return { 
+          return {
             "name": buildTypeElement.name,
             "buildNumber": buildTypeElement.builds.build[0].number,
             "status": buildTypeElement.builds.build[0].status,
-            "statusText": buildTypeElement.builds.build[0].statusText
+            "statusText": buildTypeElement.builds.build[0].statusText,
+            "drawAttention": drawAttention
           }
         })
     );
@@ -35,13 +36,13 @@ export class BuildService {
   getAllFailedBuilds(baseUrl) {
     let url = 'http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))';
 
-    return fetchBuildArray(this.clientRouter, url)
+    return fetchBuildArray(this.clientRouter, url, false)
       .then(buildArray => buildArray.filter(build => build.status === 'FAILURE'));
   }
 
   getAllLatestRunningBuilds(baseUrl) {
     let url = 'http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:true,canceled:false,count:1),build(number,status,statusText)))';
 
-    return fetchBuildArray(this.clientRouter, url)
+    return fetchBuildArray(this.clientRouter, url, true);
   }
 }

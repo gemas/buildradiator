@@ -1,12 +1,4 @@
 <template>
-	<div class="container">
-		<div class="row">
-			<div class="col-md-4 text-center" repeat.for="build of builds">
-				<div class="draw-attention alert ${build.status === 'SUCCESS' ? 'alert-success' : 'alert-danger'}" role="alert">
-					<h1>${build.name}</h1>
-					<p>${build.statusText}</p>
-				</div>
-			</div>
-		</div>
-	</div>
+	<require from="./elements/build-overview"></require>
+	<build-overview builds.bind="builds"></build-overview>
 </template>

@@ -152,7 +152,98 @@ define('running-build-overview',['exports', 'services/build-service', 'aurelia-f
     return RunningBuildOverview;
   }()) || _class);
 });
-define('elements/build-overview',[], function () {});
+define('elements/build-overview',['exports', 'aurelia-framework'], function (exports, _aureliaFramework) {
+    'use strict';
+
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+    exports.BuildOverview = undefined;
+
+    function _initDefineProp(target, property, descriptor, context) {
+        if (!descriptor) return;
+        Object.defineProperty(target, property, {
+            enumerable: descriptor.enumerable,
+            configurable: descriptor.configurable,
+            writable: descriptor.writable,
+            value: descriptor.initializer ? descriptor.initializer.call(context) : void 0
+        });
+    }
+
+    function _classCallCheck(instance, Constructor) {
+        if (!(instance instanceof Constructor)) {
+            throw new TypeError("Cannot call a class as a function");
+        }
+    }
+
+    function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
+        var desc = {};
+        Object['ke' + 'ys'](descriptor).forEach(function (key) {
+            desc[key] = descriptor[key];
+        });
+        desc.enumerable = !!desc.enumerable;
+        desc.configurable = !!desc.configurable;
+
+        if ('value' in desc || desc.initializer) {
+            desc.writable = true;
+        }
+
+        desc = decorators.slice().reverse().reduce(function (desc, decorator) {
+            return decorator(target, property, desc) || desc;
+        }, desc);
+
+        if (context && desc.initializer !== void 0) {
+            desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
+            desc.initializer = undefined;
+        }
+
+        if (desc.initializer === void 0) {
+            Object['define' + 'Property'](target, property, desc);
+            desc = null;
+        }
+
+        return desc;
+    }
+
+    function _initializerWarningHelper(descriptor, context) {
+        throw new Error('Decorating class property failed. Please ensure that transform-class-properties is enabled.');
+    }
+
+    var _desc, _value, _class, _descriptor;
+
+    var BuildOverview = exports.BuildOverview = (_class = function () {
+        function BuildOverview() {
+            _classCallCheck(this, BuildOverview);
+
+            _initDefineProp(this, 'builds', _descriptor, this);
+        }
+
+        BuildOverview.prototype.getBuildStatusCssClass = function getBuildStatusCssClass(build) {
+            if (build.status === 'SUCCESS') {
+                return 'alert-success';
+            }
+            if (build.status === 'FAILURE') {
+                return 'alert-danger';
+            }
+            throw new Error('The buildstatus "' + build.status + '" is invalid');
+        };
+
+        BuildOverview.prototype.getDrawAttentionCssClass = function getDrawAttentionCssClass(build) {
+            if (build.drawAttention === true) {
+                return 'draw-attention';
+            }
+            if (build.drawAttention === false) {
+                return '';
+            }
+            throw new Error('The drawAttention "' + build.drawAttention + '" is invalid');
+        };
+
+        return BuildOverview;
+    }(), (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'builds', [_aureliaFramework.bindable], {
+        enumerable: true,
+        initializer: null
+    })), _class);
+});
 define('resources/index',["exports"], function (exports) {
   "use strict";
 
@@ -533,7 +624,7 @@ define('services/teamcitystub/team-city-latest-running-builds-response',["export
 });
 define('text!app.html', ['module'], function(module) { module.exports = "<template>\r\n  <require from=\"css/custom.css\"></require>\r\n  <router-view></router-view>\r\n</template>"; });
 define('text!css/custom.css', ['module'], function(module) { module.exports = "@keyframes fadeIn { \r\n  from { opacity: 0; } \r\n}\r\n\r\n.draw-attention {\r\n    animation: fadeIn 1s infinite alternate;\r\n}"; });
-define('text!failed-build-overview.html', ['module'], function(module) { module.exports = "<template>\r\n\t<div class=\"container\">\r\n\t\t<div class=\"row\">\r\n\t\t\t<div class=\"col-md-4 text-center\" repeat.for=\"build of builds\">\r\n\t\t\t\t<div class=\"alert alert-danger  ${build.drawAttention ? 'draw-attention' : ''}\" role=\"alert\">\r\n\t\t\t\t\t<h1>${build.name}</h1>\r\n\t\t\t\t\t<p>${build.statusText}</p>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</template>"; });
-define('text!running-build-overview.html', ['module'], function(module) { module.exports = "<template>\r\n\t<div class=\"container\">\r\n\t\t<div class=\"row\">\r\n\t\t\t<div class=\"col-md-4 text-center\" repeat.for=\"build of builds\">\r\n\t\t\t\t<div class=\"draw-attention alert ${build.status === 'SUCCESS' ? 'alert-success' : 'alert-danger'}\" role=\"alert\">\r\n\t\t\t\t\t<h1>${build.name}</h1>\r\n\t\t\t\t\t<p>${build.statusText}</p>\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n</template>"; });
-define('text!elements/build-overview.html', ['module'], function(module) { module.exports = ""; });
+define('text!failed-build-overview.html', ['module'], function(module) { module.exports = "<template>\r\n\t<require from=\"./elements/build-overview\"></require>\r\n\t<build-overview builds.bind=\"builds\"></build-overview>\r\n</template>"; });
+define('text!running-build-overview.html', ['module'], function(module) { module.exports = "<template>\r\n\t<require from=\"./elements/build-overview\"></require>\r\n\t<build-overview builds.bind=\"builds\"></build-overview>\r\n</template>"; });
+define('text!elements/build-overview.html', ['module'], function(module) { module.exports = "<template>\r\n    <div class=\"container\">\r\n        <div class=\"row\">\r\n\r\n            <div class=\"col-md-4 text-center\" repeat.for=\"build of builds\">\r\n                <div class=\"${getBuildStatusCssClass(build)} ${getDrawAttentionCssClass(build)} alert\"\r\n                    role=\"alert \">\r\n                    <h1>${build.name}</h1>\r\n                    <p>${build.statusText}</p>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</template>"; });
 //# sourceMappingURL=app-bundle.js.map

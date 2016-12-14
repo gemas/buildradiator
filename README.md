@@ -25,9 +25,9 @@ Then open up a shell and type the following command:
 npm test
 ```
 
-If you want to watch the tests make sure you have [Chrome](https://www.google.com/chrome) installed.  
+If you want to watch the tests, make sure you have [Chrome](https://www.google.com/chrome) installed.  
 Then open up a shell and type the following command:
 
 ```shell
-npm test:watch
+npm run test:watch
 ```

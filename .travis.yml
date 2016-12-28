@@ -3,6 +3,8 @@ addons:
 language: node_js
 node_js:
   - "6"
+secure: "l88m79pFJpX/nrB7ifbqFAmJMmqtSaEnQ0M4UZ2CGXQIUVpA+Msn4CZLf+/9BWSzoPO0d+QnwSFmKpXNAOVuJqwN3ps/Jez/Mk3KpyUznrt8+F9HIC+xfh3wQO1jsiaMIBDIwWAR8AvgzMm+uZh8XgcEqBy4D8eVZnSSfSYxIc/uzGgw8FJ3sQ/MTXcyp/8IvDScL5Ewkvcbf1WgYja8CiF22o7RZMfV5oG5DaduYUEytWNfCzfd7iTxI9+01ScZJCGOdh//KIBbiE/wxZv/3i41ZDuNRF1RC5J0lifU80bYcPqD6tGK+wzNLzaHs1AxS/mL9KPwJJY7TIlCZA8tCG8PxjdVeLA5GkgqAAi1FfjNi711dziWaPeQxXc2ols81YJO8ONFuYGtYOpuYAzmMru/V7VWkFmsJ/NiSHFs2+cKd9uwtsqq1SwGkFvD/nSkwtm2W7kRhXYxuhPtVQa0MxxMtIukaLtOshFsOitQDNyD7pQnKGWWJc05b16EOzAQC/uBVAu2JYBrMiA0bHvK/pCOvOKvvxdI187JODpopkBIfPLvCyqBHNIEApjq2JrRsCtX5sWrdV87rDRzGSejnchxdT6kQ/0wArE0WnG1UUP1aSWu7oKozGNWOH4DfG39JFoAxoWSiOnSbtdoZOT+775G0cGvgRiphKa29uiFWD0="
 before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
+after_success: - buildscripts/deploy.sh

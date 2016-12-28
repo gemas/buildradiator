@@ -1,30 +1,37 @@
 import { BuildService } from '../../../src/services/build-service';
 
+const URLFORALLFAILEDBUILDS = 'http://test.com/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))';
+const URLFORALLLATESTRUNNINGBUILDS = 'http://test.com/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:true,canceled:false,count:1),build(number,status,statusText)))';
 
+function makeClientStub() {
 
-function makeClientStubForGettingALlFailedBuilds(baseUrl, fetchResponse) {
-    return makeClientStub('http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))', fetchResponse);
-}
+    var responseMap = {};
+    var builder = {
+        withResponse: withResponse,
+        build: build
+    }
 
-function makeClientStubForGettingAllLatestRunningBuilds(baseUrl, fetchResponse) {
-    return makeClientStub('http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:true,canceled:false,count:1),build(number,status,statusText)))', fetchResponse);
-}
+    function withResponse(url, response) {
+        responseMap[url] = response;
+        return builder;
+    }
 
-function makeClientStub(expectedUrl, fetchResponse) {
-
-    return {
-        fetch: function (actualUrl, init) {
-            expect(actualUrl).toEqual(expectedUrl);
-            expect(init).toEqual({
-                method: 'GET',
-                headers: new Headers({
-                    'Accept': 'application/json',
-                    'X-Requested-With': 'Fetch',
+    function build() {
+        return {
+            fetch: function (actualUrl, init) {
+                expect(init).toEqual({
+                    method: 'GET',
+                    headers: new Headers({
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'Fetch',
+                    })
                 })
-            })
-            return Promise.resolve({ json: () => fetchResponse })
-        }
-    };
+                return Promise.resolve({ json: () => responseMap[actualUrl] })
+            }
+        };
+    }
+
+    return builder;
 }
 
 describe('the buildService ', () => {
@@ -87,7 +94,7 @@ describe('the buildService ', () => {
                 }
             ];
 
-            new BuildService(makeClientStubForGettingALlFailedBuilds("test.com", fetchResponse))
+        new BuildService(makeClientStub().withResponse(URLFORALLFAILEDBUILDS, fetchResponse).build())
                 .getAllFailedBuilds("test.com")
                 .then(returnedBuilds => expect(returnedBuilds).toEqual(onlyTheFailedBuilds))
                 .catch(error => expect(error).toBeUndefined())
@@ -110,7 +117,7 @@ describe('the buildService ', () => {
                 }]
             };
 
-            new BuildService(makeClientStubForGettingALlFailedBuilds("test.com", fetchResponse))
+            new BuildService(makeClientStub().withResponse(URLFORALLFAILEDBUILDS, fetchResponse).build())
                 .getAllFailedBuilds("test.com")
                 .then(returnedBuilds => expect(returnedBuilds).toEqual([]))
                 .catch(error => expect(error).toBeUndefined())
@@ -151,7 +158,7 @@ describe('the buildService ', () => {
                 }
             ];
 
-            new BuildService(makeClientStubForGettingALlFailedBuilds("test.com", fetchResponse))
+            new BuildService(makeClientStub().withResponse(URLFORALLFAILEDBUILDS, fetchResponse).build())
                 .getAllFailedBuilds("test.com")
                 .then(returnedBuilds => expect(returnedBuilds).toEqual(onlyTheFailedBuilds))
                 .catch(error => expect(error).toBeUndefined())
@@ -212,7 +219,7 @@ describe('the buildService ', () => {
                 }
             ];
 
-            new BuildService(makeClientStubForGettingAllLatestRunningBuilds("test.com", fetchResponse))
+            new BuildService(makeClientStub().withResponse(URLFORALLLATESTRUNNINGBUILDS, fetchResponse).build())
                 .getAllLatestRunningBuilds("test.com")
                 .then(returnedBuilds => expect(returnedBuilds).toEqual(latestRunningBuilds))
                 .catch(error => expect(error).toBeUndefined())
@@ -229,7 +236,7 @@ describe('the buildService ', () => {
                 }]
             };
 
-            new BuildService(makeClientStubForGettingAllLatestRunningBuilds("test.com", fetchResponse))
+            new BuildService(makeClientStub().withResponse(URLFORALLLATESTRUNNINGBUILDS, fetchResponse).build())
                 .getAllLatestRunningBuilds("test.com")
                 .then(returnedBuilds => expect(returnedBuilds).toEqual([]))
                 .catch(error => expect(error).toBeUndefined())
@@ -237,5 +244,4 @@ describe('the buildService ', () => {
         });
     })
 });
-
 

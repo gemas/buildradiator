@@ -4,7 +4,7 @@ function putFunctionOnJobQueue(expectFunction) {
   Promise.resolve().then(expectFunction);
 }
 
-function makeBuildFactoryStub() {
+function makeBuildServiceStub() {
   let count = 0;
 
   function getAllFailedBuilds(baseUrl) {
@@ -26,7 +26,7 @@ describe('the failed build overview', () => {
 
   it('should ask and save the failedbuilds from the buildFactory using the baseUrl from the parameters every 30 seconds', (done) => {
 
-    let failedBuildOverview = new FailedBuildOverview(makeBuildFactoryStub());
+    let failedBuildOverview = new FailedBuildOverview(makeBuildServiceStub());
 
     failedBuildOverview.activate({ baseUrl: "baseUrl" });
     putFunctionOnJobQueue(() => expect(failedBuildOverview.builds).toEqual(['a1', 'b1', 'c1']));

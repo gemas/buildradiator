@@ -113,7 +113,7 @@ define('main',['exports', './environment'], function (exports, _environment) {
     });
   }
 });
-define('running-build-overview',['exports', 'anticorruptionlayer/teamcity-build-adapter', 'aurelia-framework'], function (exports, _teamcityBuildAdapter, _aureliaFramework) {
+define('running-build-overview',['exports', 'services/build-service', 'aurelia-framework'], function (exports, _buildService, _aureliaFramework) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -129,18 +129,18 @@ define('running-build-overview',['exports', 'anticorruptionlayer/teamcity-build-
 
   var _dec, _class;
 
-  var RunningBuildOverview = exports.RunningBuildOverview = (_dec = (0, _aureliaFramework.inject)(_teamcityBuildAdapter.TeamcityBuildAdapter), _dec(_class = function () {
-    function RunningBuildOverview(teamcityBuildAdapter) {
+  var RunningBuildOverview = exports.RunningBuildOverview = (_dec = (0, _aureliaFramework.inject)(_buildService.BuildService), _dec(_class = function () {
+    function RunningBuildOverview(buildService) {
       _classCallCheck(this, RunningBuildOverview);
 
-      this.teamcityBuildAdapter = teamcityBuildAdapter;
+      this.buildService = buildService;
     }
 
     RunningBuildOverview.prototype.activate = function activate(params) {
       function setAllRunningBuilds(params) {
         var _this = this;
 
-        this.teamcityBuildAdapter.getAllLatestRunningBuilds(params.baseUrl).then(function (builds) {
+        this.buildService.getAllLatestRunningBuilds(params.baseUrl).then(function (builds) {
           _this.builds = builds;
         });
       }
@@ -366,18 +366,18 @@ define('services/build-service',['exports', '../anticorruptionlayer/teamcity-bui
                 });
 
                 function validateFailedBuilds() {
-                    if (duplicateNamesInBuildArray(latestFinishedBuilds)) {
+                    if (haveDuplicateNamesInBuildArray(latestFinishedBuilds)) {
                         throw new Error("There are failed builds with the same name. We didn't foresee this to happen. Sorry. Please contact us");
                     }
                 }
 
                 function validateRunningBuilds() {
-                    if (duplicateNamesInBuildArray(latestRunningBuilds)) {
+                    if (haveDuplicateNamesInBuildArray(latestRunningBuilds)) {
                         throw new Error("There are running builds with the same name. We didn't foresee this to happen. Sorry. Please contact us");
                     }
                 }
 
-                function duplicateNamesInBuildArray(buildArray) {
+                function haveDuplicateNamesInBuildArray(buildArray) {
                     return buildArray.map(function (failedBuild1) {
                         return buildArray.filter(function (failedBuild2) {
                             return failedBuild1.name === failedBuild2.name;
@@ -386,6 +386,15 @@ define('services/build-service',['exports', '../anticorruptionlayer/teamcity-bui
                         return occurancesOfName > 1;
                     }).length > 1;
                 }
+            });
+        };
+
+        BuildService.prototype.getAllLatestRunningBuilds = function getAllLatestRunningBuilds(baseUrl) {
+            return this.teamcityBuildAdapter.getAllLatestRunningBuilds(baseUrl).then(function (latestRunningBuilds) {
+                return latestRunningBuilds.map(function (latestRunningBuild) {
+                    latestRunningBuild.drawAttention = true;
+                    return latestRunningBuild;
+                });
             });
         };
 

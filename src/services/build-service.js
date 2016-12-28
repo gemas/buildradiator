@@ -16,40 +16,49 @@ export class BuildService {
 
                 validateFailedBuilds();
                 validateRunningBuilds();
-                
+
                 return latestFinishedBuilds
-                .filter(finishedBuild => finishedBuild.status === 'FAILURE')
-                .map(failedBuild => {
-                    failedBuild.drawAttention = isNewBuildRunning();
-                    return failedBuild;
+                    .filter(finishedBuild => finishedBuild.status === 'FAILURE')
+                    .map(failedBuild => {
+                        failedBuild.drawAttention = isNewBuildRunning();
+                        return failedBuild;
 
-                    function isNewBuildRunning() {
+                        function isNewBuildRunning() {
 
-                        function getCorrespondingBuild() {
-                            return latestRunningBuilds.filter(latestRunningBuild => latestRunningBuild.name === failedBuild.name)[0];
+                            function getCorrespondingBuild() {
+                                return latestRunningBuilds.filter(latestRunningBuild => latestRunningBuild.name === failedBuild.name)[0];
+                            }
+
+                            return getCorrespondingBuild() !== undefined && getCorrespondingBuild().buildNumber > failedBuild.buildNumber;
                         }
-
-                        return getCorrespondingBuild() !== undefined && getCorrespondingBuild().buildNumber > failedBuild.buildNumber;
-                    }
-                });
+                    });
 
                 function validateFailedBuilds() {
-                    if (duplicateNamesInBuildArray(latestFinishedBuilds)) {
+                    if (haveDuplicateNamesInBuildArray(latestFinishedBuilds)) {
                         throw new Error("There are failed builds with the same name. We didn't foresee this to happen. Sorry. Please contact us");
                     }
                 }
 
                 function validateRunningBuilds() {
-                    if (duplicateNamesInBuildArray(latestRunningBuilds)) {
+                    if (haveDuplicateNamesInBuildArray(latestRunningBuilds)) {
                         throw new Error("There are running builds with the same name. We didn't foresee this to happen. Sorry. Please contact us");
                     }
                 }
 
-                function duplicateNamesInBuildArray(buildArray) {
+                function haveDuplicateNamesInBuildArray(buildArray) {
                     return buildArray
                         .map(failedBuild1 => buildArray.filter(failedBuild2 => failedBuild1.name === failedBuild2.name).length)
                         .filter(occurancesOfName => occurancesOfName > 1).length > 1;
                 }
             });
+    }
+
+    getAllLatestRunningBuilds(baseUrl) {
+        return this.teamcityBuildAdapter.getAllLatestRunningBuilds(baseUrl)
+            .then(latestRunningBuilds => latestRunningBuilds
+                .map(latestRunningBuild => {
+                    latestRunningBuild.drawAttention = true;
+                    return latestRunningBuild;
+                }));
     }
 }

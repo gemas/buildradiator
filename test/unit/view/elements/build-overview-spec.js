@@ -1,4 +1,4 @@
-import { BuildOverview } from '../../../src/elements/build-overview';
+import { BuildOverview } from '../../../../src/view/elements/build-overview';
 
 describe('the BuildOverview', () => {
     describe('getBuildStatusCssClass', () => {

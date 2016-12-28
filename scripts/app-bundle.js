@@ -448,92 +448,6 @@ define('communicationlayer/teamcitystub/team-city-latest-running-builds-response
     }]
   };
 });
-define('domain/services/build-service',['exports', '../../anticorruptionlayer/teamcity-build-adapter', 'aurelia-framework'], function (exports, _teamcityBuildAdapter, _aureliaFramework) {
-    'use strict';
-
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
-    exports.BuildService = undefined;
-
-    function _classCallCheck(instance, Constructor) {
-        if (!(instance instanceof Constructor)) {
-            throw new TypeError("Cannot call a class as a function");
-        }
-    }
-
-    var _dec, _class;
-
-    var BuildService = exports.BuildService = (_dec = (0, _aureliaFramework.inject)(_teamcityBuildAdapter.TeamcityBuildAdapter), _dec(_class = function () {
-        function BuildService(teamcityBuildAdapter) {
-            _classCallCheck(this, BuildService);
-
-            this.teamcityBuildAdapter = teamcityBuildAdapter;
-        }
-
-        BuildService.prototype.getAllFailedBuilds = function getAllFailedBuilds(baseUrl) {
-            return Promise.all([this.teamcityBuildAdapter.getAllLatestFinishedBuilds(baseUrl), this.teamcityBuildAdapter.getAllLatestRunningBuilds(baseUrl)]).then(function (buildArrays) {
-
-                var latestFinishedBuilds = buildArrays[0];
-                var latestRunningBuilds = buildArrays[1];
-
-                validateFailedBuilds();
-                validateRunningBuilds();
-
-                return latestFinishedBuilds.filter(function (finishedBuild) {
-                    return finishedBuild.status === 'FAILURE';
-                }).map(function (failedBuild) {
-                    failedBuild.drawAttention = isNewBuildRunning();
-                    return failedBuild;
-
-                    function isNewBuildRunning() {
-
-                        function getCorrespondingBuild() {
-                            return latestRunningBuilds.filter(function (latestRunningBuild) {
-                                return latestRunningBuild.name === failedBuild.name;
-                            })[0];
-                        }
-
-                        return getCorrespondingBuild() !== undefined && getCorrespondingBuild().buildNumber > failedBuild.buildNumber;
-                    }
-                });
-
-                function validateFailedBuilds() {
-                    if (haveDuplicateNamesInBuildArray(latestFinishedBuilds)) {
-                        throw new Error("There are failed builds with the same name. We didn't foresee this to happen. Sorry. Please contact us");
-                    }
-                }
-
-                function validateRunningBuilds() {
-                    if (haveDuplicateNamesInBuildArray(latestRunningBuilds)) {
-                        throw new Error("There are running builds with the same name. We didn't foresee this to happen. Sorry. Please contact us");
-                    }
-                }
-
-                function haveDuplicateNamesInBuildArray(buildArray) {
-                    return buildArray.map(function (failedBuild1) {
-                        return buildArray.filter(function (failedBuild2) {
-                            return failedBuild1.name === failedBuild2.name;
-                        }).length;
-                    }).filter(function (occurancesOfName) {
-                        return occurancesOfName > 1;
-                    }).length > 1;
-                }
-            });
-        };
-
-        BuildService.prototype.getAllLatestRunningBuilds = function getAllLatestRunningBuilds(baseUrl) {
-            return this.teamcityBuildAdapter.getAllLatestRunningBuilds(baseUrl).then(function (latestRunningBuilds) {
-                return latestRunningBuilds.map(function (latestRunningBuild) {
-                    latestRunningBuild.drawAttention = true;
-                    return latestRunningBuild;
-                });
-            });
-        };
-
-        return BuildService;
-    }()) || _class);
-});
 define('view/elements/build-overview',['exports', 'aurelia-framework'], function (exports, _aureliaFramework) {
     'use strict';
 
@@ -625,6 +539,92 @@ define('view/elements/build-overview',['exports', 'aurelia-framework'], function
         enumerable: true,
         initializer: null
     })), _class);
+});
+define('domain/services/build-service',['exports', '../../anticorruptionlayer/teamcity-build-adapter', 'aurelia-framework'], function (exports, _teamcityBuildAdapter, _aureliaFramework) {
+    'use strict';
+
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+    exports.BuildService = undefined;
+
+    function _classCallCheck(instance, Constructor) {
+        if (!(instance instanceof Constructor)) {
+            throw new TypeError("Cannot call a class as a function");
+        }
+    }
+
+    var _dec, _class;
+
+    var BuildService = exports.BuildService = (_dec = (0, _aureliaFramework.inject)(_teamcityBuildAdapter.TeamcityBuildAdapter), _dec(_class = function () {
+        function BuildService(teamcityBuildAdapter) {
+            _classCallCheck(this, BuildService);
+
+            this.teamcityBuildAdapter = teamcityBuildAdapter;
+        }
+
+        BuildService.prototype.getAllFailedBuilds = function getAllFailedBuilds(baseUrl) {
+            return Promise.all([this.teamcityBuildAdapter.getAllLatestFinishedBuilds(baseUrl), this.teamcityBuildAdapter.getAllLatestRunningBuilds(baseUrl)]).then(function (buildArrays) {
+
+                var latestFinishedBuilds = buildArrays[0];
+                var latestRunningBuilds = buildArrays[1];
+
+                validateFailedBuilds();
+                validateRunningBuilds();
+
+                return latestFinishedBuilds.filter(function (finishedBuild) {
+                    return finishedBuild.status === 'FAILURE';
+                }).map(function (failedBuild) {
+                    failedBuild.drawAttention = isNewBuildRunning();
+                    return failedBuild;
+
+                    function isNewBuildRunning() {
+
+                        function getCorrespondingBuild() {
+                            return latestRunningBuilds.filter(function (latestRunningBuild) {
+                                return latestRunningBuild.name === failedBuild.name;
+                            })[0];
+                        }
+
+                        return getCorrespondingBuild() !== undefined && getCorrespondingBuild().buildNumber > failedBuild.buildNumber;
+                    }
+                });
+
+                function validateFailedBuilds() {
+                    if (haveDuplicateNamesInBuildArray(latestFinishedBuilds)) {
+                        throw new Error("There are failed builds with the same name. We didn't foresee this to happen. Sorry. Please contact us");
+                    }
+                }
+
+                function validateRunningBuilds() {
+                    if (haveDuplicateNamesInBuildArray(latestRunningBuilds)) {
+                        throw new Error("There are running builds with the same name. We didn't foresee this to happen. Sorry. Please contact us");
+                    }
+                }
+
+                function haveDuplicateNamesInBuildArray(buildArray) {
+                    return buildArray.map(function (failedBuild1) {
+                        return buildArray.filter(function (failedBuild2) {
+                            return failedBuild1.name === failedBuild2.name;
+                        }).length;
+                    }).filter(function (occurancesOfName) {
+                        return occurancesOfName > 1;
+                    }).length > 1;
+                }
+            });
+        };
+
+        BuildService.prototype.getAllLatestRunningBuilds = function getAllLatestRunningBuilds(baseUrl) {
+            return this.teamcityBuildAdapter.getAllLatestRunningBuilds(baseUrl).then(function (latestRunningBuilds) {
+                return latestRunningBuilds.map(function (latestRunningBuild) {
+                    latestRunningBuild.drawAttention = true;
+                    return latestRunningBuild;
+                });
+            });
+        };
+
+        return BuildService;
+    }()) || _class);
 });
 define('text!app.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"css/custom.css\"></require>\n  <router-view></router-view>\n</template>"; });
 define('text!css/custom.css', ['module'], function(module) { module.exports = "@keyframes fadeIn { \n  from { opacity: 0; } \n}\n\n.draw-attention {\n    animation: fadeIn 1s infinite alternate;\n}"; });

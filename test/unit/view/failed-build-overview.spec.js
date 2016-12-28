@@ -1,4 +1,4 @@
-import { FailedBuildOverview } from '../../src/failed-build-overview';
+import { FailedBuildOverview } from '../../../src/view/failed-build-overview';
 
 function putFunctionOnJobQueue(expectFunction) {
   Promise.resolve().then(expectFunction);

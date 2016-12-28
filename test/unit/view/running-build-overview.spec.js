@@ -1,4 +1,4 @@
-import { RunningBuildOverview } from '../../src/running-build-overview';
+import { RunningBuildOverview } from '../../../src/view/running-build-overview';
 
 function putFunctionOnJobQueue(expectFunction) {
   Promise.resolve().then(expectFunction);

@@ -1,35 +1,46 @@
 import { BuildService } from '../../../src/services/build-service';
 
 describe('the buildService getAllFailedBuilds method', () => {
-    it('returns the failed builds and draw attention on the ones that have a new build that is running', (done) => {
+    it('returns only the failed builds and draw attention on the ones that have a new build that is running', (done) => {
         let teamcityBuildAdapterStub = {
-            getAllFailedBuilds: function getAllFailedBuilds(baseUrl) {
+            getAllLatestFinishedBuilds: function getAllLatestFinishedBuilds(baseUrl) {
                 expect(baseUrl).toEqual("test.com");
                 return Promise.resolve([
                     {
                         "name": "Build1",
                         "buildNumber": "3.1.70.17327",
                         "status": "FAILURE",
-                        "statusText": "Tests failed: 8 (2 new), passed: 29"
+                        "statusText": "Tests failed: 8 (2 new), passed: 29",
+                        "drawAttention": false
                     },
                     {
                         "name": "Build2",
                         "buildNumber": "2.1.75.17327",
                         "status": "FAILURE",
-                        "statusText": "Tests failed: 8 (2 new), passed: 29"
+                        "statusText": "Tests failed: 8 (2 new), passed: 29",
+                        "drawAttention": false
                     },
                     {
                         "name": "Build3",
                         "buildNumber": "123",
                         "status": "FAILURE",
-                        "statusText": "Tests failed: 8 (2 new), passed: 29"
+                        "statusText": "Tests failed: 8 (2 new), passed: 29",
+                        "drawAttention": false
                     },
                     {
                         "name": "Build4",
                         "buildNumber": "3.1.70.23",
                         "status": "FAILURE",
-                        "statusText": "Tests failed: 8 (2 new), passed: 29"
-                    }
+                        "statusText": "Tests failed: 8 (2 new), passed: 29",
+                        "drawAttention": false
+                    },
+                    {
+                        "name": "Build5",
+                        "buildNumber": "3.1.70.17327",
+                        "status": "SUCCESS",
+                        "statusText": "Tests failed: 8 (2 new), passed: 29",
+                        "drawAttention": false
+                    },
                 ]);
             },
             getAllLatestRunningBuilds: function getAllFailedBuilds(baseUrl) {
@@ -39,19 +50,22 @@ describe('the buildService getAllFailedBuilds method', () => {
                         "name": "Build2",
                         "buildNumber": "2.1.75.17325",
                         "status": "SUCCESS",
-                        "statusText": "Tests failed: 8 (2 new), passed: 29"
+                        "statusText": "Tests failed: 8 (2 new), passed: 29",
+                        "drawAttention": false
                     },
                     {
                         "name": "Build3",
                         "buildNumber": "124",
                         "status": "SUCCESS",
-                        "statusText": "Tests failed: 6 (2 new), passed: 10"
+                        "statusText": "Tests failed: 6 (2 new), passed: 10",
+                        "drawAttention": false
                     },
                     {
                         "name": "Build4",
                         "buildNumber": "3.1.70.25",
                         "status": "FAILURE",
-                        "statusText": "Tests failed: 8 (1 new), passed: 60"
+                        "statusText": "Tests failed: 8 (1 new), passed: 60",
+                        "drawAttention": false
                     }
                 ]);
             }
@@ -94,20 +108,22 @@ describe('the buildService getAllFailedBuilds method', () => {
 
     it('makes the assumption that the name in the failing builds is unique', (done) => {
         let teamcityBuildAdapterStub = {
-            getAllFailedBuilds: function getAllFailedBuilds(baseUrl) {
+            getAllLatestFinishedBuilds: function getAllLatestFinishedBuilds(baseUrl) {
                 expect(baseUrl).toEqual("test.com");
                 return Promise.resolve([
                     {
                         "name": "Build1",
                         "buildNumber": "3.1.70.17327",
                         "status": "FAILURE",
-                        "statusText": "Tests failed: 8 (2 new), passed: 29"
+                        "statusText": "Tests failed: 8 (2 new), passed: 29",
+                        "drawAttention": false
                     },
                     {
                         "name": "Build1",
                         "buildNumber": "2.1.75.17327",
                         "status": "FAILURE",
-                        "statusText": "Tests failed: 8 (2 new), passed: 29"
+                        "statusText": "Tests failed: 8 (2 new), passed: 29",
+                        "drawAttention": false
                     }
                 ]);
             },
@@ -126,7 +142,7 @@ describe('the buildService getAllFailedBuilds method', () => {
 
     it('makes the assumption that the name in the running builds is unique', (done) => {
         let teamcityBuildAdapterStub = {
-            getAllFailedBuilds: function getAllFailedBuilds(baseUrl) {
+            getAllLatestFinishedBuilds: function getAllLatestFinishedBuilds(baseUrl) {
                 expect(baseUrl).toEqual("test.com");
                 return Promise.resolve([]);
             },
@@ -137,13 +153,15 @@ describe('the buildService getAllFailedBuilds method', () => {
                         "name": "Build1",
                         "buildNumber": "3.1.70.17327",
                         "status": "FAILURE",
-                        "statusText": "Tests failed: 8 (2 new), passed: 29"
+                        "statusText": "Tests failed: 8 (2 new), passed: 29",
+                        "drawAttention": false
                     },
                     {
                         "name": "Build1",
                         "buildNumber": "2.1.75.17327",
                         "status": "FAILURE",
-                        "statusText": "Tests failed: 8 (2 new), passed: 29"
+                        "statusText": "Tests failed: 8 (2 new), passed: 29",
+                        "drawAttention": false
                     }
                 ]);
             }

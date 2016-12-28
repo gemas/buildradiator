@@ -8,17 +8,18 @@ export class BuildService {
     }
 
     getAllFailedBuilds(baseUrl) {
-        return Promise.all([this.teamcityBuildAdapter.getAllFailedBuilds(baseUrl), this.teamcityBuildAdapter.getAllLatestRunningBuilds(baseUrl)])
+        return Promise.all([this.teamcityBuildAdapter.getAllLatestFinishedBuilds(baseUrl), this.teamcityBuildAdapter.getAllLatestRunningBuilds(baseUrl)])
             .then(buildArrays => {
 
-                let failedBuilds = buildArrays[0];
+                let latestFinishedBuilds = buildArrays[0];
                 let latestRunningBuilds = buildArrays[1];
 
                 validateFailedBuilds();
                 validateRunningBuilds();
                 
-                return failedBuilds.map(failedBuild => {
-
+                return latestFinishedBuilds
+                .filter(finishedBuild => finishedBuild.status === 'FAILURE')
+                .map(failedBuild => {
                     failedBuild.drawAttention = isNewBuildRunning();
                     return failedBuild;
 
@@ -33,7 +34,7 @@ export class BuildService {
                 });
 
                 function validateFailedBuilds() {
-                    if (duplicateNamesInBuildArray(failedBuilds)) {
+                    if (duplicateNamesInBuildArray(latestFinishedBuilds)) {
                         throw new Error("There are failed builds with the same name. We didn't foresee this to happen. Sorry. Please contact us");
                     }
                 }

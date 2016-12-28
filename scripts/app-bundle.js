@@ -168,7 +168,7 @@ define('anticorruptionlayer/teamcity-build-adapter',['exports', '../services/htt
 
   var _dec, _class;
 
-  function fetchBuildArray(clientRouter, url, drawAttention) {
+  function fetchBuildArray(clientRouter, url) {
     var init = {
       method: 'GET',
       headers: new Headers({
@@ -188,7 +188,7 @@ define('anticorruptionlayer/teamcity-build-adapter',['exports', '../services/htt
           "buildNumber": buildTypeElement.builds.build[0].number,
           "status": buildTypeElement.builds.build[0].status,
           "statusText": buildTypeElement.builds.build[0].statusText,
-          "drawAttention": drawAttention
+          "drawAttention": false
         };
       });
     });
@@ -201,20 +201,14 @@ define('anticorruptionlayer/teamcity-build-adapter',['exports', '../services/htt
       this.clientRouter = clientRouter;
     }
 
-    TeamcityBuildAdapter.prototype.getAllFailedBuilds = function getAllFailedBuilds(baseUrl) {
+    TeamcityBuildAdapter.prototype.getAllLatestFinishedBuilds = function getAllLatestFinishedBuilds(baseUrl) {
       var url = 'http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))';
-
-      return fetchBuildArray(this.clientRouter, url, false).then(function (buildArray) {
-        return buildArray.filter(function (build) {
-          return build.status === 'FAILURE';
-        });
-      });
+      return fetchBuildArray(this.clientRouter, url);
     };
 
     TeamcityBuildAdapter.prototype.getAllLatestRunningBuilds = function getAllLatestRunningBuilds(baseUrl) {
       var url = 'http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:true,canceled:false,count:1),build(number,status,statusText)))';
-
-      return fetchBuildArray(this.clientRouter, url, true);
+      return fetchBuildArray(this.clientRouter, url);
     };
 
     return TeamcityBuildAdapter;
@@ -345,16 +339,17 @@ define('services/build-service',['exports', '../anticorruptionlayer/teamcity-bui
         }
 
         BuildService.prototype.getAllFailedBuilds = function getAllFailedBuilds(baseUrl) {
-            return Promise.all([this.teamcityBuildAdapter.getAllFailedBuilds(baseUrl), this.teamcityBuildAdapter.getAllLatestRunningBuilds(baseUrl)]).then(function (buildArrays) {
+            return Promise.all([this.teamcityBuildAdapter.getAllLatestFinishedBuilds(baseUrl), this.teamcityBuildAdapter.getAllLatestRunningBuilds(baseUrl)]).then(function (buildArrays) {
 
-                var failedBuilds = buildArrays[0];
+                var latestFinishedBuilds = buildArrays[0];
                 var latestRunningBuilds = buildArrays[1];
 
                 validateFailedBuilds();
                 validateRunningBuilds();
 
-                return failedBuilds.map(function (failedBuild) {
-
+                return latestFinishedBuilds.filter(function (finishedBuild) {
+                    return finishedBuild.status === 'FAILURE';
+                }).map(function (failedBuild) {
                     failedBuild.drawAttention = isNewBuildRunning();
                     return failedBuild;
 
@@ -371,7 +366,7 @@ define('services/build-service',['exports', '../anticorruptionlayer/teamcity-bui
                 });
 
                 function validateFailedBuilds() {
-                    if (duplicateNamesInBuildArray(failedBuilds)) {
+                    if (duplicateNamesInBuildArray(latestFinishedBuilds)) {
                         throw new Error("There are failed builds with the same name. We didn't foresee this to happen. Sorry. Please contact us");
                     }
                 }

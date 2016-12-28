@@ -1,8 +1,6 @@
 import { TeamcityBuildAdapter } from '../../../src/anticorruptionlayer/teamcity-build-adapter';
 
-
-
-function makeClientStubForGettingALlFailedBuilds(baseUrl, fetchResponse) {
+function makeClientStubForGettingAllLatestFinishedBuilds(baseUrl, fetchResponse) {
     return makeClientStub('http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))', fetchResponse);
 }
 
@@ -28,8 +26,8 @@ function makeClientStub(expectedUrl, fetchResponse) {
 }
 
 describe('the teamcityBuildAdapter ', () => {
-    describe('the teamcityBuildAdapter getAllFailedBuilds method', () => {
-        it('returns only the failed builds when given a response with failed and successfull builds', (done) => {
+    describe('the teamcityBuildAdapter getAllLatestFinishedBuilds method', () => {
+        it('asks the latest builds from teamcity and transforms those to build objects from our domain', (done) => {
             let fetchResponse = {
                 "buildType": [{
                     "name": "Build1",
@@ -70,7 +68,14 @@ describe('the teamcityBuildAdapter ', () => {
                 ]
             };
 
-            let onlyTheFailedBuilds = [
+            let expectedBuilds = [
+                {
+                    "name": "Build1",
+                    "buildNumber": "183",
+                    "status": "SUCCESS",
+                    "statusText": "Tests passed: 198, ignored: 9",
+                    "drawAttention": false
+                },
                 {
                     "name": "Build2",
                     "buildNumber": "2931",
@@ -87,37 +92,26 @@ describe('the teamcityBuildAdapter ', () => {
                 }
             ];
 
-            new TeamcityBuildAdapter(makeClientStubForGettingALlFailedBuilds("test.com", fetchResponse))
-                .getAllFailedBuilds("test.com")
-                .then(returnedBuilds => expect(returnedBuilds).toEqual(onlyTheFailedBuilds))
+            new TeamcityBuildAdapter(makeClientStubForGettingAllLatestFinishedBuilds("test.com", fetchResponse))
+                .getAllLatestFinishedBuilds("test.com")
+                .then(returnedBuilds => expect(returnedBuilds).toEqual(expectedBuilds))
                 .catch(error => expect(error).toBeUndefined())
                 .finally(done);
         });
 
-        it('returns an empty array when there are no failed builds', (done) => {
+        it('returns an empty array when there are no builds', (done) => {
             let fetchResponse = {
-                "buildType": [{
-                    "name": "Build1",
-                    "builds": {
-                        "build": [
-                            {
-                                "number": "123",
-                                "status": "SUCCESS",
-                                "statusText": "Tests passed: 198, ignored: 9"
-                            }
-                        ]
-                    }
-                }]
+                "buildType": []
             };
 
-            new TeamcityBuildAdapter(makeClientStubForGettingALlFailedBuilds("test.com", fetchResponse))
-                .getAllFailedBuilds("test.com")
+            new TeamcityBuildAdapter(makeClientStubForGettingAllLatestFinishedBuilds("test.com", fetchResponse))
+                .getAllLatestFinishedBuilds("test.com")
                 .then(returnedBuilds => expect(returnedBuilds).toEqual([]))
                 .catch(error => expect(error).toBeUndefined())
                 .finally(done);
         });
 
-        it('returns the failed builds even if are no builds in some of the buildTypes', (done) => {
+        it('returns the builds even if are no builds in some of the buildTypes of the response', (done) => {
             let fetchResponse = {
                 "buildType": [
                     {
@@ -151,8 +145,8 @@ describe('the teamcityBuildAdapter ', () => {
                 }
             ];
 
-            new TeamcityBuildAdapter(makeClientStubForGettingALlFailedBuilds("test.com", fetchResponse))
-                .getAllFailedBuilds("test.com")
+            new TeamcityBuildAdapter(makeClientStubForGettingAllLatestFinishedBuilds("test.com", fetchResponse))
+                .getAllLatestFinishedBuilds("test.com")
                 .then(returnedBuilds => expect(returnedBuilds).toEqual(onlyTheFailedBuilds))
                 .catch(error => expect(error).toBeUndefined())
                 .finally(done);
@@ -201,14 +195,14 @@ describe('the teamcityBuildAdapter ', () => {
                     "buildNumber": "183",
                     "status": "SUCCESS",
                     "statusText": "Tests passed: 198, ignored: 9",
-                    "drawAttention": true
+                    "drawAttention": false
                 },
                 {
                     "name": "Build3",
                     "buildNumber": "121",
                     "status": "FAILURE",
                     "statusText": "Tests failed: 8 (2 new), passed: 29",
-                    "drawAttention": true
+                    "drawAttention": false
                 }
             ];
 

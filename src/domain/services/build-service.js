@@ -1,4 +1,4 @@
-import { TeamcityBuildAdapter } from '../anticorruptionlayer/teamcity-build-adapter';
+import { TeamcityBuildAdapter } from '../../anticorruptionlayer/teamcity-build-adapter';
 import { inject } from 'aurelia-framework';
 
 @inject(TeamcityBuildAdapter)

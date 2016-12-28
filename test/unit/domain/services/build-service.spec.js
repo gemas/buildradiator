@@ -1,4 +1,4 @@
-import { BuildService } from '../../../src/services/build-service';
+import { BuildService } from '../../../../src/domain/services/build-service';
 
 describe('the buildService', () => {
     describe('getAllFailedBuilds method', () => {

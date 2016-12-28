@@ -1,14 +1,14 @@
-import { BuildService } from './build-service';
+import { TeamcityBuildAdapter } from '../anticorruptionlayer/teamcity-build-adapter';
 import { inject } from 'aurelia-framework';
 
-@inject(BuildService)
+@inject(TeamcityBuildAdapter)
 export class BuildFactory {
-    constructor(buildService) {
-        this.buildService = buildService;
+    constructor(teamcityBuildAdapter) {
+        this.teamcityBuildAdapter = teamcityBuildAdapter;
     }
 
     constructFailedBuildObjects(baseUrl) {
-        return Promise.all([this.buildService.getAllFailedBuilds(baseUrl), this.buildService.getAllLatestRunningBuilds(baseUrl)])
+        return Promise.all([this.teamcityBuildAdapter.getAllFailedBuilds(baseUrl), this.teamcityBuildAdapter.getAllLatestRunningBuilds(baseUrl)])
             .then(buildArrays => {
 
                 let failedBuilds = buildArrays[0];

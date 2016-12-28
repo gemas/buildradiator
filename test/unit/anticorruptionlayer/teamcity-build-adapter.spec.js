@@ -1,41 +1,34 @@
-import { BuildService } from '../../../src/services/build-service';
+import { TeamcityBuildAdapter } from '../../../src/anticorruptionlayer/teamcity-build-adapter';
 
-const URLFORALLFAILEDBUILDS = 'http://test.com/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))';
-const URLFORALLLATESTRUNNINGBUILDS = 'http://test.com/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:true,canceled:false,count:1),build(number,status,statusText)))';
 
-function makeClientStub() {
 
-    var responseMap = {};
-    var builder = {
-        withResponse: withResponse,
-        build: build
-    }
-
-    function withResponse(url, response) {
-        responseMap[url] = response;
-        return builder;
-    }
-
-    function build() {
-        return {
-            fetch: function (actualUrl, init) {
-                expect(init).toEqual({
-                    method: 'GET',
-                    headers: new Headers({
-                        'Accept': 'application/json',
-                        'X-Requested-With': 'Fetch',
-                    })
-                })
-                return Promise.resolve({ json: () => responseMap[actualUrl] })
-            }
-        };
-    }
-
-    return builder;
+function makeClientStubForGettingALlFailedBuilds(baseUrl, fetchResponse) {
+    return makeClientStub('http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))', fetchResponse);
 }
 
-describe('the buildService ', () => {
-    describe('the buildService getAllFailedBuilds method', () => {
+function makeClientStubForGettingAllLatestRunningBuilds(baseUrl, fetchResponse) {
+    return makeClientStub('http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:true,canceled:false,count:1),build(number,status,statusText)))', fetchResponse);
+}
+
+function makeClientStub(expectedUrl, fetchResponse) {
+
+    return {
+        fetch: function (actualUrl, init) {
+            expect(actualUrl).toEqual(expectedUrl);
+            expect(init).toEqual({
+                method: 'GET',
+                headers: new Headers({
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'Fetch',
+                })
+            })
+            return Promise.resolve({ json: () => fetchResponse })
+        }
+    };
+}
+
+describe('the teamcityBuildAdapter ', () => {
+    describe('the teamcityBuildAdapter getAllFailedBuilds method', () => {
         it('returns only the failed builds when given a response with failed and successfull builds', (done) => {
             let fetchResponse = {
                 "buildType": [{
@@ -94,7 +87,7 @@ describe('the buildService ', () => {
                 }
             ];
 
-        new BuildService(makeClientStub().withResponse(URLFORALLFAILEDBUILDS, fetchResponse).build())
+            new TeamcityBuildAdapter(makeClientStubForGettingALlFailedBuilds("test.com", fetchResponse))
                 .getAllFailedBuilds("test.com")
                 .then(returnedBuilds => expect(returnedBuilds).toEqual(onlyTheFailedBuilds))
                 .catch(error => expect(error).toBeUndefined())
@@ -117,7 +110,7 @@ describe('the buildService ', () => {
                 }]
             };
 
-            new BuildService(makeClientStub().withResponse(URLFORALLFAILEDBUILDS, fetchResponse).build())
+            new TeamcityBuildAdapter(makeClientStubForGettingALlFailedBuilds("test.com", fetchResponse))
                 .getAllFailedBuilds("test.com")
                 .then(returnedBuilds => expect(returnedBuilds).toEqual([]))
                 .catch(error => expect(error).toBeUndefined())
@@ -158,7 +151,7 @@ describe('the buildService ', () => {
                 }
             ];
 
-            new BuildService(makeClientStub().withResponse(URLFORALLFAILEDBUILDS, fetchResponse).build())
+            new TeamcityBuildAdapter(makeClientStubForGettingALlFailedBuilds("test.com", fetchResponse))
                 .getAllFailedBuilds("test.com")
                 .then(returnedBuilds => expect(returnedBuilds).toEqual(onlyTheFailedBuilds))
                 .catch(error => expect(error).toBeUndefined())
@@ -166,7 +159,7 @@ describe('the buildService ', () => {
         });
     })
 
-    describe('the buildService getAllLatestRunningBuilds method', () => {
+    describe('the teamcityBuildAdapter getAllLatestRunningBuilds method', () => {
         it('returns all the running builds', (done) => {
             let fetchResponse = {
                 "buildType": [{
@@ -219,7 +212,7 @@ describe('the buildService ', () => {
                 }
             ];
 
-            new BuildService(makeClientStub().withResponse(URLFORALLLATESTRUNNINGBUILDS, fetchResponse).build())
+            new TeamcityBuildAdapter(makeClientStubForGettingAllLatestRunningBuilds("test.com", fetchResponse))
                 .getAllLatestRunningBuilds("test.com")
                 .then(returnedBuilds => expect(returnedBuilds).toEqual(latestRunningBuilds))
                 .catch(error => expect(error).toBeUndefined())
@@ -236,7 +229,7 @@ describe('the buildService ', () => {
                 }]
             };
 
-            new BuildService(makeClientStub().withResponse(URLFORALLLATESTRUNNINGBUILDS, fetchResponse).build())
+            new TeamcityBuildAdapter(makeClientStubForGettingAllLatestRunningBuilds("test.com", fetchResponse))
                 .getAllLatestRunningBuilds("test.com")
                 .then(returnedBuilds => expect(returnedBuilds).toEqual([]))
                 .catch(error => expect(error).toBeUndefined())
@@ -244,4 +237,5 @@ describe('the buildService ', () => {
         });
     })
 });
+
 

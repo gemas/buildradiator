@@ -1,15 +1,15 @@
-import { BuildService } from 'services/build-service';
+import { TeamcityBuildAdapter } from 'anticorruptionlayer/teamcity-build-adapter';
 import { inject } from 'aurelia-framework';
 
-@inject(BuildService)
+@inject(TeamcityBuildAdapter)
 export class RunningBuildOverview {
-  constructor(buildService) {
-    this.buildService = buildService;
+  constructor(teamcityBuildAdapter) {
+    this.teamcityBuildAdapter = teamcityBuildAdapter;
   }
 
   activate(params) {
     function setAllRunningBuilds(params) {
-      this.buildService
+      this.teamcityBuildAdapter
         .getAllLatestRunningBuilds(params.baseUrl)
         .then(builds => { this.builds = builds; });
     }

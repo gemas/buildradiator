@@ -1,4 +1,4 @@
-import { HttpClientRouter } from './http-client-router';
+import { HttpClientRouter } from '../services/http-client-router';
 import { inject } from 'aurelia-framework';
 
 function fetchBuildArray(clientRouter, url, drawAttention) {
@@ -28,7 +28,7 @@ function fetchBuildArray(clientRouter, url, drawAttention) {
 }
 
 @inject(HttpClientRouter)
-export class BuildService {
+export class TeamcityBuildAdapter {
   constructor(clientRouter) {
     this.clientRouter = clientRouter;
   }

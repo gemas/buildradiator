@@ -113,7 +113,7 @@ define('main',['exports', './environment'], function (exports, _environment) {
     });
   }
 });
-define('running-build-overview',['exports', 'services/build-service', 'aurelia-framework'], function (exports, _buildService, _aureliaFramework) {
+define('running-build-overview',['exports', 'anticorruptionlayer/teamcity-build-adapter', 'aurelia-framework'], function (exports, _teamcityBuildAdapter, _aureliaFramework) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -129,18 +129,18 @@ define('running-build-overview',['exports', 'services/build-service', 'aurelia-f
 
   var _dec, _class;
 
-  var RunningBuildOverview = exports.RunningBuildOverview = (_dec = (0, _aureliaFramework.inject)(_buildService.BuildService), _dec(_class = function () {
-    function RunningBuildOverview(buildService) {
+  var RunningBuildOverview = exports.RunningBuildOverview = (_dec = (0, _aureliaFramework.inject)(_teamcityBuildAdapter.TeamcityBuildAdapter), _dec(_class = function () {
+    function RunningBuildOverview(teamcityBuildAdapter) {
       _classCallCheck(this, RunningBuildOverview);
 
-      this.buildService = buildService;
+      this.teamcityBuildAdapter = teamcityBuildAdapter;
     }
 
     RunningBuildOverview.prototype.activate = function activate(params) {
       function setAllRunningBuilds(params) {
         var _this = this;
 
-        this.buildService.getAllLatestRunningBuilds(params.baseUrl).then(function (builds) {
+        this.teamcityBuildAdapter.getAllLatestRunningBuilds(params.baseUrl).then(function (builds) {
           _this.builds = builds;
         });
       }
@@ -150,6 +150,74 @@ define('running-build-overview',['exports', 'services/build-service', 'aurelia-f
     };
 
     return RunningBuildOverview;
+  }()) || _class);
+});
+define('anticorruptionlayer/teamcity-build-adapter',['exports', '../services/http-client-router', 'aurelia-framework'], function (exports, _httpClientRouter, _aureliaFramework) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.TeamcityBuildAdapter = undefined;
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  var _dec, _class;
+
+  function fetchBuildArray(clientRouter, url, drawAttention) {
+    var init = {
+      method: 'GET',
+      headers: new Headers({
+        'Accept': 'application/json',
+        'X-Requested-With': 'Fetch'
+      })
+    };
+
+    return clientRouter.fetch(url, init).then(function (response) {
+      return response.json();
+    }).then(function (jsonResponse) {
+      return jsonResponse.buildType.filter(function (buildTypeElement) {
+        return buildTypeElement.builds.build.length > 0;
+      }).map(function (buildTypeElement) {
+        return {
+          "name": buildTypeElement.name,
+          "buildNumber": buildTypeElement.builds.build[0].number,
+          "status": buildTypeElement.builds.build[0].status,
+          "statusText": buildTypeElement.builds.build[0].statusText,
+          "drawAttention": drawAttention
+        };
+      });
+    });
+  }
+
+  var TeamcityBuildAdapter = exports.TeamcityBuildAdapter = (_dec = (0, _aureliaFramework.inject)(_httpClientRouter.HttpClientRouter), _dec(_class = function () {
+    function TeamcityBuildAdapter(clientRouter) {
+      _classCallCheck(this, TeamcityBuildAdapter);
+
+      this.clientRouter = clientRouter;
+    }
+
+    TeamcityBuildAdapter.prototype.getAllFailedBuilds = function getAllFailedBuilds(baseUrl) {
+      var url = 'http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))';
+
+      return fetchBuildArray(this.clientRouter, url, false).then(function (buildArray) {
+        return buildArray.filter(function (build) {
+          return build.status === 'FAILURE';
+        });
+      });
+    };
+
+    TeamcityBuildAdapter.prototype.getAllLatestRunningBuilds = function getAllLatestRunningBuilds(baseUrl) {
+      var url = 'http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:true,canceled:false,count:1),build(number,status,statusText)))';
+
+      return fetchBuildArray(this.clientRouter, url, true);
+    };
+
+    return TeamcityBuildAdapter;
   }()) || _class);
 });
 define('elements/build-overview',['exports', 'aurelia-framework'], function (exports, _aureliaFramework) {
@@ -253,7 +321,7 @@ define('resources/index',["exports"], function (exports) {
   exports.configure = configure;
   function configure(config) {}
 });
-define('services/build-factory',['exports', './build-service', 'aurelia-framework'], function (exports, _buildService, _aureliaFramework) {
+define('services/build-factory',['exports', '../anticorruptionlayer/teamcity-build-adapter', 'aurelia-framework'], function (exports, _teamcityBuildAdapter, _aureliaFramework) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
@@ -269,15 +337,15 @@ define('services/build-factory',['exports', './build-service', 'aurelia-framewor
 
     var _dec, _class;
 
-    var BuildFactory = exports.BuildFactory = (_dec = (0, _aureliaFramework.inject)(_buildService.BuildService), _dec(_class = function () {
-        function BuildFactory(buildService) {
+    var BuildFactory = exports.BuildFactory = (_dec = (0, _aureliaFramework.inject)(_teamcityBuildAdapter.TeamcityBuildAdapter), _dec(_class = function () {
+        function BuildFactory(teamcityBuildAdapter) {
             _classCallCheck(this, BuildFactory);
 
-            this.buildService = buildService;
+            this.teamcityBuildAdapter = teamcityBuildAdapter;
         }
 
         BuildFactory.prototype.constructFailedBuildObjects = function constructFailedBuildObjects(baseUrl) {
-            return Promise.all([this.buildService.getAllFailedBuilds(baseUrl), this.buildService.getAllLatestRunningBuilds(baseUrl)]).then(function (buildArrays) {
+            return Promise.all([this.teamcityBuildAdapter.getAllFailedBuilds(baseUrl), this.teamcityBuildAdapter.getAllLatestRunningBuilds(baseUrl)]).then(function (buildArrays) {
 
                 var failedBuilds = buildArrays[0];
                 var latestRunningBuilds = buildArrays[1];
@@ -328,74 +396,6 @@ define('services/build-factory',['exports', './build-service', 'aurelia-framewor
 
         return BuildFactory;
     }()) || _class);
-});
-define('services/build-service',['exports', './http-client-router', 'aurelia-framework'], function (exports, _httpClientRouter, _aureliaFramework) {
-  'use strict';
-
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.BuildService = undefined;
-
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  var _dec, _class;
-
-  function fetchBuildArray(clientRouter, url, drawAttention) {
-    var init = {
-      method: 'GET',
-      headers: new Headers({
-        'Accept': 'application/json',
-        'X-Requested-With': 'Fetch'
-      })
-    };
-
-    return clientRouter.fetch(url, init).then(function (response) {
-      return response.json();
-    }).then(function (jsonResponse) {
-      return jsonResponse.buildType.filter(function (buildTypeElement) {
-        return buildTypeElement.builds.build.length > 0;
-      }).map(function (buildTypeElement) {
-        return {
-          "name": buildTypeElement.name,
-          "buildNumber": buildTypeElement.builds.build[0].number,
-          "status": buildTypeElement.builds.build[0].status,
-          "statusText": buildTypeElement.builds.build[0].statusText,
-          "drawAttention": drawAttention
-        };
-      });
-    });
-  }
-
-  var BuildService = exports.BuildService = (_dec = (0, _aureliaFramework.inject)(_httpClientRouter.HttpClientRouter), _dec(_class = function () {
-    function BuildService(clientRouter) {
-      _classCallCheck(this, BuildService);
-
-      this.clientRouter = clientRouter;
-    }
-
-    BuildService.prototype.getAllFailedBuilds = function getAllFailedBuilds(baseUrl) {
-      var url = 'http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))';
-
-      return fetchBuildArray(this.clientRouter, url, false).then(function (buildArray) {
-        return buildArray.filter(function (build) {
-          return build.status === 'FAILURE';
-        });
-      });
-    };
-
-    BuildService.prototype.getAllLatestRunningBuilds = function getAllLatestRunningBuilds(baseUrl) {
-      var url = 'http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:true,canceled:false,count:1),build(number,status,statusText)))';
-
-      return fetchBuildArray(this.clientRouter, url, true);
-    };
-
-    return BuildService;
-  }()) || _class);
 });
 define('services/http-client-router',['exports', 'aurelia-fetch-client', './teamcitystub/team-city-http-client-stub', 'aurelia-framework'], function (exports, _aureliaFetchClient, _teamCityHttpClientStub, _aureliaFramework) {
     'use strict';

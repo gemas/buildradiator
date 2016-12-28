@@ -1,4 +1,4 @@
-import { HttpClientRouter } from '../services/http-client-router';
+import { HttpClientRouter } from '../communicationlayer/http-client-router';
 import { inject } from 'aurelia-framework';
 
 function fetchBuildArray(clientRouter, url) {

@@ -1,4 +1,4 @@
-import { HttpClientRouter } from '../../../src/services/http-client-router';
+import { HttpClientRouter } from '../../../src/communicationlayer/http-client-router';
 
 describe('the httpClientRouter fetch method', () => {
     let realResponse = ['realResponse'];

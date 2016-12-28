@@ -1,6 +1,6 @@
-import teamCitylatestBuildsResponse from '../../../../src/services/teamcitystub/team-city-latest-builds-response';
-import teamCitylatestRunningBuildsResponse from '../../../../src/services/teamcitystub/team-city-latest-running-builds-response';
-import { TeamCityHttpClientStub } from '../../../../src/services/teamcitystub/team-city-http-client-stub';
+import teamCitylatestBuildsResponse from '../../../../src/communicationlayer/teamcitystub/team-city-latest-builds-response';
+import teamCitylatestRunningBuildsResponse from '../../../../src/communicationlayer/teamcitystub/team-city-latest-running-builds-response';
+import { TeamCityHttpClientStub } from '../../../../src/communicationlayer/teamcitystub/team-city-http-client-stub';
 
 describe('the teamCityHttpClientStub fetch method', () => {
     it('given a url containing running:false returns a promise with an object with a json method that returns the teamCitylatestBuildsResponse', (done) => { 

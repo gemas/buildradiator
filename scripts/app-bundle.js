@@ -152,7 +152,7 @@ define('running-build-overview',['exports', 'services/build-service', 'aurelia-f
     return RunningBuildOverview;
   }()) || _class);
 });
-define('anticorruptionlayer/teamcity-build-adapter',['exports', '../services/http-client-router', 'aurelia-framework'], function (exports, _httpClientRouter, _aureliaFramework) {
+define('anticorruptionlayer/teamcity-build-adapter',['exports', '../communicationlayer/http-client-router', 'aurelia-framework'], function (exports, _httpClientRouter, _aureliaFramework) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -213,6 +213,37 @@ define('anticorruptionlayer/teamcity-build-adapter',['exports', '../services/htt
 
     return TeamcityBuildAdapter;
   }()) || _class);
+});
+define('communicationlayer/http-client-router',['exports', 'aurelia-fetch-client', './teamcitystub/team-city-http-client-stub', 'aurelia-framework'], function (exports, _aureliaFetchClient, _teamCityHttpClientStub, _aureliaFramework) {
+    'use strict';
+
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+    exports.HttpClientRouter = undefined;
+
+    function _classCallCheck(instance, Constructor) {
+        if (!(instance instanceof Constructor)) {
+            throw new TypeError("Cannot call a class as a function");
+        }
+    }
+
+    var _dec, _class;
+
+    var HttpClientRouter = exports.HttpClientRouter = (_dec = (0, _aureliaFramework.inject)(_aureliaFetchClient.HttpClient, _teamCityHttpClientStub.TeamCityHttpClientStub), _dec(_class = function () {
+        function HttpClientRouter(realHttpClient, teamCityHttpClientStub) {
+            _classCallCheck(this, HttpClientRouter);
+
+            this.realHttpClient = realHttpClient;
+            this.teamCityHttpClientStub = teamCityHttpClientStub;
+        }
+
+        HttpClientRouter.prototype.fetch = function fetch(url, init) {
+            return url.includes('stub') ? this.teamCityHttpClientStub.fetch(url) : this.realHttpClient.fetch(url, init);
+        };
+
+        return HttpClientRouter;
+    }()) || _class);
 });
 define('elements/build-overview',['exports', 'aurelia-framework'], function (exports, _aureliaFramework) {
     'use strict';
@@ -401,38 +432,7 @@ define('services/build-service',['exports', '../anticorruptionlayer/teamcity-bui
         return BuildService;
     }()) || _class);
 });
-define('services/http-client-router',['exports', 'aurelia-fetch-client', './teamcitystub/team-city-http-client-stub', 'aurelia-framework'], function (exports, _aureliaFetchClient, _teamCityHttpClientStub, _aureliaFramework) {
-    'use strict';
-
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
-    exports.HttpClientRouter = undefined;
-
-    function _classCallCheck(instance, Constructor) {
-        if (!(instance instanceof Constructor)) {
-            throw new TypeError("Cannot call a class as a function");
-        }
-    }
-
-    var _dec, _class;
-
-    var HttpClientRouter = exports.HttpClientRouter = (_dec = (0, _aureliaFramework.inject)(_aureliaFetchClient.HttpClient, _teamCityHttpClientStub.TeamCityHttpClientStub), _dec(_class = function () {
-        function HttpClientRouter(realHttpClient, teamCityHttpClientStub) {
-            _classCallCheck(this, HttpClientRouter);
-
-            this.realHttpClient = realHttpClient;
-            this.teamCityHttpClientStub = teamCityHttpClientStub;
-        }
-
-        HttpClientRouter.prototype.fetch = function fetch(url, init) {
-            return url.includes('stub') ? this.teamCityHttpClientStub.fetch(url) : this.realHttpClient.fetch(url, init);
-        };
-
-        return HttpClientRouter;
-    }()) || _class);
-});
-define('services/teamcitystub/team-city-http-client-stub',['exports', './team-city-latest-builds-response', './team-city-latest-running-builds-response'], function (exports, _teamCityLatestBuildsResponse, _teamCityLatestRunningBuildsResponse) {
+define('communicationlayer/teamcitystub/team-city-http-client-stub',['exports', './team-city-latest-builds-response', './team-city-latest-running-builds-response'], function (exports, _teamCityLatestBuildsResponse, _teamCityLatestRunningBuildsResponse) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -480,7 +480,7 @@ define('services/teamcitystub/team-city-http-client-stub',['exports', './team-ci
 
   ;
 });
-define('services/teamcitystub/team-city-latest-builds-response',["exports"], function (exports) {
+define('communicationlayer/teamcitystub/team-city-latest-builds-response',["exports"], function (exports) {
   "use strict";
 
   Object.defineProperty(exports, "__esModule", {
@@ -580,7 +580,7 @@ define('services/teamcitystub/team-city-latest-builds-response',["exports"], fun
     }]
   };
 });
-define('services/teamcitystub/team-city-latest-running-builds-response',["exports"], function (exports) {
+define('communicationlayer/teamcitystub/team-city-latest-running-builds-response',["exports"], function (exports) {
   "use strict";
 
   Object.defineProperty(exports, "__esModule", {

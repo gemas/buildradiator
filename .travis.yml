@@ -7,4 +7,5 @@ secure: "l88m79pFJpX/nrB7ifbqFAmJMmqtSaEnQ0M4UZ2CGXQIUVpA+Msn4CZLf+/9BWSzoPO0d+Q
 before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
-after_success: - buildscripts/deploy.sh
+after_success: 
+  - buildscripts/deploy.sh

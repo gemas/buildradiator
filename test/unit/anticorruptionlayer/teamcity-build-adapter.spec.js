@@ -30,6 +30,7 @@ describe('the teamcityBuildAdapter ', () => {
         it('asks the latest builds from teamcity and transforms those to build objects from our domain', (done) => {
             let fetchResponse = {
                 "buildType": [{
+                    "id": "build_1_id",
                     "name": "Build1",
                     "builds": {
                         "build": [
@@ -42,6 +43,7 @@ describe('the teamcityBuildAdapter ', () => {
                     }
                 },
                 {
+                    "id": "build_2_id",
                     "name": "Build2",
                     "builds": {
                         "build": [
@@ -54,6 +56,7 @@ describe('the teamcityBuildAdapter ', () => {
                     }
                 },
                 {
+                    "id": "build_3_id",
                     "name": "Build3",
                     "builds": {
                         "build": [
@@ -70,6 +73,7 @@ describe('the teamcityBuildAdapter ', () => {
 
             let expectedBuilds = [
                 {
+                    "id": "build_1_id",
                     "name": "Build1",
                     "buildNumber": "183",
                     "status": "SUCCESS",
@@ -77,6 +81,7 @@ describe('the teamcityBuildAdapter ', () => {
                     "drawAttention": false
                 },
                 {
+                    "id": "build_2_id",
                     "name": "Build2",
                     "buildNumber": "2931",
                     "status": "FAILURE",
@@ -84,6 +89,7 @@ describe('the teamcityBuildAdapter ', () => {
                     "drawAttention": false
                 },
                 {
+                    "id": "build_3_id",
                     "name": "Build3",
                     "buildNumber": "121",
                     "status": "FAILURE",
@@ -115,12 +121,14 @@ describe('the teamcityBuildAdapter ', () => {
             let fetchResponse = {
                 "buildType": [
                     {
+                        "id": "build_1_id",
                         "name": "Build1",
                         "builds": {
                             "build": []
                         }
                     },
                     {
+                        "id": "build_2_id",
                         "name": "Build2",
                         "builds": {
                             "build": [
@@ -135,8 +143,9 @@ describe('the teamcityBuildAdapter ', () => {
                 ]
             };
 
-            let onlyTheFailedBuilds = [
+            let expectedBuilds = [
                 {
+                    "id": "build_2_id",
                     "name": "Build2",
                     "buildNumber": "123",
                     "status": "FAILURE",
@@ -147,7 +156,7 @@ describe('the teamcityBuildAdapter ', () => {
 
             new TeamcityBuildAdapter(makeClientStubForGettingAllLatestFinishedBuilds("test.com", fetchResponse))
                 .getAllLatestFinishedBuilds("test.com")
-                .then(returnedBuilds => expect(returnedBuilds).toEqual(onlyTheFailedBuilds))
+                .then(returnedBuilds => expect(returnedBuilds).toEqual(expectedBuilds))
                 .catch(error => expect(error).toBeUndefined())
                 .finally(done);
         });
@@ -157,6 +166,7 @@ describe('the teamcityBuildAdapter ', () => {
         it('returns all the running builds', (done) => {
             let fetchResponse = {
                 "buildType": [{
+                    "id": "build_1_id",
                     "name": "Build1",
                     "builds": {
                         "build": [
@@ -169,12 +179,14 @@ describe('the teamcityBuildAdapter ', () => {
                     }
                 },
                 {
+                    "id": "build_2_id",
                     "name": "Build2",
                     "builds": {
                         "build": []
                     }
                 },
                 {
+                    "id": "build_3_id",
                     "name": "Build3",
                     "builds": {
                         "build": [
@@ -191,6 +203,7 @@ describe('the teamcityBuildAdapter ', () => {
 
             let latestRunningBuilds = [
                 {
+                    "id": "build_1_id",
                     "name": "Build1",
                     "buildNumber": "183",
                     "status": "SUCCESS",
@@ -198,6 +211,7 @@ describe('the teamcityBuildAdapter ', () => {
                     "drawAttention": false
                 },
                 {
+                    "id": "build_3_id",
                     "name": "Build3",
                     "buildNumber": "121",
                     "status": "FAILURE",
@@ -216,6 +230,7 @@ describe('the teamcityBuildAdapter ', () => {
         it('returns an empty array when there are no running builds', (done) => {
             let fetchResponse = {
                 "buildType": [{
+                    "id": "build_1_id",
                     "name": "Build1",
                     "builds": {
                         "build": []

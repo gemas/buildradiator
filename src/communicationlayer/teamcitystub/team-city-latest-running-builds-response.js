@@ -1,6 +1,7 @@
 export default {
   "buildType": [
     {
+      "id": "build_1_id",
       "name": "build 1",
       "builds": {
         "build": [
@@ -13,6 +14,7 @@ export default {
       }
     },
     {
+      "id": "build_25_id",
       "name": "build 25",
       "builds": {
         "build": [
@@ -25,6 +27,7 @@ export default {
       }
     },
     {
+      "id": "build_3_id",
       "name": "build 3",
       "builds": {
         "build": [

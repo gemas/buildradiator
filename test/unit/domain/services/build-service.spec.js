@@ -8,6 +8,7 @@ describe('the buildService', () => {
                     expect(baseUrl).toEqual("test.com");
                     return Promise.resolve([
                         {
+                            "id": "build1_id",
                             "name": "Build1",
                             "buildNumber": "3.1.70.17327",
                             "status": "FAILURE",
@@ -15,6 +16,7 @@ describe('the buildService', () => {
                             "drawAttention": false
                         },
                         {
+                            "id": "build2_id",
                             "name": "Build2",
                             "buildNumber": "2.1.75.17327",
                             "status": "FAILURE",
@@ -22,6 +24,7 @@ describe('the buildService', () => {
                             "drawAttention": false
                         },
                         {
+                            "id": "build3_id",
                             "name": "Build3",
                             "buildNumber": "123",
                             "status": "FAILURE",
@@ -29,6 +32,15 @@ describe('the buildService', () => {
                             "drawAttention": false
                         },
                         {
+                            "id": "other_build3_id",
+                            "name": "Build3",
+                            "buildNumber": "123",
+                            "status": "FAILURE",
+                            "statusText": "Tests failed: 8 (2 new), passed: 29",
+                            "drawAttention": false
+                        },
+                        {
+                            "id": "build4_id",
                             "name": "Build4",
                             "buildNumber": "3.1.70.23",
                             "status": "FAILURE",
@@ -36,6 +48,7 @@ describe('the buildService', () => {
                             "drawAttention": false
                         },
                         {
+                            "id": "build5_id",
                             "name": "Build5",
                             "buildNumber": "3.1.70.17327",
                             "status": "SUCCESS",
@@ -48,6 +61,7 @@ describe('the buildService', () => {
                     expect(baseUrl).toEqual("test.com");
                     return Promise.resolve([
                         {
+                            "id": "build2_id",
                             "name": "Build2",
                             "buildNumber": "2.1.75.17325",
                             "status": "SUCCESS",
@@ -55,6 +69,7 @@ describe('the buildService', () => {
                             "drawAttention": false
                         },
                         {
+                            "id": "build3_id",
                             "name": "Build3",
                             "buildNumber": "124",
                             "status": "SUCCESS",
@@ -62,6 +77,7 @@ describe('the buildService', () => {
                             "drawAttention": false
                         },
                         {
+                            "id": "build4_id",
                             "name": "Build4",
                             "buildNumber": "3.1.70.25",
                             "status": "FAILURE",
@@ -75,6 +91,7 @@ describe('the buildService', () => {
             new BuildService(teamcityBuildAdapterStub).getAllFailedBuilds("test.com")
                 .then(returnedBuilds => expect(returnedBuilds).toEqual([
                     {
+                        "id": "build1_id",
                         "name": "Build1",
                         "buildNumber": "3.1.70.17327",
                         "status": "FAILURE",
@@ -82,6 +99,7 @@ describe('the buildService', () => {
                         "drawAttention": false
                     },
                     {
+                        "id": "build2_id",
                         "name": "Build2",
                         "buildNumber": "2.1.75.17327",
                         "status": "FAILURE",
@@ -89,6 +107,7 @@ describe('the buildService', () => {
                         "drawAttention": false
                     },
                     {
+                        "id": "build3_id",
                         "name": "Build3",
                         "buildNumber": "123",
                         "status": "FAILURE",
@@ -96,6 +115,15 @@ describe('the buildService', () => {
                         "drawAttention": true
                     },
                     {
+                        "id": "other_build3_id",
+                        "name": "Build3",
+                        "buildNumber": "123",
+                        "status": "FAILURE",
+                        "statusText": "Tests failed: 8 (2 new), passed: 29",
+                        "drawAttention": false
+                    },
+                    {
+                        "id": "build4_id",
                         "name": "Build4",
                         "buildNumber": "3.1.70.23",
                         "status": "FAILURE",
@@ -107,72 +135,9 @@ describe('the buildService', () => {
                 .finally(done);
         });
 
-        it('makes the assumption that the name in the failing builds is unique', (done) => {
-            let teamcityBuildAdapterStub = {
-                getAllLatestFinishedBuilds: function getAllLatestFinishedBuilds(baseUrl) {
-                    expect(baseUrl).toEqual("test.com");
-                    return Promise.resolve([
-                        {
-                            "name": "Build1",
-                            "buildNumber": "3.1.70.17327",
-                            "status": "FAILURE",
-                            "statusText": "Tests failed: 8 (2 new), passed: 29",
-                            "drawAttention": false
-                        },
-                        {
-                            "name": "Build1",
-                            "buildNumber": "2.1.75.17327",
-                            "status": "FAILURE",
-                            "statusText": "Tests failed: 8 (2 new), passed: 29",
-                            "drawAttention": false
-                        }
-                    ]);
-                },
-                getAllLatestRunningBuilds: function getAllLatestRunningBuilds(baseUrl) {
-                    expect(baseUrl).toEqual("test.com");
-                    return Promise.resolve([
-                    ]);
-                }
-            }
 
-            new BuildService(teamcityBuildAdapterStub).getAllFailedBuilds("test.com")
-                .then(() => { throw "exception isn't thrown" })
-                .catch(error => expect(error).toEqual(new Error("There are failed builds with the same name. We didn't foresee this to happen. Sorry. Please contact us")))
-                .finally(done);
-        });
 
-        it('makes the assumption that the name in the running builds is unique', (done) => {
-            let teamcityBuildAdapterStub = {
-                getAllLatestFinishedBuilds: function getAllLatestFinishedBuilds(baseUrl) {
-                    expect(baseUrl).toEqual("test.com");
-                    return Promise.resolve([]);
-                },
-                getAllLatestRunningBuilds: function getAllLatestRunningBuilds(baseUrl) {
-                    expect(baseUrl).toEqual("test.com");
-                    return Promise.resolve([
-                        {
-                            "name": "Build1",
-                            "buildNumber": "3.1.70.17327",
-                            "status": "FAILURE",
-                            "statusText": "Tests failed: 8 (2 new), passed: 29",
-                            "drawAttention": false
-                        },
-                        {
-                            "name": "Build1",
-                            "buildNumber": "2.1.75.17327",
-                            "status": "FAILURE",
-                            "statusText": "Tests failed: 8 (2 new), passed: 29",
-                            "drawAttention": false
-                        }
-                    ]);
-                }
-            }
 
-            new BuildService(teamcityBuildAdapterStub).getAllFailedBuilds("test.com")
-                .then(() => { throw "exception isn't thrown" })
-                .catch(error => expect(error).toEqual(new Error("There are running builds with the same name. We didn't foresee this to happen. Sorry. Please contact us")))
-                .finally(done);
-        });
     });
 
     describe('getAllLatestRunningBuilds method', () => {

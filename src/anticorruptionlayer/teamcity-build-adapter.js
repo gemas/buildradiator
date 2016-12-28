@@ -17,6 +17,7 @@ function fetchBuildArray(clientRouter, url) {
         .filter(buildTypeElement => buildTypeElement.builds.build.length > 0)
         .map(buildTypeElement => {
           return {
+            "id": buildTypeElement.id,
             "name": buildTypeElement.name,
             "buildNumber": buildTypeElement.builds.build[0].number,
             "status": buildTypeElement.builds.build[0].status,

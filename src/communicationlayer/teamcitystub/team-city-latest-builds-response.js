@@ -1,6 +1,7 @@
 export default {
   "buildType": [
     {
+      "id": "build_1_id",
       "name": "build 1",
       "builds": {
         "build": [
@@ -13,6 +14,7 @@ export default {
       }
     },
     {
+      "id": "build_2_id",
       "name": "build 2",
       "builds": {
         "build": [
@@ -25,6 +27,7 @@ export default {
       }
     },
     {
+      "id": "build_3_id",
       "name": "build 3",
       "builds": {
         "build": [
@@ -37,7 +40,7 @@ export default {
       }
     },
     {
-      "name": "build 4",
+      "id": "build_4_id",
       "builds": {
         "build": [
           {
@@ -49,7 +52,8 @@ export default {
       }
     },
     {
-      "name": "build 5",
+      "id": "build_5_id",
+      "name": "same name as other build",
       "builds": {
         "build": [
           {
@@ -61,7 +65,8 @@ export default {
       }
     },
     {
-      "name": "build 6",
+      "id": "build_6_id",
+      "name": "same name as other build",
       "builds": {
         "build": [
           {
@@ -73,6 +78,7 @@ export default {
       }
     },
     {
+      "id": "build_7_id",
       "name": "build 7",
       "builds": {
         "build": [
@@ -85,6 +91,7 @@ export default {
       }
     },
     {
+      "id": "build_8_id",
       "name": "build 8",
       "builds": {
         "build": [
@@ -97,6 +104,7 @@ export default {
       }
     },
     {
+      "id": "build_9_id",
       "name": "build 9",
       "builds": {
         "build": [
@@ -109,6 +117,7 @@ export default {
       }
     },
     {
+      "id": "build_10_id",
       "name": "build 10",
       "builds": {
         "build": [

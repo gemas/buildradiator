@@ -14,9 +14,6 @@ export class BuildService {
                 let latestFinishedBuilds = buildArrays[0];
                 let latestRunningBuilds = buildArrays[1];
 
-                validateFailedBuilds();
-                validateRunningBuilds();
-
                 return latestFinishedBuilds
                     .filter(finishedBuild => finishedBuild.status === 'FAILURE')
                     .map(failedBuild => {
@@ -26,30 +23,12 @@ export class BuildService {
                         function isNewBuildRunning() {
 
                             function getCorrespondingBuild() {
-                                return latestRunningBuilds.filter(latestRunningBuild => latestRunningBuild.name === failedBuild.name)[0];
+                                return latestRunningBuilds.filter(latestRunningBuild => latestRunningBuild.id === failedBuild.id)[0];
                             }
 
                             return getCorrespondingBuild() !== undefined && getCorrespondingBuild().buildNumber > failedBuild.buildNumber;
                         }
                     });
-
-                function validateFailedBuilds() {
-                    if (haveDuplicateNamesInBuildArray(latestFinishedBuilds)) {
-                        throw new Error("There are failed builds with the same name. We didn't foresee this to happen. Sorry. Please contact us");
-                    }
-                }
-
-                function validateRunningBuilds() {
-                    if (haveDuplicateNamesInBuildArray(latestRunningBuilds)) {
-                        throw new Error("There are running builds with the same name. We didn't foresee this to happen. Sorry. Please contact us");
-                    }
-                }
-
-                function haveDuplicateNamesInBuildArray(buildArray) {
-                    return buildArray
-                        .map(failedBuild1 => buildArray.filter(failedBuild2 => failedBuild1.name === failedBuild2.name).length)
-                        .filter(occurancesOfName => occurancesOfName > 1).length > 1;
-                }
             });
     }
 

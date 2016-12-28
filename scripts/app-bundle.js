@@ -36,7 +36,7 @@ define('environment',["exports"], function (exports) {
     testing: true
   };
 });
-define('failed-build-overview',['exports', 'services/build-factory', 'aurelia-framework'], function (exports, _buildFactory, _aureliaFramework) {
+define('failed-build-overview',['exports', 'services/build-service', 'aurelia-framework'], function (exports, _buildService, _aureliaFramework) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -52,18 +52,18 @@ define('failed-build-overview',['exports', 'services/build-factory', 'aurelia-fr
 
   var _dec, _class;
 
-  var FailedBuildOverview = exports.FailedBuildOverview = (_dec = (0, _aureliaFramework.inject)(_buildFactory.BuildFactory), _dec(_class = function () {
-    function FailedBuildOverview(factory) {
+  var FailedBuildOverview = exports.FailedBuildOverview = (_dec = (0, _aureliaFramework.inject)(_buildService.BuildService), _dec(_class = function () {
+    function FailedBuildOverview(service) {
       _classCallCheck(this, FailedBuildOverview);
 
-      this.factory = factory;
+      this.service = service;
     }
 
     FailedBuildOverview.prototype.activate = function activate(params) {
       function setAllFailedBuilds(params) {
         var _this = this;
 
-        this.factory.constructFailedBuildObjects(params.baseUrl).then(function (builds) {
+        this.service.getAllFailedBuilds(params.baseUrl).then(function (builds) {
           _this.builds = builds;
         });
       }
@@ -321,13 +321,13 @@ define('resources/index',["exports"], function (exports) {
   exports.configure = configure;
   function configure(config) {}
 });
-define('services/build-factory',['exports', '../anticorruptionlayer/teamcity-build-adapter', 'aurelia-framework'], function (exports, _teamcityBuildAdapter, _aureliaFramework) {
+define('services/build-service',['exports', '../anticorruptionlayer/teamcity-build-adapter', 'aurelia-framework'], function (exports, _teamcityBuildAdapter, _aureliaFramework) {
     'use strict';
 
     Object.defineProperty(exports, "__esModule", {
         value: true
     });
-    exports.BuildFactory = undefined;
+    exports.BuildService = undefined;
 
     function _classCallCheck(instance, Constructor) {
         if (!(instance instanceof Constructor)) {
@@ -337,14 +337,14 @@ define('services/build-factory',['exports', '../anticorruptionlayer/teamcity-bui
 
     var _dec, _class;
 
-    var BuildFactory = exports.BuildFactory = (_dec = (0, _aureliaFramework.inject)(_teamcityBuildAdapter.TeamcityBuildAdapter), _dec(_class = function () {
-        function BuildFactory(teamcityBuildAdapter) {
-            _classCallCheck(this, BuildFactory);
+    var BuildService = exports.BuildService = (_dec = (0, _aureliaFramework.inject)(_teamcityBuildAdapter.TeamcityBuildAdapter), _dec(_class = function () {
+        function BuildService(teamcityBuildAdapter) {
+            _classCallCheck(this, BuildService);
 
             this.teamcityBuildAdapter = teamcityBuildAdapter;
         }
 
-        BuildFactory.prototype.constructFailedBuildObjects = function constructFailedBuildObjects(baseUrl) {
+        BuildService.prototype.getAllFailedBuilds = function getAllFailedBuilds(baseUrl) {
             return Promise.all([this.teamcityBuildAdapter.getAllFailedBuilds(baseUrl), this.teamcityBuildAdapter.getAllLatestRunningBuilds(baseUrl)]).then(function (buildArrays) {
 
                 var failedBuilds = buildArrays[0];
@@ -394,7 +394,7 @@ define('services/build-factory',['exports', '../anticorruptionlayer/teamcity-bui
             });
         };
 
-        return BuildFactory;
+        return BuildService;
     }()) || _class);
 });
 define('services/http-client-router',['exports', 'aurelia-fetch-client', './teamcitystub/team-city-http-client-stub', 'aurelia-framework'], function (exports, _aureliaFetchClient, _teamCityHttpClientStub, _aureliaFramework) {

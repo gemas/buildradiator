@@ -1,16 +1,16 @@
-import { BuildFactory } from 'services/build-factory';
+import { BuildService } from 'services/build-service';
 import { inject } from 'aurelia-framework';
 
-@inject(BuildFactory)
+@inject(BuildService)
 export class FailedBuildOverview {
-  constructor(factory) {
-    this.factory = factory;
+  constructor(service) {
+    this.service = service;
   }
 
   activate(params) {
     function setAllFailedBuilds(params) {
-      this.factory
-        .constructFailedBuildObjects(params.baseUrl)
+      this.service
+        .getAllFailedBuilds(params.baseUrl)
         .then(builds => { this.builds = builds; });
     }
 

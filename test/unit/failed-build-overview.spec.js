@@ -7,12 +7,12 @@ function putFunctionOnJobQueue(expectFunction) {
 function makeBuildFactoryStub() {
   let count = 0;
 
-  function constructFailedBuildObjects(baseUrl) {
+  function getAllFailedBuilds(baseUrl) {
     count++;
     expect(baseUrl).toEqual("baseUrl");
     return Promise.resolve(['a' + count, 'b' + count, 'c' + count]);
   }
-  return { constructFailedBuildObjects: constructFailedBuildObjects };
+  return { getAllFailedBuilds: getAllFailedBuilds };
 }
 
 describe('the failed build overview', () => {

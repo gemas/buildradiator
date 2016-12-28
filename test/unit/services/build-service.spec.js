@@ -1,8 +1,8 @@
-import { BuildFactory } from '../../../src/services/build-factory';
+import { BuildService } from '../../../src/services/build-service';
 
 describe('the buildService getAllFailedBuilds method', () => {
-    it('returns only the failed builds when given a response with failed an successfull builds', (done) => {
-        let buildServiceStub = {
+    it('returns the failed builds and draw attention on the ones that have a new build that is running', (done) => {
+        let teamcityBuildAdapterStub = {
             getAllFailedBuilds: function getAllFailedBuilds(baseUrl) {
                 expect(baseUrl).toEqual("test.com");
                 return Promise.resolve([
@@ -32,7 +32,7 @@ describe('the buildService getAllFailedBuilds method', () => {
                     }
                 ]);
             },
-            getAllLatestRunningBuilds: function getAllLatestRunningBuilds(baseUrl) {
+            getAllLatestRunningBuilds: function getAllFailedBuilds(baseUrl) {
                 expect(baseUrl).toEqual("test.com");
                 return Promise.resolve([
                     {
@@ -57,7 +57,7 @@ describe('the buildService getAllFailedBuilds method', () => {
             }
         }
 
-        new BuildFactory(buildServiceStub).constructFailedBuildObjects("test.com")
+        new BuildService(teamcityBuildAdapterStub).getAllFailedBuilds("test.com")
             .then(returnedBuilds => expect(returnedBuilds).toEqual([
                 {
                     "name": "Build1",
@@ -93,7 +93,7 @@ describe('the buildService getAllFailedBuilds method', () => {
     });
 
     it('makes the assumption that the name in the failing builds is unique', (done) => {
-        let buildServiceStub = {
+        let teamcityBuildAdapterStub = {
             getAllFailedBuilds: function getAllFailedBuilds(baseUrl) {
                 expect(baseUrl).toEqual("test.com");
                 return Promise.resolve([
@@ -118,14 +118,14 @@ describe('the buildService getAllFailedBuilds method', () => {
             }
         }
 
-        new BuildFactory(buildServiceStub).constructFailedBuildObjects("test.com")
+        new BuildService(teamcityBuildAdapterStub).getAllFailedBuilds("test.com")
             .then(() => { throw "exception isn't thrown" })
             .catch(error => expect(error).toEqual(new Error("There are failed builds with the same name. We didn't foresee this to happen. Sorry. Please contact us")))
             .finally(done);
     });
 
     it('makes the assumption that the name in the running builds is unique', (done) => {
-        let buildServiceStub = {
+        let teamcityBuildAdapterStub = {
             getAllFailedBuilds: function getAllFailedBuilds(baseUrl) {
                 expect(baseUrl).toEqual("test.com");
                 return Promise.resolve([]);
@@ -149,7 +149,7 @@ describe('the buildService getAllFailedBuilds method', () => {
             }
         }
 
-        new BuildFactory(buildServiceStub).constructFailedBuildObjects("test.com")
+        new BuildService(teamcityBuildAdapterStub).getAllFailedBuilds("test.com")
             .then(() => { throw "exception isn't thrown" })
             .catch(error => expect(error).toEqual(new Error("There are running builds with the same name. We didn't foresee this to happen. Sorry. Please contact us")))
             .finally(done);

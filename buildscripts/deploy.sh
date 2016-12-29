@@ -5,6 +5,7 @@ echo "New deploy\n"
 au build --env prod
 
 cd $HOME
+git config --global push.default simple
 git config --global user.email "travis@travis-ci.org"
 git config --global user.name "travis-ci"
 git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/robisrob/buildradiator gh-pages
@@ -17,4 +18,4 @@ cp $HOME/build/robisrob/buildradiator/scripts/vendor-bundle.js ./gh-pages/app/sc
 cd gh-pages
 git add -A
 git commit -m "new deploy: $TRAVIS_BUILD_NUMBER"
-git push -q > /dev/null
+git push --quiet 

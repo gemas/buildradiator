@@ -30,6 +30,7 @@ export class BuildOverview {
 
     startDrag(event) {
         this.showBlackList = true;
+        event.dataTransfer.setData("id", event.target.id);
         return true;
     }
 

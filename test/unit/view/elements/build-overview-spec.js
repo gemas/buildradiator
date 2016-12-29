@@ -34,10 +34,42 @@ describe('the BuildOverview', () => {
     it('is constructed with the property showBlackList on false', () => expect(new BuildOverview().showBlackList).toBe(false));
 
     describe('startDrag', () => {
+        function makeEvent() {
+            var setDataFunction = function setDataFunction() { };
+            var id = "id";
+
+            function withSetDataFunction(_setDataFunction) {
+                setDataFunction = _setDataFunction;
+                return this;
+            }
+
+            function withId(_id) {
+                id = _id;
+                return this;
+            }
+
+            function build() {
+                return {
+                    dataTransfer: {
+                        setData: setDataFunction
+                    },
+                    target: {
+                        id: id
+                    }
+                }
+            }
+
+            return {
+                withSetDataFunction: withSetDataFunction,
+                withId: withId,
+                build: build
+            }
+        };
+
         it('sets the property showBlackList on true', () => {
             var buildOverview = new BuildOverview();
 
-            buildOverview.startDrag();
+            buildOverview.startDrag(makeEvent().build());
 
             expect(buildOverview.showBlackList).toBe(true);
         })
@@ -45,10 +77,22 @@ describe('the BuildOverview', () => {
         it('returns true so that preventDefault is not called on event, because this breaks the dragging', () => {
             var buildOverview = new BuildOverview();
 
-            buildOverview.startDrag();
+            buildOverview.startDrag(makeEvent().build());
 
             expect(buildOverview.showBlackList).toBe(true);
         });
+
+        it('puts the id of the target from the event on the datatransfer with the key id', () => {
+            var data = {};
+            var event = makeEvent()
+                .withSetDataFunction((key, value) => data[key] = value)
+                .withId("random_id")
+                .build();
+
+            new BuildOverview().startDrag(event);
+
+            expect(data.id).toBe("random_id");
+        })
     });
 
     describe('endDrag', () => {
@@ -63,9 +107,9 @@ describe('the BuildOverview', () => {
         it('returns not true so that preventDefault is called on event, because the stop dragging does not need further propagation of the event', () => {
             var buildOverview = new BuildOverview();
 
-            buildOverview.startDrag();
+            buildOverview.endDrag();
 
-            expect(buildOverview.showBlackList).toBeFalsy;
+            expect(buildOverview.showBlackList).toBeFalsy();
         });
     });
 });

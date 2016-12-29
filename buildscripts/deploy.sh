@@ -17,4 +17,4 @@ cp $HOME/build/robisrob/buildradiator/scripts/vendor-bundle.js ./gh-pages/app/sc
 cd gh-pages
 git add -A
 git commit -m "new deploy: $TRAVIS_BUILD_NUMBER"
-git push > /dev/null
+git push -q > /dev/null

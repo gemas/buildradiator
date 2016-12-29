@@ -1,6 +1,9 @@
 import { BuildService } from '../../../../src/domain/services/build-service';
 
 describe('the buildService', () => {
+
+    beforeEach(() => localStorage.clear());
+
     describe('getAllFailedBuilds method', () => {
         it('returns only the failed builds and draw attention on the ones that have a new build that is running', (done) => {
             let teamcityBuildAdapterStub = {
@@ -135,9 +138,59 @@ describe('the buildService', () => {
                 .finally(done);
         });
 
+        it('returns only builds that are not in the blackListFailedBuilds from the localStorage', (done) => {
+            let teamcityBuildAdapterStub = {
+                getAllLatestFinishedBuilds: function getAllLatestFinishedBuilds(baseUrl) {
+                    expect(baseUrl).toEqual("test.com");
+                    return Promise.resolve([
+                        {
+                            "id": "build1_id",
+                            "name": "Build1",
+                            "buildNumber": "3.1.70.17327",
+                            "status": "FAILURE",
+                            "statusText": "Tests failed: 8 (2 new), passed: 29",
+                            "drawAttention": false
+                        },
+                        {
+                            "id": "build2_id",
+                            "name": "Build2",
+                            "buildNumber": "2.1.75.17327",
+                            "status": "FAILURE",
+                            "statusText": "Tests failed: 8 (2 new), passed: 29",
+                            "drawAttention": false
+                        },
+                        {
+                            "id": "build3_id",
+                            "name": "Build3",
+                            "buildNumber": "123",
+                            "status": "FAILURE",
+                            "statusText": "Tests failed: 8 (2 new), passed: 29",
+                            "drawAttention": false
+                        }
+                    ])
+                },
+                getAllLatestRunningBuilds: function getAllLatestRunningBuilds(baseUrl) {
+                    expect(baseUrl).toEqual("test.com");
+                    return Promise.resolve([]);
+                }
+            };
 
+            localStorage.blackListFailedBuilds = JSON.stringify(["build2_id", "build3_id"]);
 
-
+            new BuildService(teamcityBuildAdapterStub).getAllFailedBuilds("test.com")
+                .then(returnedBuilds => expect(returnedBuilds).toEqual([
+                    {
+                        "id": "build1_id",
+                        "name": "Build1",
+                        "buildNumber": "3.1.70.17327",
+                        "status": "FAILURE",
+                        "statusText": "Tests failed: 8 (2 new), passed: 29",
+                        "drawAttention": false
+                    }
+                ]))
+                .catch(error => expect(error).toBeUndefined())
+                .finally(done);
+        });
     });
 
     describe('getAllLatestRunningBuilds method', () => {

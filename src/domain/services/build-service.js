@@ -14,8 +14,13 @@ export class BuildService {
                 let latestFinishedBuilds = buildArrays[0];
                 let latestRunningBuilds = buildArrays[1];
 
+                function isNotInBlackListFailedBuilds(finishedBuild) {
+                    return !(localStorage.blackListFailedBuilds && JSON.parse([localStorage.blackListFailedBuilds]).includes(finishedBuild.id));
+                }
+
                 return latestFinishedBuilds
                     .filter(finishedBuild => finishedBuild.status === 'FAILURE')
+                    .filter(finishedBuild => isNotInBlackListFailedBuilds(finishedBuild))
                     .map(failedBuild => {
                         failedBuild.drawAttention = isNewBuildRunning();
                         return failedBuild;

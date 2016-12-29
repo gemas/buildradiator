@@ -13,7 +13,7 @@ cd gh-pages/app
 cp $HOME/build/robisrob/buildradiator/index.html ./index.html
 cp $HOME/build/robisrob/buildradiator/scripts/app-bundle.js ./scripts/app-bundle.js
 cp $HOME/build/robisrob/buildradiator/scripts/vendor-bundle.js ./scripts/vendor-bundle.js
-
+echo ${GH_TOKEN}
 git add -A
 git commit -m "new deploy: $TRAVIS_BUILD_NUMBER"
 git push 

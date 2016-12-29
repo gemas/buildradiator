@@ -17,4 +17,7 @@ export class RunningBuildOverview {
     setAllRunningBuilds.bind(this)(params);
     setInterval(setAllRunningBuilds.bind(this), 30000, params);
   }
+
+  addToBlacklistLatestRunningBuilds() {
+  }
 }

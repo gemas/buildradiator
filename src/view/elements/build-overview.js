@@ -2,6 +2,7 @@ import { bindable } from 'aurelia-framework';
 
 export class BuildOverview {
     @bindable builds;
+    @bindable addToBlacklist;
 
     constructor() {
         this.showBlackList = false;

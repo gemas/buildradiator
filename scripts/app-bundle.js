@@ -606,6 +606,8 @@ define('view/elements/build-overview',['exports', 'aurelia-framework'], function
             _classCallCheck(this, BuildOverview);
 
             _initDefineProp(this, 'builds', _descriptor, this);
+
+            this.showBlackList = false;
         }
 
         BuildOverview.prototype.getBuildStatusCssClass = function getBuildStatusCssClass(build) {
@@ -628,6 +630,15 @@ define('view/elements/build-overview',['exports', 'aurelia-framework'], function
             throw new Error('The drawAttention "' + build.drawAttention + '" is invalid');
         };
 
+        BuildOverview.prototype.startDrag = function startDrag(event) {
+            this.showBlackList = true;
+            return true;
+        };
+
+        BuildOverview.prototype.endDrag = function endDrag(event) {
+            this.showBlackList = false;
+        };
+
         return BuildOverview;
     }(), (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'builds', [_aureliaFramework.bindable], {
         enumerable: true,
@@ -638,5 +649,5 @@ define('text!app.html', ['module'], function(module) { module.exports = "<templa
 define('text!css/custom.css', ['module'], function(module) { module.exports = "@keyframes fadeIn { \n  from { opacity: 0; } \n}\n\n.draw-attention {\n    animation: fadeIn 1s infinite alternate;\n}"; });
 define('text!view/failed-build-overview.html', ['module'], function(module) { module.exports = "<template>\n\t<require from=\"./elements/build-overview\"></require>\n\t<build-overview builds.bind=\"builds\"></build-overview>\n</template>"; });
 define('text!view/running-build-overview.html', ['module'], function(module) { module.exports = "<template>\n\t<require from=\"./elements/build-overview\"></require>\n\t<build-overview builds.bind=\"builds\"></build-overview>\n</template>"; });
-define('text!view/elements/build-overview.html', ['module'], function(module) { module.exports = "<template>\n    <div class=\"container\">\n        <div class=\"row\">\n\n            <div class=\"col-md-4 text-center\" repeat.for=\"build of builds\">\n                <div class=\"${getBuildStatusCssClass(build)} ${getDrawAttentionCssClass(build)} alert\"\n                    role=\"alert \">\n                    <h1>${build.name}</h1>\n                    <p>${build.statusText}</p>\n                </div>\n            </div>\n        </div>\n    </div>\n</template>"; });
+define('text!view/elements/build-overview.html', ['module'], function(module) { module.exports = "<template>\n    <div class=\"container\">\n        <div class=\"row\">\n            <div class=\"col-md-4 text-center\" repeat.for=\"build of builds\">\n                <div class=\"${getBuildStatusCssClass(build)} ${getDrawAttentionCssClass(build)} alert\" role=\"alert \" draggable=\"true\" dragstart.delegate=\"startDrag($event)\" dragend.delegate=\"endDrag($event)\">\n                    <h1>${build.name}</h1>\n                    <p>${build.statusText}</p>\n                </div>\n            </div>\n        </div>\n        <div class=\"row\" show.bind=\"showBlackList\">\n            <div class=\"col-md-12 text-center alert alert-warning\">\n                <h1>Blacklist</h1>\n            </div>\n        </div>\n    </div>\n</template>"; });
 //# sourceMappingURL=app-bundle.js.map

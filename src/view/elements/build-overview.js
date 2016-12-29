@@ -3,6 +3,10 @@ import { bindable } from 'aurelia-framework';
 export class BuildOverview {
     @bindable builds;
 
+    constructor() {
+        this.showBlackList = false;
+    }
+
     getBuildStatusCssClass(build) {
         if (build.status === 'SUCCESS') {
             return 'alert-success';
@@ -21,5 +25,14 @@ export class BuildOverview {
             return '';
         }
         throw new Error('The drawAttention "' + build.drawAttention + '" is invalid')
+    }
+
+    startDrag(event) {
+        this.showBlackList = true;
+        return true;
+    }
+
+    endDrag(event) {
+        this.showBlackList = false;
     }
 }

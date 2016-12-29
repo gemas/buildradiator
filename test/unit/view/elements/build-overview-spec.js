@@ -30,4 +30,42 @@ describe('the BuildOverview', () => {
             expect(() => new BuildOverview().getDrawAttentionCssClass({})).toThrow(new Error('The drawAttention "undefined" is invalid'));
         });
     });
+
+    it('is constructed with the property showBlackList on false', () => expect(new BuildOverview().showBlackList).toBe(false));
+
+    describe('startDrag', () => {
+        it('sets the property showBlackList on true', () => {
+            var buildOverview = new BuildOverview();
+
+            buildOverview.startDrag();
+
+            expect(buildOverview.showBlackList).toBe(true);
+        })
+
+        it('returns true so that preventDefault is not called on event, because this breaks the dragging', () => {
+            var buildOverview = new BuildOverview();
+
+            buildOverview.startDrag();
+
+            expect(buildOverview.showBlackList).toBe(true);
+        });
+    });
+
+    describe('endDrag', () => {
+        it('sets the property showBlackList on false', () => {
+            var buildOverview = new BuildOverview();
+
+            buildOverview.endDrag();
+
+            expect(buildOverview.showBlackList).toBe(false);
+        })
+
+        it('returns not true so that preventDefault is called on event, because the stop dragging does not need further propagation of the event', () => {
+            var buildOverview = new BuildOverview();
+
+            buildOverview.startDrag();
+
+            expect(buildOverview.showBlackList).toBeFalsy;
+        });
+    });
 });

@@ -1,13 +1,16 @@
 <template>
     <div class="container">
         <div class="row">
-
             <div class="col-md-4 text-center" repeat.for="build of builds">
-                <div class="${getBuildStatusCssClass(build)} ${getDrawAttentionCssClass(build)} alert"
-                    role="alert ">
+                <div class="${getBuildStatusCssClass(build)} ${getDrawAttentionCssClass(build)} alert" role="alert " draggable="true" dragstart.delegate="startDrag($event)" dragend.delegate="endDrag($event)">
                     <h1>${build.name}</h1>
                     <p>${build.statusText}</p>
                 </div>
+            </div>
+        </div>
+        <div class="row" show.bind="showBlackList">
+            <div class="col-md-12 text-center alert alert-warning">
+                <h1>Blacklist</h1>
             </div>
         </div>
     </div>

@@ -9,6 +9,7 @@ git config --global user.email "travis@travis-ci.org"
 git config --global user.name "travis-ci"
 git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/robisrob/buildradiator gh-pages
 
+mkdir -p app/scripts
 cd gh-pages/app
 cp $HOME/build/robisrob/buildradiator/index.html ./index.html
 cp $HOME/build/robisrob/buildradiator/scripts/app-bundle.js ./scripts/app-bundle.js

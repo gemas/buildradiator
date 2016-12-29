@@ -37,4 +37,4 @@ To deploy the application you must do a build and copy the generated files to a 
 au build --env prod
 ```
 
-See the [following script](buildscripts/deploy.sh) to see what steps are nessary to deploy to github pages. This script is executed automatically by travis when there is a commit and al the tests are green. To make this work Travis must be configured with an environment variable GH_PAGES that contains a token from github.
+See the [following script](buildscripts/deploy.sh) to see what steps are nessary to deploy to github pages. This script is executed automatically by Travis when there is a commit and all the tests are green. To make this work Travis must be configured with an environment variable GH_PAGES that contains a token from github.

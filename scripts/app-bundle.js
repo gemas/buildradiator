@@ -490,8 +490,11 @@ define('domain/services/build-service',['exports', '../../anticorruptionlayer/te
                 var latestFinishedBuilds = buildArrays[0];
                 var latestRunningBuilds = buildArrays[1];
 
+                function getBlackListFailedBuilds() {
+                    return localStorage.blackListFailedBuilds ? JSON.parse(localStorage.blackListFailedBuilds) : [];
+                }
                 function isNotInBlackListFailedBuilds(finishedBuild) {
-                    return !(localStorage.blackListFailedBuilds && JSON.parse([localStorage.blackListFailedBuilds]).includes(finishedBuild.id));
+                    return !getBlackListFailedBuilds().includes(finishedBuild.id);
                 }
 
                 return latestFinishedBuilds.filter(function (finishedBuild) {
@@ -517,8 +520,19 @@ define('domain/services/build-service',['exports', '../../anticorruptionlayer/te
         };
 
         BuildService.prototype.getAllLatestRunningBuilds = function getAllLatestRunningBuilds(baseUrl) {
+
+            function getBlacklistLatestRunningBuilds() {
+                return localStorage.blacklistLatestRunningBuilds ? JSON.parse(localStorage.blacklistLatestRunningBuilds) : [];
+            }
+
+            function isNotInBlacklistLatestRunningBuilds(runningBuild) {
+                return !getBlacklistLatestRunningBuilds().includes(runningBuild.id);
+            }
+
             return this.teamcityBuildAdapter.getAllLatestRunningBuilds(baseUrl).then(function (latestRunningBuilds) {
-                return latestRunningBuilds.map(function (latestRunningBuild) {
+                return latestRunningBuilds.filter(function (latestRunningBuild) {
+                    return isNotInBlacklistLatestRunningBuilds(latestRunningBuild);
+                }).map(function (latestRunningBuild) {
                     latestRunningBuild.drawAttention = true;
                     return latestRunningBuild;
                 });

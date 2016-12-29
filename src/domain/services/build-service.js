@@ -14,8 +14,11 @@ export class BuildService {
                 let latestFinishedBuilds = buildArrays[0];
                 let latestRunningBuilds = buildArrays[1];
 
+                function getBlackListFailedBuilds() {
+                    return localStorage.blackListFailedBuilds ? JSON.parse(localStorage.blackListFailedBuilds) : [];
+                }
                 function isNotInBlackListFailedBuilds(finishedBuild) {
-                    return !(localStorage.blackListFailedBuilds && JSON.parse([localStorage.blackListFailedBuilds]).includes(finishedBuild.id));
+                    return !getBlackListFailedBuilds().includes(finishedBuild.id);
                 }
 
                 return latestFinishedBuilds
@@ -38,8 +41,18 @@ export class BuildService {
     }
 
     getAllLatestRunningBuilds(baseUrl) {
+
+        function getBlacklistLatestRunningBuilds() {
+            return localStorage.blacklistLatestRunningBuilds ? JSON.parse(localStorage.blacklistLatestRunningBuilds) : [];
+        }
+
+        function isNotInBlacklistLatestRunningBuilds(runningBuild) {
+            return !getBlacklistLatestRunningBuilds().includes(runningBuild.id);
+        }
+
         return this.teamcityBuildAdapter.getAllLatestRunningBuilds(baseUrl)
             .then(latestRunningBuilds => latestRunningBuilds
+                .filter(latestRunningBuild => isNotInBlacklistLatestRunningBuilds(latestRunningBuild))
                 .map(latestRunningBuild => {
                     latestRunningBuild.drawAttention = true;
                     return latestRunningBuild;

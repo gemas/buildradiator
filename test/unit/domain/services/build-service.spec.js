@@ -252,5 +252,55 @@ describe('the buildService', () => {
                 .finally(done);
 
         });
+
+        it('returns only builds that are not in the blackListLatestRunningBuilds from the localStorage', (done) => {
+            let teamcityBuildAdapterStub = {
+                getAllLatestRunningBuilds: function getAllLatestRunningBuilds(baseUrl) {
+                    expect(baseUrl).toEqual("test.com");
+                    return Promise.resolve([
+                        {
+                            "id": "build1_id",
+                            "name": "Build1",
+                            "buildNumber": "3.1.70.17327",
+                            "status": "FAILURE",
+                            "statusText": "Tests failed: 8 (2 new), passed: 29",
+                            "drawAttention": false
+                        },
+                        {
+                            "id": "build2_id",
+                            "name": "Build2",
+                            "buildNumber": "2.1.75.17327",
+                            "status": "FAILURE",
+                            "statusText": "Tests failed: 8 (2 new), passed: 29",
+                            "drawAttention": false
+                        },
+                        {
+                            "id": "build3_id",
+                            "name": "Build3",
+                            "buildNumber": "123",
+                            "status": "FAILURE",
+                            "statusText": "Tests failed: 8 (2 new), passed: 29",
+                            "drawAttention": false
+                        }
+                    ])
+                }
+            };
+
+            localStorage.blacklistLatestRunningBuilds = JSON.stringify(["build2_id", "build3_id"]);
+
+            new BuildService(teamcityBuildAdapterStub).getAllLatestRunningBuilds("test.com")
+                .then(returnedBuilds => expect(returnedBuilds).toEqual([
+                    {
+                        "id": "build1_id",
+                        "name": "Build1",
+                        "buildNumber": "3.1.70.17327",
+                        "status": "FAILURE",
+                        "statusText": "Tests failed: 8 (2 new), passed: 29",
+                        "drawAttention": true
+                    }
+                ]))
+                .catch(error => expect(error).toBeUndefined())
+                .finally(done);
+        });
     });
 });

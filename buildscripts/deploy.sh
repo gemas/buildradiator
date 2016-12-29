@@ -8,7 +8,7 @@ cd $HOME
 git config --global push.default simple
 git config --global user.email "travis@travis-ci.org"
 git config --global user.name "travis-ci"
-git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/robisrob/buildradiator gh-pages > /dev/null
+git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/robisrob/buildradiator gh-pages 2> /dev/null
 
 mkdir -p gh-pages/app/scripts
 cp $HOME/build/robisrob/buildradiator/index.html ./gh-pages/app/index.html
@@ -18,4 +18,4 @@ cp $HOME/build/robisrob/buildradiator/scripts/vendor-bundle.js ./gh-pages/app/sc
 cd gh-pages
 git add -A
 git commit -m "new deploy: $TRAVIS_BUILD_NUMBER" 
-git push --quiet > /dev/null
+git push --quiet 2> /dev/null

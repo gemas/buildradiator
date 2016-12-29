@@ -18,6 +18,7 @@ export class FailedBuildOverview {
     setInterval(setAllFailedBuilds.bind(this), 30000, params);
   }
 
-  addToBlackListFailedBuilds() {
+  addToBlackListFailedBuilds(buildId) {
+    this.service.addToBlackListFailedBuilds(buildId);
   }
 }

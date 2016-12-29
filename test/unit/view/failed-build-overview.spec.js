@@ -1,21 +1,22 @@
 import { FailedBuildOverview } from '../../../src/view/failed-build-overview';
 
-function putFunctionOnJobQueue(expectFunction) {
-  Promise.resolve().then(expectFunction);
-}
-
-function makeBuildServiceStub() {
-  let count = 0;
-
-  function getAllFailedBuilds(baseUrl) {
-    count++;
-    expect(baseUrl).toEqual("baseUrl");
-    return Promise.resolve(['a' + count, 'b' + count, 'c' + count]);
-  }
-  return { getAllFailedBuilds: getAllFailedBuilds };
-}
-
 describe('the failed build overview', () => {
+
+  function putFunctionOnJobQueue(expectFunction) {
+    Promise.resolve().then(expectFunction);
+  }
+
+  function makeBuildServiceStub() {
+    let count = 0;
+
+    function getAllFailedBuilds(baseUrl) {
+      count++;
+      expect(baseUrl).toEqual("baseUrl");
+      return Promise.resolve(['a' + count, 'b' + count, 'c' + count]);
+    }
+    return { getAllFailedBuilds: getAllFailedBuilds };
+  }
+
   beforeEach(() => {
     jasmine.clock().install();
   });
@@ -24,26 +25,38 @@ describe('the failed build overview', () => {
     jasmine.clock().uninstall();
   });
 
-  it('should ask and save the failedbuilds from the buildFactory using the baseUrl from the parameters every 30 seconds', (done) => {
+  describe('activate function', () => {
+    it('should ask and save the failedbuilds from the buildFactory using the baseUrl from the parameters every 30 seconds', (done) => {
 
-    let failedBuildOverview = new FailedBuildOverview(makeBuildServiceStub());
+      let failedBuildOverview = new FailedBuildOverview(makeBuildServiceStub());
 
-    failedBuildOverview.activate({ baseUrl: "baseUrl" });
-    putFunctionOnJobQueue(() => expect(failedBuildOverview.builds).toEqual(['a1', 'b1', 'c1']));
+      failedBuildOverview.activate({ baseUrl: "baseUrl" });
+      putFunctionOnJobQueue(() => expect(failedBuildOverview.builds).toEqual(['a1', 'b1', 'c1']));
 
-    jasmine.clock().tick(30000);
+      jasmine.clock().tick(30000);
 
-    putFunctionOnJobQueue(() => expect(failedBuildOverview.builds).toEqual(['a2', 'b2', 'c2']));
+      putFunctionOnJobQueue(() => expect(failedBuildOverview.builds).toEqual(['a2', 'b2', 'c2']));
 
-    jasmine.clock().tick(29999);
+      jasmine.clock().tick(29999);
 
-    putFunctionOnJobQueue(() => expect(failedBuildOverview.builds).toEqual(['a2', 'b2', 'c2']));
+      putFunctionOnJobQueue(() => expect(failedBuildOverview.builds).toEqual(['a2', 'b2', 'c2']));
 
-    jasmine.clock().tick(1);
+      jasmine.clock().tick(1);
 
-    putFunctionOnJobQueue(() => expect(failedBuildOverview.builds).toEqual(['a3', 'b3', 'c3']));
+      putFunctionOnJobQueue(() => expect(failedBuildOverview.builds).toEqual(['a3', 'b3', 'c3']));
 
-    putFunctionOnJobQueue(done);
+      putFunctionOnJobQueue(done);
+    });
+  });
+
+  describe('addToBlackListFailedBuilds method', () => {
+    it('should call addToBlackListFailedBuilds on the buildService', () => {
+      var addedId;
+      var buildOverview = new FailedBuildOverview({ addToBlackListFailedBuilds: (buildId) => addedId = buildId });
+
+      buildOverview.addToBlackListFailedBuilds("random_id");
+
+      expect(addedId).toBe("random_id");
+    });
   });
 });
-

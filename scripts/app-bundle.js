@@ -213,7 +213,9 @@ define('view/failed-build-overview',['exports', '../domain/services/build-servic
       setInterval(setAllFailedBuilds.bind(this), 30000, params);
     };
 
-    FailedBuildOverview.prototype.addToBlackListFailedBuilds = function addToBlackListFailedBuilds() {};
+    FailedBuildOverview.prototype.addToBlackListFailedBuilds = function addToBlackListFailedBuilds(buildId) {
+      this.service.addToBlackListFailedBuilds(buildId);
+    };
 
     return FailedBuildOverview;
   }()) || _class);

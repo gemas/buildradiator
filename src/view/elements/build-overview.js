@@ -35,4 +35,11 @@ export class BuildOverview {
     endDrag(event) {
         this.showBlackList = false;
     }
+
+    preventEventPropagation(event) {
+        event.preventDefault();
+    }
+
+    drop(event) {
+    }
 }

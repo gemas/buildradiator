@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="row" show.bind="showBlackList">
-            <div class="col-md-12 text-center alert alert-warning">
+            <div class="col-md-12 text-center alert alert-warning" drop.delegate="drop($event)" dragover.delegate="preventEventPropagation($event)">
                 <h1>Blacklist</h1>
             </div>
         </div>

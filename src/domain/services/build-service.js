@@ -1,6 +1,10 @@
 import { TeamcityBuildAdapter } from '../../anticorruptionlayer/teamcity-build-adapter';
 import { inject } from 'aurelia-framework';
 
+function getBlackListFailedBuilds() {
+    return localStorage.blackListFailedBuilds ? JSON.parse(localStorage.blackListFailedBuilds) : [];
+}
+
 @inject(TeamcityBuildAdapter)
 export class BuildService {
     constructor(teamcityBuildAdapter) {
@@ -14,9 +18,6 @@ export class BuildService {
                 let latestFinishedBuilds = buildArrays[0];
                 let latestRunningBuilds = buildArrays[1];
 
-                function getBlackListFailedBuilds() {
-                    return localStorage.blackListFailedBuilds ? JSON.parse(localStorage.blackListFailedBuilds) : [];
-                }
                 function isNotInBlackListFailedBuilds(finishedBuild) {
                     return !getBlackListFailedBuilds().includes(finishedBuild.id);
                 }
@@ -58,4 +59,8 @@ export class BuildService {
                     return latestRunningBuild;
                 }));
     }
+
+    addToBlackListFailedBuilds(buildId) {
+        localStorage.blackListFailedBuilds = JSON.stringify(getBlackListFailedBuilds().concat(buildId));
+    } 
 }

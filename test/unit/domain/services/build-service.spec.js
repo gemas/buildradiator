@@ -303,4 +303,14 @@ describe('the buildService', () => {
                 .finally(done);
         });
     });
+
+    describe('addToBlackListFailedBuilds method', () => {
+        it('adds the buildId to the blacklist with failed builds in the localStorage', () => {
+            new BuildService().addToBlackListFailedBuilds('31');
+            new BuildService().addToBlackListFailedBuilds('28');
+            new BuildService().addToBlackListFailedBuilds('een_tekst_id');
+
+            expect(localStorage.blackListFailedBuilds).toBe(JSON.stringify(['31', '28', 'een_tekst_id']));
+        });
+    });
 });

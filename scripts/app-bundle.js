@@ -481,6 +481,10 @@ define('domain/services/build-service',['exports', '../../anticorruptionlayer/te
 
     var _dec, _class;
 
+    function getBlackListFailedBuilds() {
+        return localStorage.blackListFailedBuilds ? JSON.parse(localStorage.blackListFailedBuilds) : [];
+    }
+
     var BuildService = exports.BuildService = (_dec = (0, _aureliaFramework.inject)(_teamcityBuildAdapter.TeamcityBuildAdapter), _dec(_class = function () {
         function BuildService(teamcityBuildAdapter) {
             _classCallCheck(this, BuildService);
@@ -494,9 +498,6 @@ define('domain/services/build-service',['exports', '../../anticorruptionlayer/te
                 var latestFinishedBuilds = buildArrays[0];
                 var latestRunningBuilds = buildArrays[1];
 
-                function getBlackListFailedBuilds() {
-                    return localStorage.blackListFailedBuilds ? JSON.parse(localStorage.blackListFailedBuilds) : [];
-                }
                 function isNotInBlackListFailedBuilds(finishedBuild) {
                     return !getBlackListFailedBuilds().includes(finishedBuild.id);
                 }
@@ -541,6 +542,10 @@ define('domain/services/build-service',['exports', '../../anticorruptionlayer/te
                     return latestRunningBuild;
                 });
             });
+        };
+
+        BuildService.prototype.addToBlackListFailedBuilds = function addToBlackListFailedBuilds(buildId) {
+            localStorage.blackListFailedBuilds = JSON.stringify(getBlackListFailedBuilds().concat(buildId));
         };
 
         return BuildService;

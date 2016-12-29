@@ -1,6 +1,40 @@
 import { BuildOverview } from '../../../../src/view/elements/build-overview';
 
 describe('the BuildOverview', () => {
+
+    function makeEvent() {
+        var data = {};
+        var id = "id";
+
+        function withId(_id) {
+            id = _id;
+            return this;
+        }
+
+        function withData(key, value) {
+            data[key] = value;
+            return this;
+        }
+
+        function build() {
+            return {
+                dataTransfer: {
+                    setData: (key, value) => data[key] = value,
+                    getData: (key) => data[key],
+                },
+                target: {
+                    id: id
+                }
+            }
+        }
+
+        return {
+            withId: withId,
+            withData: withData,
+            build: build
+        }
+    };
+
     describe('getBuildStatusCssClass', () => {
         it('returns alert-success when buildStatus is SUCCESS', () => {
             expect(new BuildOverview().getBuildStatusCssClass({ status: 'SUCCESS' })).toEqual('alert-success');
@@ -34,37 +68,6 @@ describe('the BuildOverview', () => {
     it('is constructed with the property showBlackList on false', () => expect(new BuildOverview().showBlackList).toBe(false));
 
     describe('startDrag', () => {
-        function makeEvent() {
-            var setDataFunction = function setDataFunction() { };
-            var id = "id";
-
-            function withSetDataFunction(_setDataFunction) {
-                setDataFunction = _setDataFunction;
-                return this;
-            }
-
-            function withId(_id) {
-                id = _id;
-                return this;
-            }
-
-            function build() {
-                return {
-                    dataTransfer: {
-                        setData: setDataFunction
-                    },
-                    target: {
-                        id: id
-                    }
-                }
-            }
-
-            return {
-                withSetDataFunction: withSetDataFunction,
-                withId: withId,
-                build: build
-            }
-        };
 
         it('sets the property showBlackList on true', () => {
             var buildOverview = new BuildOverview();
@@ -83,16 +86,14 @@ describe('the BuildOverview', () => {
         });
 
         it('puts the id of the target from the event on the datatransfer with the key id', () => {
-            var data = {};
             var event = makeEvent()
-                .withSetDataFunction((key, value) => data[key] = value)
                 .withId("random_id")
                 .build();
 
             new BuildOverview().startDrag(event);
 
-            expect(data.id).toBe("random_id");
-        })
+            expect(event.dataTransfer.getData("id")).toBe("random_id");
+        });
     });
 
     describe('endDrag', () => {
@@ -112,4 +113,18 @@ describe('the BuildOverview', () => {
             expect(buildOverview.showBlackList).toBeFalsy();
         });
     });
+
+    describe('drop', () => {
+        it('calls addToBlacklist method from buildOverview with the id in the dataTransfer of the event', () => {
+            var buildOverview = new BuildOverview();
+            var passedId;
+            buildOverview.addToBlacklist = (_passedId) => passedId = _passedId;
+
+            buildOverview.drop(makeEvent().withId("").withData("id", "someId").build());
+
+            expect(passedId).toBe("someId");
+        })
+    });
+
+
 });

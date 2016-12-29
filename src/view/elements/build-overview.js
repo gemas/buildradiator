@@ -43,5 +43,6 @@ export class BuildOverview {
     }
 
     drop(event) {
+        this.addToBlacklist(event.dataTransfer.getData("id"));
     }
 }

@@ -657,7 +657,9 @@ define('view/elements/build-overview',['exports', 'aurelia-framework'], function
             event.preventDefault();
         };
 
-        BuildOverview.prototype.drop = function drop(event) {};
+        BuildOverview.prototype.drop = function drop(event) {
+            this.addToBlacklist(event.dataTransfer.getData("id"));
+        };
 
         return BuildOverview;
     }(), (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'builds', [_aureliaFramework.bindable], {

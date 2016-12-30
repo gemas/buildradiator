@@ -198,6 +198,9 @@ define('view/failed-build-overview',['exports', '../domain/services/build-servic
       _classCallCheck(this, FailedBuildOverview);
 
       this.service = service;
+      this.addToBlackListFailedBuilds = function (buildId) {
+        return service.addToBlackListFailedBuilds(buildId);
+      };
     }
 
     FailedBuildOverview.prototype.activate = function activate(params) {
@@ -211,10 +214,6 @@ define('view/failed-build-overview',['exports', '../domain/services/build-servic
 
       setAllFailedBuilds.bind(this)(params);
       setInterval(setAllFailedBuilds.bind(this), 30000, params);
-    };
-
-    FailedBuildOverview.prototype.addToBlackListFailedBuilds = function addToBlackListFailedBuilds(buildId) {
-      this.service.addToBlackListFailedBuilds(buildId);
     };
 
     return FailedBuildOverview;

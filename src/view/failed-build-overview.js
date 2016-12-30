@@ -5,6 +5,7 @@ import { inject } from 'aurelia-framework';
 export class FailedBuildOverview {
   constructor(service) {
     this.service = service;
+    this.addToBlackListFailedBuilds = buildId => service.addToBlackListFailedBuilds(buildId);
   }
 
   activate(params) {
@@ -16,9 +17,5 @@ export class FailedBuildOverview {
 
     setAllFailedBuilds.bind(this)(params);
     setInterval(setAllFailedBuilds.bind(this), 30000, params);
-  }
-
-  addToBlackListFailedBuilds(buildId) {
-    this.service.addToBlackListFailedBuilds(buildId);
   }
 }

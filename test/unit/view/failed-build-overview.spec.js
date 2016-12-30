@@ -50,11 +50,12 @@ describe('the failed build overview', () => {
   });
 
   describe('addToBlackListFailedBuilds method', () => {
-    it('should call addToBlackListFailedBuilds on the buildService', () => {
+    it('should call addToBlackListFailedBuilds on the buildService even when "this" is not the FailedBuildOverview', () => {
       var addedId;
-      var buildOverview = new FailedBuildOverview({ addToBlackListFailedBuilds: (buildId) => addedId = buildId });
+      var buildServiceStub = { addToBlackListFailedBuilds: (buildId) => addedId = buildId };
+      var buildOverview = new FailedBuildOverview(buildServiceStub);
 
-      buildOverview.addToBlackListFailedBuilds("random_id");
+      buildOverview.addToBlackListFailedBuilds.apply({}, ["random_id"]);
 
       expect(addedId).toBe("random_id");
     });

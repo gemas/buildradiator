@@ -5,6 +5,10 @@ function getBlackListFailedBuilds() {
     return localStorage.blackListFailedBuilds ? JSON.parse(localStorage.blackListFailedBuilds) : [];
 }
 
+function getBlacklistLatestRunningBuilds() {
+    return localStorage.blacklistLatestRunningBuilds ? JSON.parse(localStorage.blacklistLatestRunningBuilds) : [];
+}
+
 @inject(TeamcityBuildAdapter)
 export class BuildService {
     constructor(teamcityBuildAdapter) {
@@ -42,11 +46,6 @@ export class BuildService {
     }
 
     getAllLatestRunningBuilds(baseUrl) {
-
-        function getBlacklistLatestRunningBuilds() {
-            return localStorage.blacklistLatestRunningBuilds ? JSON.parse(localStorage.blacklistLatestRunningBuilds) : [];
-        }
-
         function isNotInBlacklistLatestRunningBuilds(runningBuild) {
             return !getBlacklistLatestRunningBuilds().includes(runningBuild.id);
         }
@@ -62,5 +61,9 @@ export class BuildService {
 
     addToBlackListFailedBuilds(buildId) {
         localStorage.blackListFailedBuilds = JSON.stringify(getBlackListFailedBuilds().concat(buildId));
-    } 
+    }
+
+    addToBlacklistLatestRunningBuilds(buildId) {
+        localStorage.blacklistLatestRunningBuilds = JSON.stringify(getBlacklistLatestRunningBuilds().concat(buildId));
+    }
 }

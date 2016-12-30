@@ -313,4 +313,14 @@ describe('the buildService', () => {
             expect(localStorage.blackListFailedBuilds).toBe(JSON.stringify(['31', '28', 'een_tekst_id']));
         });
     });
+
+    describe('addToBlacklistLatestRunningBuilds method', () => {
+        it('adds the buildId to the blacklist with latest running builds in the localStorage', () => {
+            new BuildService().addToBlacklistLatestRunningBuilds('31');
+            new BuildService().addToBlacklistLatestRunningBuilds('28');
+            new BuildService().addToBlacklistLatestRunningBuilds('een_tekst_id');
+
+            expect(localStorage.blacklistLatestRunningBuilds).toBe(JSON.stringify(['31', '28', 'een_tekst_id']));
+        });
+    });
 });

@@ -486,6 +486,10 @@ define('domain/services/build-service',['exports', '../../anticorruptionlayer/te
         return localStorage.blackListFailedBuilds ? JSON.parse(localStorage.blackListFailedBuilds) : [];
     }
 
+    function getBlacklistLatestRunningBuilds() {
+        return localStorage.blacklistLatestRunningBuilds ? JSON.parse(localStorage.blacklistLatestRunningBuilds) : [];
+    }
+
     var BuildService = exports.BuildService = (_dec = (0, _aureliaFramework.inject)(_teamcityBuildAdapter.TeamcityBuildAdapter), _dec(_class = function () {
         function BuildService(teamcityBuildAdapter) {
             _classCallCheck(this, BuildService);
@@ -526,11 +530,6 @@ define('domain/services/build-service',['exports', '../../anticorruptionlayer/te
         };
 
         BuildService.prototype.getAllLatestRunningBuilds = function getAllLatestRunningBuilds(baseUrl) {
-
-            function getBlacklistLatestRunningBuilds() {
-                return localStorage.blacklistLatestRunningBuilds ? JSON.parse(localStorage.blacklistLatestRunningBuilds) : [];
-            }
-
             function isNotInBlacklistLatestRunningBuilds(runningBuild) {
                 return !getBlacklistLatestRunningBuilds().includes(runningBuild.id);
             }
@@ -547,6 +546,10 @@ define('domain/services/build-service',['exports', '../../anticorruptionlayer/te
 
         BuildService.prototype.addToBlackListFailedBuilds = function addToBlackListFailedBuilds(buildId) {
             localStorage.blackListFailedBuilds = JSON.stringify(getBlackListFailedBuilds().concat(buildId));
+        };
+
+        BuildService.prototype.addToBlacklistLatestRunningBuilds = function addToBlacklistLatestRunningBuilds(buildId) {
+            localStorage.blacklistLatestRunningBuilds = JSON.stringify(getBlacklistLatestRunningBuilds().concat(buildId));
         };
 
         return BuildService;

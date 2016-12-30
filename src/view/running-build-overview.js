@@ -5,6 +5,7 @@ import { inject } from 'aurelia-framework';
 export class RunningBuildOverview {
   constructor(buildService) {
     this.buildService = buildService;
+    this.addToBlacklistLatestRunningBuilds = buildId => buildService.addToBlacklistLatestRunningBuilds(buildId);
   }
 
   activate(params) {
@@ -16,8 +17,5 @@ export class RunningBuildOverview {
 
     setAllRunningBuilds.bind(this)(params);
     setInterval(setAllRunningBuilds.bind(this), 30000, params);
-  }
-
-  addToBlacklistLatestRunningBuilds() {
   }
 }

@@ -45,5 +45,17 @@ describe('the running build overview', () => {
 
     putFunctionOnJobQueue(done);
   });
+
+  describe('addToBlacklistLatestRunningBuilds method', () => {
+    it('should call addToBlacklistLatestRunningBuilds on the buildService even when "this" is not the RunningBuildOverview', () => {
+      var addedId;
+      var buildServiceStub = { addToBlacklistLatestRunningBuilds: (buildId) => addedId = buildId };
+      var buildOverview = new RunningBuildOverview(buildServiceStub);
+
+      buildOverview.addToBlacklistLatestRunningBuilds.apply({}, ["random_id"]);
+
+      expect(addedId).toBe("random_id");
+    });
+  });
 });
 

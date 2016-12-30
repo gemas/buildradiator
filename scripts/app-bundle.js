@@ -240,6 +240,9 @@ define('view/running-build-overview',['exports', '../domain/services/build-servi
       _classCallCheck(this, RunningBuildOverview);
 
       this.buildService = buildService;
+      this.addToBlacklistLatestRunningBuilds = function (buildId) {
+        return buildService.addToBlacklistLatestRunningBuilds(buildId);
+      };
     }
 
     RunningBuildOverview.prototype.activate = function activate(params) {
@@ -254,8 +257,6 @@ define('view/running-build-overview',['exports', '../domain/services/build-servi
       setAllRunningBuilds.bind(this)(params);
       setInterval(setAllRunningBuilds.bind(this), 30000, params);
     };
-
-    RunningBuildOverview.prototype.addToBlacklistLatestRunningBuilds = function addToBlacklistLatestRunningBuilds() {};
 
     return RunningBuildOverview;
   }()) || _class);

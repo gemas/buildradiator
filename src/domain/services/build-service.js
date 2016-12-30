@@ -1,10 +1,6 @@
 import { TeamcityBuildAdapter } from '../../anticorruptionlayer/teamcity-build-adapter';
 import { inject } from 'aurelia-framework';
 
-function getBlackListFailedBuilds() {
-    return localStorage.blackListFailedBuilds ? JSON.parse(localStorage.blackListFailedBuilds) : [];
-}
-
 function getBlacklistLatestRunningBuilds() {
     return localStorage.blacklistLatestRunningBuilds ? JSON.parse(localStorage.blacklistLatestRunningBuilds) : [];
 }
@@ -23,12 +19,12 @@ export class BuildService {
                 let latestRunningBuilds = buildArrays[1];
 
                 function isNotInBlackListFailedBuilds(finishedBuild) {
-                    return !getBlackListFailedBuilds().includes(finishedBuild.id);
+                    return !this.getBlackListFailedBuilds().includes(finishedBuild.id);
                 }
 
                 return latestFinishedBuilds
                     .filter(finishedBuild => finishedBuild.status === 'FAILURE')
-                    .filter(finishedBuild => isNotInBlackListFailedBuilds(finishedBuild))
+                    .filter(finishedBuild => isNotInBlackListFailedBuilds.bind(this)(finishedBuild))
                     .map(failedBuild => {
                         failedBuild.drawAttention = isNewBuildRunning();
                         return failedBuild;
@@ -60,10 +56,14 @@ export class BuildService {
     }
 
     addToBlackListFailedBuilds(buildId) {
-        localStorage.blackListFailedBuilds = JSON.stringify(getBlackListFailedBuilds().concat(buildId));
+        localStorage.blackListFailedBuilds = JSON.stringify(this.getBlackListFailedBuilds().concat(buildId));
     }
 
     addToBlacklistLatestRunningBuilds(buildId) {
         localStorage.blacklistLatestRunningBuilds = JSON.stringify(getBlacklistLatestRunningBuilds().concat(buildId));
+    }
+
+    getBlackListFailedBuilds(buildId) {
+        return localStorage.blackListFailedBuilds ? JSON.parse(localStorage.blackListFailedBuilds) : [];
     }
 }

@@ -314,6 +314,14 @@ describe('the buildService', () => {
         });
     });
 
+    describe('getBlackListFailedBuilds method', () => {
+        it('returns the buildIds from the blacklist with failed builds in the localStorage', () => {
+            localStorage.blackListFailedBuilds = JSON.stringify(['31', '28', 'een_tekst_id']);
+
+            expect(new BuildService().getBlackListFailedBuilds()).toEqual(['31', '28', 'een_tekst_id']);
+        });
+    });
+
     describe('addToBlacklistLatestRunningBuilds method', () => {
         it('adds the buildId to the blacklist with latest running builds in the localStorage', () => {
             new BuildService().addToBlacklistLatestRunningBuilds('31');

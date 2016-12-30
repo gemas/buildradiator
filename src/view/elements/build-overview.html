@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="row match-my-cols">
+        <div class="row">
             <div id="${build.id}" class="col-md-4 text-center ${getBuildStatusCssClass(build)} ${getDrawAttentionCssClass(build)} alert"
                 role="alert " draggable="true" dragstart.delegate="startDrag($event)" dragend.delegate="endDrag($event)" repeat.for="build of builds">
                 <h1>${build.name}</h1>

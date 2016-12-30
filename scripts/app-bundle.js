@@ -201,6 +201,9 @@ define('view/failed-build-overview',['exports', '../domain/services/build-servic
       this.addToBlackListFailedBuilds = function (buildId) {
         return service.addToBlackListFailedBuilds(buildId);
       };
+      this.getBlackListFailedBuilds = function () {
+        return service.getBlackListFailedBuilds();
+      };
     }
 
     FailedBuildOverview.prototype.activate = function activate(params) {

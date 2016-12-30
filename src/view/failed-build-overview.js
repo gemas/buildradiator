@@ -6,6 +6,7 @@ export class FailedBuildOverview {
   constructor(service) {
     this.service = service;
     this.addToBlackListFailedBuilds = buildId => service.addToBlackListFailedBuilds(buildId);
+    this.getBlackListFailedBuilds = () => service.getBlackListFailedBuilds();
   }
 
   activate(params) {

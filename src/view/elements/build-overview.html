@@ -1,11 +1,10 @@
 <template>
     <div class="container">
-        <div class="row">
-            <div class="col-md-4 text-center" repeat.for="build of builds">
-                <div id ="${build.id}" class="${getBuildStatusCssClass(build)} ${getDrawAttentionCssClass(build)} alert" role="alert " draggable="true" dragstart.delegate="startDrag($event)" dragend.delegate="endDrag($event)">
-                    <h1>${build.name}</h1>
-                    <p>${build.statusText}</p>
-                </div>
+        <div class="row match-my-cols">
+            <div id="${build.id}" class="col-md-4 text-center ${getBuildStatusCssClass(build)} ${getDrawAttentionCssClass(build)} alert"
+                role="alert " draggable="true" dragstart.delegate="startDrag($event)" dragend.delegate="endDrag($event)" repeat.for="build of builds">
+                <h1>${build.name}</h1>
+                <p>${build.statusText}</p>
             </div>
         </div>
         <div class="row" show.bind="showBlackList">

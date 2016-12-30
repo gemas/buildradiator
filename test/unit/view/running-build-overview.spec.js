@@ -57,5 +57,17 @@ describe('the running build overview', () => {
       expect(addedId).toBe("random_id");
     });
   });
+
+  describe('getBlacklistLatestRunningBuilds method', () => {
+    it('should call getBlacklistLatestRunningBuilds on the buildService even when "this" is not the RunningBuildOverview', () => {
+      var addedId;
+      var buildServiceStub = { getBlacklistLatestRunningBuilds: () => [1, 3, 5] };
+      var buildOverview = new RunningBuildOverview(buildServiceStub);
+
+      var blacklist = buildOverview.getBlacklistLatestRunningBuilds.apply({});
+
+      expect(blacklist).toEqual([1, 3, 5]);
+    });
+  });
 });
 

@@ -484,10 +484,6 @@ define('domain/services/build-service',['exports', '../../anticorruptionlayer/te
 
     var _dec, _class;
 
-    function getBlacklistLatestRunningBuilds() {
-        return localStorage.blacklistLatestRunningBuilds ? JSON.parse(localStorage.blacklistLatestRunningBuilds) : [];
-    }
-
     var BuildService = exports.BuildService = (_dec = (0, _aureliaFramework.inject)(_teamcityBuildAdapter.TeamcityBuildAdapter), _dec(_class = function () {
         function BuildService(teamcityBuildAdapter) {
             _classCallCheck(this, BuildService);
@@ -530,13 +526,15 @@ define('domain/services/build-service',['exports', '../../anticorruptionlayer/te
         };
 
         BuildService.prototype.getAllLatestRunningBuilds = function getAllLatestRunningBuilds(baseUrl) {
+            var _this2 = this;
+
             function isNotInBlacklistLatestRunningBuilds(runningBuild) {
-                return !getBlacklistLatestRunningBuilds().includes(runningBuild.id);
+                return !this.getBlacklistLatestRunningBuilds().includes(runningBuild.id);
             }
 
             return this.teamcityBuildAdapter.getAllLatestRunningBuilds(baseUrl).then(function (latestRunningBuilds) {
                 return latestRunningBuilds.filter(function (latestRunningBuild) {
-                    return isNotInBlacklistLatestRunningBuilds(latestRunningBuild);
+                    return isNotInBlacklistLatestRunningBuilds.bind(_this2)(latestRunningBuild);
                 }).map(function (latestRunningBuild) {
                     latestRunningBuild.drawAttention = true;
                     return latestRunningBuild;
@@ -549,11 +547,15 @@ define('domain/services/build-service',['exports', '../../anticorruptionlayer/te
         };
 
         BuildService.prototype.addToBlacklistLatestRunningBuilds = function addToBlacklistLatestRunningBuilds(buildId) {
-            localStorage.blacklistLatestRunningBuilds = JSON.stringify(getBlacklistLatestRunningBuilds().concat(buildId));
+            localStorage.blacklistLatestRunningBuilds = JSON.stringify(this.getBlacklistLatestRunningBuilds().concat(buildId));
         };
 
         BuildService.prototype.getBlackListFailedBuilds = function getBlackListFailedBuilds(buildId) {
             return localStorage.blackListFailedBuilds ? JSON.parse(localStorage.blackListFailedBuilds) : [];
+        };
+
+        BuildService.prototype.getBlacklistLatestRunningBuilds = function getBlacklistLatestRunningBuilds(buildId) {
+            return localStorage.blacklistLatestRunningBuilds ? JSON.parse(localStorage.blacklistLatestRunningBuilds) : [];
         };
 
         return BuildService;

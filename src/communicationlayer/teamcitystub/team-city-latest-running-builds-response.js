@@ -40,6 +40,7 @@ export default {
       }
     },
     {
+      "id": "build_4_id",
       "name": "build 4",
       "builds": {
         "build": [

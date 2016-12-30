@@ -456,6 +456,7 @@ define('communicationlayer/teamcitystub/team-city-latest-running-builds-response
         }]
       }
     }, {
+      "id": "build_4_id",
       "name": "build 4",
       "builds": {
         "build": [{

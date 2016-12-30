@@ -320,6 +320,10 @@ describe('the buildService', () => {
 
             expect(new BuildService().getBlackListFailedBuilds()).toEqual(['31', '28', 'een_tekst_id']);
         });
+
+        it('returns an empty array when there is now blacklist with failed builds in the localStorage', () => {
+            expect(new BuildService().getBlackListFailedBuilds()).toEqual([]);
+        });
     });
 
     describe('addToBlacklistLatestRunningBuilds method', () => {
@@ -337,6 +341,10 @@ describe('the buildService', () => {
             localStorage.blacklistLatestRunningBuilds = JSON.stringify(['31', '28', 'een_tekst_id']);
 
             expect(new BuildService().getBlacklistLatestRunningBuilds()).toEqual(['31', '28', 'een_tekst_id']);
+        });
+
+        it('returns an empty array when there is now blacklist with running builds in the localStorage', () => {
+            expect(new BuildService().getBlacklistLatestRunningBuilds()).toEqual([]);
         });
     });
 });

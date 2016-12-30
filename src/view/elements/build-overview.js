@@ -3,6 +3,7 @@ import { bindable } from 'aurelia-framework';
 export class BuildOverview {
     @bindable builds;
     @bindable addToBlacklist;
+    @bindable getBlacklist;
 
     constructor() {
         this.showBlackList = false;
@@ -44,5 +45,6 @@ export class BuildOverview {
 
     drop(event) {
         this.addToBlacklist(event.dataTransfer.getData("id"));
+        this.builds = this.builds.filter(build => !this.getBlacklist().includes(build.id));
     }
 }

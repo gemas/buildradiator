@@ -117,13 +117,26 @@ describe('the BuildOverview', () => {
     describe('drop', () => {
         it('calls addToBlacklist method from buildOverview with the id in the dataTransfer of the event', () => {
             var buildOverview = new BuildOverview();
+            buildOverview.builds = [];
             var passedId;
-            buildOverview.addToBlacklist = (_passedId) => passedId = _passedId;
+            buildOverview.addToBlacklist = _passedId => passedId = _passedId;
 
             buildOverview.drop(makeEvent().withId("").withData("id", "someId").build());
 
             expect(passedId).toBe("someId");
-        })
+        });
+
+        it('should filter the builds with the blacklist', () => {
+            var buildOverview = new BuildOverview();
+            var blacklist = ["1", "8", "4"];
+            buildOverview.getBlacklist = () => blacklist;
+            buildOverview.addToBlacklist = id => blacklist.push(id);
+            buildOverview.builds = [{id: "5"}, {id: "8"}, {id: "1"}, {id: "2"}, {id: "someId"}];
+
+            buildOverview.drop(makeEvent().withId("").withData("id", "someId").build());
+
+            expect(buildOverview.builds).toEqual([{id: "5"}, {id: "2"}]);
+        });
     });
 
 

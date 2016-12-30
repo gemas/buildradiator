@@ -621,7 +621,7 @@ define('view/elements/build-overview',['exports', 'aurelia-framework'], function
         throw new Error('Decorating class property failed. Please ensure that transform-class-properties is enabled.');
     }
 
-    var _desc, _value, _class, _descriptor, _descriptor2;
+    var _desc, _value, _class, _descriptor, _descriptor2, _descriptor3;
 
     var BuildOverview = exports.BuildOverview = (_class = function () {
         function BuildOverview() {
@@ -630,6 +630,8 @@ define('view/elements/build-overview',['exports', 'aurelia-framework'], function
             _initDefineProp(this, 'builds', _descriptor, this);
 
             _initDefineProp(this, 'addToBlacklist', _descriptor2, this);
+
+            _initDefineProp(this, 'getBlacklist', _descriptor3, this);
 
             this.showBlackList = false;
         }
@@ -669,7 +671,12 @@ define('view/elements/build-overview',['exports', 'aurelia-framework'], function
         };
 
         BuildOverview.prototype.drop = function drop(event) {
+            var _this = this;
+
             this.addToBlacklist(event.dataTransfer.getData("id"));
+            this.builds = this.builds.filter(function (build) {
+                return !_this.getBlacklist().includes(build.id);
+            });
         };
 
         return BuildOverview;
@@ -679,11 +686,14 @@ define('view/elements/build-overview',['exports', 'aurelia-framework'], function
     }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, 'addToBlacklist', [_aureliaFramework.bindable], {
         enumerable: true,
         initializer: null
+    }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, 'getBlacklist', [_aureliaFramework.bindable], {
+        enumerable: true,
+        initializer: null
     })), _class);
 });
 define('text!app.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"css/custom.css\"></require>\n  <router-view></router-view>\n</template>"; });
 define('text!css/custom.css', ['module'], function(module) { module.exports = "@keyframes fadeIn { \n  from { opacity: 0; } \n}\n\n.draw-attention {\n    animation: fadeIn 1s infinite alternate;\n}"; });
-define('text!view/failed-build-overview.html', ['module'], function(module) { module.exports = "<template>\n\t<require from=\"./elements/build-overview\"></require>\n\t<build-overview builds.bind=\"builds\" add-to-blacklist.bind=\"addToBlackListFailedBuilds\"></build-overview>\n</template>"; });
+define('text!view/failed-build-overview.html', ['module'], function(module) { module.exports = "<template>\n\t<require from=\"./elements/build-overview\"></require>\n\t<build-overview builds.bind=\"builds\" add-to-blacklist.bind=\"addToBlackListFailedBuilds\" get-blacklist.bind=\"getBlackListFailedBuilds\"></build-overview>\n</template>"; });
 define('text!view/running-build-overview.html', ['module'], function(module) { module.exports = "<template>\n\t<require from=\"./elements/build-overview\"></require>\n\t<build-overview builds.bind=\"builds\" add-to-blacklist.bind=\"addToBlacklistLatestRunningBuilds\"></build-overview>\n</template>"; });
 define('text!view/elements/build-overview.html', ['module'], function(module) { module.exports = "<template>\n    <div class=\"container\">\n        <div class=\"row\">\n            <div class=\"col-md-4 text-center\" repeat.for=\"build of builds\">\n                <div id =\"${build.id}\" class=\"${getBuildStatusCssClass(build)} ${getDrawAttentionCssClass(build)} alert\" role=\"alert \" draggable=\"true\" dragstart.delegate=\"startDrag($event)\" dragend.delegate=\"endDrag($event)\">\n                    <h1>${build.name}</h1>\n                    <p>${build.statusText}</p>\n                </div>\n            </div>\n        </div>\n        <div class=\"row\" show.bind=\"showBlackList\">\n            <div class=\"col-md-12 text-center alert alert-warning\" drop.delegate=\"drop($event)\" dragover.delegate=\"preventEventPropagation($event)\">\n                <h1>Blacklist</h1>\n            </div>\n        </div>\n    </div>\n</template>"; });
 //# sourceMappingURL=app-bundle.js.map

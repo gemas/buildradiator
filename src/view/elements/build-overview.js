@@ -46,5 +46,6 @@ export class BuildOverview {
     drop(event) {
         this.addToBlacklist(event.dataTransfer.getData("id"));
         this.builds = this.builds.filter(build => !this.getBlacklist().includes(build.id));
+        this.showBlackList = false;
     }
 }

@@ -137,6 +137,17 @@ describe('the BuildOverview', () => {
 
             expect(buildOverview.builds).toEqual([{id: "5"}, {id: "2"}]);
         });
+
+        it('sets the property showBlackList on false', () => {
+            var buildOverview = new BuildOverview();
+            buildOverview.getBlacklist = () => [];
+            buildOverview.addToBlacklist = function(){};
+            buildOverview.builds = [];
+
+            buildOverview.drop(makeEvent().build());
+
+            expect(buildOverview.showBlackList).toBe(false);
+        })
     });
 
 

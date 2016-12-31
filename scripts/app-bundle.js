@@ -680,6 +680,7 @@ define('view/elements/build-overview',['exports', 'aurelia-framework'], function
             this.builds = this.builds.filter(function (build) {
                 return !_this.getBlacklist().includes(build.id);
             });
+            this.showBlackList = false;
         };
 
         return BuildOverview;

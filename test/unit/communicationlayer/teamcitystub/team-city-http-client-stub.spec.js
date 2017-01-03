@@ -1,5 +1,6 @@
 import teamCitylatestBuildsResponse from '../../../../src/communicationlayer/teamcitystub/team-city-latest-builds-response';
 import teamCitylatestRunningBuildsResponse from '../../../../src/communicationlayer/teamcitystub/team-city-latest-running-builds-response';
+import teamCityBuildTypesResponse from '../../../../src/communicationlayer/teamcitystub/team-city-build-types-response';
 import { TeamCityHttpClientStub } from '../../../../src/communicationlayer/teamcitystub/team-city-http-client-stub';
 
 describe('the teamCityHttpClientStub fetch method', () => {
@@ -19,8 +20,20 @@ describe('the teamCityHttpClientStub fetch method', () => {
             .finally(done);
     });
 
-    it('given a url containing not running:true or running:false returns a failed promise', () => { 
+    it('given a url containing not running:true or running:false throws an exception', () => { 
        expect(() => new TeamCityHttpClientStub().fetch("randomUrl.com")).toThrowError("team city http client stub doesn't support randomUrl.com");
+    });
+
+    it('given a url equals host/guestAuth/app/rest/buildTypes returns a promise with an object with a json method that returns the build types', (done) => {
+        new TeamCityHttpClientStub()
+            .fetch("host/guestAuth/app/rest/buildTypes")
+            .then(promiseResult => expect(promiseResult.json()).toBe(teamCityBuildTypesResponse))
+            .catch(error => expect(error).toBeUndefined())
+            .finally(done);
+    });
+
+    it('given a url containing, but not equals host/guestAuth/app/rest/buildTypes throws an exception', () => {
+        expect(() => new TeamCityHttpClientStub().fetch("host/guestAuth/app/rest/buildTypes?bla=2")).toThrowError("team city http client stub doesn't support host/guestAuth/app/rest/buildTypes?bla=2");
     });
 });
 

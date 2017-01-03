@@ -267,7 +267,7 @@ define('view/running-build-overview',['exports', '../domain/services/build-servi
     return RunningBuildOverview;
   }()) || _class);
 });
-define('communicationlayer/teamcitystub/team-city-http-client-stub',['exports', './team-city-latest-builds-response', './team-city-latest-running-builds-response'], function (exports, _teamCityLatestBuildsResponse, _teamCityLatestRunningBuildsResponse) {
+define('communicationlayer/teamcitystub/team-city-http-client-stub',['exports', './team-city-latest-builds-response', './team-city-latest-running-builds-response', './team-city-build-types-response'], function (exports, _teamCityLatestBuildsResponse, _teamCityLatestRunningBuildsResponse, _teamCityBuildTypesResponse) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -278,6 +278,8 @@ define('communicationlayer/teamcitystub/team-city-http-client-stub',['exports', 
   var _teamCityLatestBuildsResponse2 = _interopRequireDefault(_teamCityLatestBuildsResponse);
 
   var _teamCityLatestRunningBuildsResponse2 = _interopRequireDefault(_teamCityLatestRunningBuildsResponse);
+
+  var _teamCityBuildTypesResponse2 = _interopRequireDefault(_teamCityBuildTypesResponse);
 
   function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
@@ -305,6 +307,11 @@ define('communicationlayer/teamcitystub/team-city-http-client-stub',['exports', 
       if (url.includes('running:true')) {
         return Promise.resolve({ json: function json() {
             return _teamCityLatestRunningBuildsResponse2.default;
+          } });
+      }
+      if (url === 'host/guestAuth/app/rest/buildTypes') {
+        return Promise.resolve({ json: function json() {
+            return _teamCityBuildTypesResponse2.default;
           } });
       }
       throw new Error("team city http client stub doesn't support " + url);
@@ -354,6 +361,7 @@ define('communicationlayer/teamcitystub/team-city-latest-builds-response',["expo
       }
     }, {
       "id": "build_4_id",
+      "name": "build 4",
       "builds": {
         "build": [{
           "number": "3.1.54.17253",
@@ -473,6 +481,95 @@ define('communicationlayer/teamcitystub/team-city-latest-running-builds-response
       }
     }]
   };
+});
+define('communicationlayer/teamcitystub/teamcity-build-types',["exports"], function (exports) {
+    "use strict";
+
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+    exports.default = {
+        "count": 81,
+        "href": "/httpAuth/app/rest/buildTypes",
+        "buildType": [{
+            "id": "build_1_id",
+            "name": "build 1",
+            "projectName": "Proj1 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_1_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_1_id"
+        }, {
+            "id": "build_2_id",
+            "name": "build 2",
+            "projectName": "Proj1 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_2_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_2_id"
+        }, {
+            "id": "build_3_id",
+            "name": "build 3",
+            "projectName": "Proj2 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_3_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_3_id"
+        }, {
+            "id": "build_4_id",
+            "name": "build 4",
+            "projectName": "Proj2 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_4_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_4_id"
+        }, {
+            "id": "build_5_id",
+            "name": "same name as other build",
+            "projectName": "Proj1 :: SubProj2",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_5_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_5_id"
+        }, {
+            "id": "build_6_id",
+            "name": "same name as other build",
+            "projectName": "Proj1 :: SubProj4",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_6_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_6_id"
+        }, {
+            "id": "build_7_id",
+            "name": "build 7",
+            "projectName": "Proj1 :: SubProj2",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_7_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_7_id"
+        }, {
+            "id": "build_8_id",
+            "name": "build 8",
+            "projectName": "Proj1 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_8_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_8_id"
+        }, {
+            "id": "build_9_id",
+            "name": "build 9",
+            "projectName": "Proj1 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_9_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_9_id"
+        }, {
+            "id": "build_10_id",
+            "name": "build 3",
+            "projectName": "Proj1 :: SubProj1 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_3_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_3_id"
+        }, {
+            "id": "build_25_id",
+            "name": "build 25",
+            "projectName": "Proj5",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_25_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_25_id"
+        }]
+    };
 });
 define('domain/services/build-service',['exports', '../../anticorruptionlayer/teamcity-build-adapter', 'aurelia-framework'], function (exports, _teamcityBuildAdapter, _aureliaFramework) {
     'use strict';
@@ -694,6 +791,95 @@ define('view/elements/build-overview',['exports', 'aurelia-framework'], function
         enumerable: true,
         initializer: null
     })), _class);
+});
+define('communicationlayer/teamcitystub/team-city-build-types-response',["exports"], function (exports) {
+    "use strict";
+
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+    exports.default = {
+        "count": 81,
+        "href": "/httpAuth/app/rest/buildTypes",
+        "buildType": [{
+            "id": "build_1_id",
+            "name": "build 1",
+            "projectName": "Proj1 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_1_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_1_id"
+        }, {
+            "id": "build_2_id",
+            "name": "build 2",
+            "projectName": "Proj1 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_2_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_2_id"
+        }, {
+            "id": "build_3_id",
+            "name": "build 3",
+            "projectName": "Proj2 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_3_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_3_id"
+        }, {
+            "id": "build_4_id",
+            "name": "build 4",
+            "projectName": "Proj2 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_4_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_4_id"
+        }, {
+            "id": "build_5_id",
+            "name": "same name as other build",
+            "projectName": "Proj1 :: SubProj2",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_5_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_5_id"
+        }, {
+            "id": "build_6_id",
+            "name": "same name as other build",
+            "projectName": "Proj1 :: SubProj4",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_6_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_6_id"
+        }, {
+            "id": "build_7_id",
+            "name": "build 7",
+            "projectName": "Proj1 :: SubProj2",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_7_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_7_id"
+        }, {
+            "id": "build_8_id",
+            "name": "build 8",
+            "projectName": "Proj1 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_8_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_8_id"
+        }, {
+            "id": "build_9_id",
+            "name": "build 9",
+            "projectName": "Proj1 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_9_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_9_id"
+        }, {
+            "id": "build_10_id",
+            "name": "build 3",
+            "projectName": "Proj1 :: SubProj1 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_3_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_3_id"
+        }, {
+            "id": "build_25_id",
+            "name": "build 25",
+            "projectName": "Proj5",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_25_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_25_id"
+        }]
+    };
 });
 define('text!app.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"css/custom.css\"></require>\n  <router-view></router-view>\n</template>"; });
 define('text!css/custom.css', ['module'], function(module) { module.exports = "@keyframes fadeIn { \n  from { opacity: 0; } \n}\n\n.draw-attention {\n    animation: fadeIn 1s infinite alternate;\n}"; });

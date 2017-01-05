@@ -1,4 +1,5 @@
 import { TeamcityBuildAdapter } from '../../../src/anticorruptionlayer/teamcity-build-adapter';
+import makeClientStub from './client-stub-factory.js'
 
 function makeClientStubForGettingAllLatestFinishedBuilds(baseUrl, fetchResponse) {
     return makeClientStub('http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))', fetchResponse);
@@ -6,23 +7,6 @@ function makeClientStubForGettingAllLatestFinishedBuilds(baseUrl, fetchResponse)
 
 function makeClientStubForGettingAllLatestRunningBuilds(baseUrl, fetchResponse) {
     return makeClientStub('http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:true,canceled:false,count:1),build(number,status,statusText)))', fetchResponse);
-}
-
-function makeClientStub(expectedUrl, fetchResponse) {
-
-    return {
-        fetch: function (actualUrl, init) {
-            expect(actualUrl).toEqual(expectedUrl);
-            expect(init).toEqual({
-                method: 'GET',
-                headers: new Headers({
-                    'Accept': 'application/json',
-                    'X-Requested-With': 'Fetch',
-                })
-            })
-            return Promise.resolve({ json: () => fetchResponse })
-        }
-    };
 }
 
 describe('the teamcityBuildAdapter ', () => {

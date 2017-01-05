@@ -1,5 +1,5 @@
 export default {
-    "count": 81,
+    "count": 11,
     "href": "/httpAuth/app/rest/buildTypes",
     "buildType": [
         {

@@ -138,24 +138,66 @@ define('anticorruptionlayer/teamcity-build-adapter',['exports', '../communicatio
   }()) || _class);
 });
 define('anticorruptionlayer/teamcity-build-type-adapter',['exports', '../communicationlayer/http-client-router', 'aurelia-framework'], function (exports, _httpClientRouter, _aureliaFramework) {
-  'use strict';
+    'use strict';
 
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.TeamcityBuildTypeAdapter = undefined;
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+    exports.TeamcityBuildTypeAdapter = undefined;
 
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
+    function _classCallCheck(instance, Constructor) {
+        if (!(instance instanceof Constructor)) {
+            throw new TypeError("Cannot call a class as a function");
+        }
     }
-  }
 
-  var _dec, _class;
+    var _dec, _class;
 
-  var TeamcityBuildTypeAdapter = exports.TeamcityBuildTypeAdapter = (_dec = (0, _aureliaFramework.inject)(_httpClientRouter.HttpClientRouter), _dec(_class = function TeamcityBuildTypeAdapter() {
-    _classCallCheck(this, TeamcityBuildTypeAdapter);
-  }) || _class);
+    var TeamcityBuildTypeAdapter = exports.TeamcityBuildTypeAdapter = (_dec = (0, _aureliaFramework.inject)(_httpClientRouter.HttpClientRouter), _dec(_class = function () {
+        function TeamcityBuildTypeAdapter(clientRouter) {
+            _classCallCheck(this, TeamcityBuildTypeAdapter);
+
+            this.clientRouter = clientRouter;
+        }
+
+        TeamcityBuildTypeAdapter.prototype.getBuildTypes = function getBuildTypes(url) {
+            return this.clientRouter.fetch(url + "/guestAuth/app/rest/buildTypes", makeInit()).then(function (response) {
+                return response.json();
+            }).then(function (jsonResponse) {
+                return makeBuildType(jsonResponse);
+            });
+
+            function makeInit() {
+                return {
+                    method: 'GET',
+                    headers: new Headers({
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'Fetch'
+                    })
+                };
+            }
+
+            function makeBuildType(jsonResponse) {
+                return jsonResponse.buildType.map(function (buildTypeElement) {
+                    return {
+                        id: buildTypeElement.id,
+                        label: makeLabel(buildTypeElement.projectName)
+                    };
+                });
+
+                function makeLabel(projectName) {
+                    return projectName.split(" :: ").map(function (labelName) {
+                        return { name: labelName };
+                    }).reduce(function (p1, p2) {
+                        p2.parentLabel = p1;
+                        return p2;
+                    });
+                }
+            }
+        };
+
+        return TeamcityBuildTypeAdapter;
+    }()) || _class);
 });
 define('communicationlayer/http-client-router',['exports', 'aurelia-fetch-client', './teamcitystub/team-city-http-client-stub', 'aurelia-framework'], function (exports, _aureliaFetchClient, _teamCityHttpClientStub, _aureliaFramework) {
     'use strict';
@@ -294,7 +336,7 @@ define('communicationlayer/teamcitystub/team-city-build-types-response',["export
         value: true
     });
     exports.default = {
-        "count": 81,
+        "count": 11,
         "href": "/httpAuth/app/rest/buildTypes",
         "buildType": [{
             "id": "build_1_id",

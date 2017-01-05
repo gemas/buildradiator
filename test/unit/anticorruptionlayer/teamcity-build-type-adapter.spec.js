@@ -22,6 +22,14 @@ describe('the teamcityBuildTypeAdapter ', () => {
                     "projectId": "Proj1_SubProj1_SubProj3",
                     "href": "/httpAuth/app/rest/buildTypes/id:build_2_id",
                     "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_2_id"
+                },
+                {
+                    "id": "build_3_id",
+                    "name": "build 3",
+                    "projectName": "Proj1",
+                    "projectId": "Proj1",
+                    "href": "/httpAuth/app/rest/buildTypes/id:build_3_id",
+                    "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_3_id"
                 }]
         };
 
@@ -39,7 +47,14 @@ describe('the teamcityBuildTypeAdapter ', () => {
                     label: {
                         name: "SubProj2", parentLabel: { name: "SubProj1", parentLabel: { name: "Proj1" } }
                     }
-                }]))
+                },
+                {
+                    id: "build_3_id",
+                    label: {
+                        name: "Proj1"
+                    }
+                }
+            ]))
             .catch(error => expect(error).toBeUndefined())
             .finally(done);
     });

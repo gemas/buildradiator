@@ -38,18 +38,21 @@ describe('the teamcityBuildTypeAdapter ', () => {
             .then(returnedBuildTypes => expect(returnedBuildTypes).toEqual([
                 {
                     id: "build_1_id",
+                    name: "build 1",
                     label: {
                         name: "SubProj1", parentLabel: { name: "Proj1" }
                     }
                 },
                 {
                     id: "build_2_id",
+                    name: "build 2",
                     label: {
                         name: "SubProj2", parentLabel: { name: "SubProj1", parentLabel: { name: "Proj1" } }
                     }
                 },
                 {
                     id: "build_3_id",
+                    name: "build 3",
                     label: {
                         name: "Proj1"
                     }

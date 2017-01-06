@@ -137,68 +137,6 @@ define('anticorruptionlayer/teamcity-build-adapter',['exports', '../communicatio
     return TeamcityBuildAdapter;
   }()) || _class);
 });
-define('anticorruptionlayer/teamcity-build-type-adapter',['exports', '../communicationlayer/http-client-router', 'aurelia-framework'], function (exports, _httpClientRouter, _aureliaFramework) {
-    'use strict';
-
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
-    exports.TeamcityBuildTypeAdapter = undefined;
-
-    function _classCallCheck(instance, Constructor) {
-        if (!(instance instanceof Constructor)) {
-            throw new TypeError("Cannot call a class as a function");
-        }
-    }
-
-    var _dec, _class;
-
-    var TeamcityBuildTypeAdapter = exports.TeamcityBuildTypeAdapter = (_dec = (0, _aureliaFramework.inject)(_httpClientRouter.HttpClientRouter), _dec(_class = function () {
-        function TeamcityBuildTypeAdapter(clientRouter) {
-            _classCallCheck(this, TeamcityBuildTypeAdapter);
-
-            this.clientRouter = clientRouter;
-        }
-
-        TeamcityBuildTypeAdapter.prototype.getBuildTypes = function getBuildTypes(url) {
-            return this.clientRouter.fetch(url + "/guestAuth/app/rest/buildTypes", makeInit()).then(function (response) {
-                return response.json();
-            }).then(function (jsonResponse) {
-                return makeBuildType(jsonResponse);
-            });
-
-            function makeInit() {
-                return {
-                    method: 'GET',
-                    headers: new Headers({
-                        'Accept': 'application/json',
-                        'X-Requested-With': 'Fetch'
-                    })
-                };
-            }
-
-            function makeBuildType(jsonResponse) {
-                return jsonResponse.buildType.map(function (buildTypeElement) {
-                    return {
-                        id: buildTypeElement.id,
-                        label: makeLabel(buildTypeElement.projectName)
-                    };
-                });
-
-                function makeLabel(projectName) {
-                    return projectName.split(" :: ").map(function (labelName) {
-                        return { name: labelName };
-                    }).reduce(function (p1, p2) {
-                        p2.parentLabel = p1;
-                        return p2;
-                    });
-                }
-            }
-        };
-
-        return TeamcityBuildTypeAdapter;
-    }()) || _class);
-});
 define('communicationlayer/http-client-router',['exports', 'aurelia-fetch-client', './teamcitystub/team-city-http-client-stub', 'aurelia-framework'], function (exports, _aureliaFetchClient, _teamCityHttpClientStub, _aureliaFramework) {
     'use strict';
 
@@ -328,95 +266,6 @@ define('view/running-build-overview',['exports', '../domain/services/build-servi
 
     return RunningBuildOverview;
   }()) || _class);
-});
-define('communicationlayer/teamcitystub/team-city-build-types-response',["exports"], function (exports) {
-    "use strict";
-
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
-    exports.default = {
-        "count": 11,
-        "href": "/httpAuth/app/rest/buildTypes",
-        "buildType": [{
-            "id": "build_1_id",
-            "name": "build 1",
-            "projectName": "Proj1 :: SubProj1",
-            "projectId": "Proj1_SubProj1",
-            "href": "/httpAuth/app/rest/buildTypes/id:build_1_id",
-            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_1_id"
-        }, {
-            "id": "build_2_id",
-            "name": "build 2",
-            "projectName": "Proj1 :: SubProj1",
-            "projectId": "Proj1_SubProj1",
-            "href": "/httpAuth/app/rest/buildTypes/id:build_2_id",
-            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_2_id"
-        }, {
-            "id": "build_3_id",
-            "name": "build 3",
-            "projectName": "Proj2 :: SubProj1",
-            "projectId": "Proj1_SubProj1",
-            "href": "/httpAuth/app/rest/buildTypes/id:build_3_id",
-            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_3_id"
-        }, {
-            "id": "build_4_id",
-            "name": "build 4",
-            "projectName": "Proj2 :: SubProj1",
-            "projectId": "Proj1_SubProj1",
-            "href": "/httpAuth/app/rest/buildTypes/id:build_4_id",
-            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_4_id"
-        }, {
-            "id": "build_5_id",
-            "name": "same name as other build",
-            "projectName": "Proj1 :: SubProj2",
-            "projectId": "Proj1_SubProj1",
-            "href": "/httpAuth/app/rest/buildTypes/id:build_5_id",
-            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_5_id"
-        }, {
-            "id": "build_6_id",
-            "name": "same name as other build",
-            "projectName": "Proj1 :: SubProj4",
-            "projectId": "Proj1_SubProj1",
-            "href": "/httpAuth/app/rest/buildTypes/id:build_6_id",
-            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_6_id"
-        }, {
-            "id": "build_7_id",
-            "name": "build 7",
-            "projectName": "Proj1 :: SubProj2",
-            "projectId": "Proj1_SubProj1",
-            "href": "/httpAuth/app/rest/buildTypes/id:build_7_id",
-            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_7_id"
-        }, {
-            "id": "build_8_id",
-            "name": "build 8",
-            "projectName": "Proj1 :: SubProj1",
-            "projectId": "Proj1_SubProj1",
-            "href": "/httpAuth/app/rest/buildTypes/id:build_8_id",
-            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_8_id"
-        }, {
-            "id": "build_9_id",
-            "name": "build 9",
-            "projectName": "Proj1 :: SubProj1",
-            "projectId": "Proj1_SubProj1",
-            "href": "/httpAuth/app/rest/buildTypes/id:build_9_id",
-            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_9_id"
-        }, {
-            "id": "build_10_id",
-            "name": "build 3",
-            "projectName": "Proj1 :: SubProj1 :: SubProj1",
-            "projectId": "Proj1_SubProj1",
-            "href": "/httpAuth/app/rest/buildTypes/id:build_3_id",
-            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_3_id"
-        }, {
-            "id": "build_25_id",
-            "name": "build 25",
-            "projectName": "Proj5",
-            "projectId": "Proj1_SubProj1",
-            "href": "/httpAuth/app/rest/buildTypes/id:build_25_id",
-            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_25_id"
-        }]
-    };
 });
 define('communicationlayer/teamcitystub/team-city-http-client-stub',['exports', './team-city-latest-builds-response', './team-city-latest-running-builds-response', './team-city-build-types-response'], function (exports, _teamCityLatestBuildsResponse, _teamCityLatestRunningBuildsResponse, _teamCityBuildTypesResponse) {
   'use strict';
@@ -632,6 +481,95 @@ define('communicationlayer/teamcitystub/team-city-latest-running-builds-response
       }
     }]
   };
+});
+define('communicationlayer/teamcitystub/teamcity-build-types',["exports"], function (exports) {
+    "use strict";
+
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+    exports.default = {
+        "count": 81,
+        "href": "/httpAuth/app/rest/buildTypes",
+        "buildType": [{
+            "id": "build_1_id",
+            "name": "build 1",
+            "projectName": "Proj1 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_1_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_1_id"
+        }, {
+            "id": "build_2_id",
+            "name": "build 2",
+            "projectName": "Proj1 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_2_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_2_id"
+        }, {
+            "id": "build_3_id",
+            "name": "build 3",
+            "projectName": "Proj2 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_3_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_3_id"
+        }, {
+            "id": "build_4_id",
+            "name": "build 4",
+            "projectName": "Proj2 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_4_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_4_id"
+        }, {
+            "id": "build_5_id",
+            "name": "same name as other build",
+            "projectName": "Proj1 :: SubProj2",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_5_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_5_id"
+        }, {
+            "id": "build_6_id",
+            "name": "same name as other build",
+            "projectName": "Proj1 :: SubProj4",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_6_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_6_id"
+        }, {
+            "id": "build_7_id",
+            "name": "build 7",
+            "projectName": "Proj1 :: SubProj2",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_7_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_7_id"
+        }, {
+            "id": "build_8_id",
+            "name": "build 8",
+            "projectName": "Proj1 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_8_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_8_id"
+        }, {
+            "id": "build_9_id",
+            "name": "build 9",
+            "projectName": "Proj1 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_9_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_9_id"
+        }, {
+            "id": "build_10_id",
+            "name": "build 3",
+            "projectName": "Proj1 :: SubProj1 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_3_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_3_id"
+        }, {
+            "id": "build_25_id",
+            "name": "build 25",
+            "projectName": "Proj5",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_25_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_25_id"
+        }]
+    };
 });
 define('domain/services/build-service',['exports', '../../anticorruptionlayer/teamcity-build-adapter', 'aurelia-framework'], function (exports, _teamcityBuildAdapter, _aureliaFramework) {
     'use strict';
@@ -854,92 +792,284 @@ define('view/elements/build-overview',['exports', 'aurelia-framework'], function
         initializer: null
     })), _class);
 });
-define('anticorruptionlayer/teamcity-build-adapter.1',['exports', '../communicationlayer/http-client-router', 'aurelia-framework'], function (exports, _httpClientRouter, _aureliaFramework) {
-  'use strict';
+define('communicationlayer/teamcitystub/team-city-build-types-response',["exports"], function (exports) {
+    "use strict";
 
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.TeamcityBuildAdapter = undefined;
-
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  var _dec, _class;
-
-  function fetchBuildArray(clientRouter, url) {
-    var init = {
-      method: 'GET',
-      headers: new Headers({
-        'Accept': 'application/json',
-        'X-Requested-With': 'Fetch'
-      })
-    };
-
-    return clientRouter.fetch(url, init).then(function (response) {
-      return response.json();
-    }).then(function (jsonResponse) {
-      return jsonResponse.buildType.filter(function (buildTypeElement) {
-        return buildTypeElement.builds.build.length > 0;
-      }).map(function (buildTypeElement) {
-        return {
-          "id": buildTypeElement.id,
-          "name": buildTypeElement.name,
-          "buildNumber": buildTypeElement.builds.build[0].number,
-          "status": buildTypeElement.builds.build[0].status,
-          "statusText": buildTypeElement.builds.build[0].statusText,
-          "drawAttention": false
-        };
-      });
+    Object.defineProperty(exports, "__esModule", {
+        value: true
     });
-  }
+    exports.default = {
+        "count": 11,
+        "href": "/httpAuth/app/rest/buildTypes",
+        "buildType": [{
+            "id": "build_1_id",
+            "name": "build 1",
+            "projectName": "Proj1 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_1_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_1_id"
+        }, {
+            "id": "build_2_id",
+            "name": "build 2",
+            "projectName": "Proj1 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_2_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_2_id"
+        }, {
+            "id": "build_3_id",
+            "name": "build 3",
+            "projectName": "Proj2 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_3_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_3_id"
+        }, {
+            "id": "build_4_id",
+            "name": "build 4",
+            "projectName": "Proj2 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_4_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_4_id"
+        }, {
+            "id": "build_5_id",
+            "name": "same name as other build",
+            "projectName": "Proj1 :: SubProj2",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_5_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_5_id"
+        }, {
+            "id": "build_6_id",
+            "name": "same name as other build",
+            "projectName": "Proj1 :: SubProj4",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_6_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_6_id"
+        }, {
+            "id": "build_7_id",
+            "name": "build 7",
+            "projectName": "Proj1 :: SubProj2",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_7_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_7_id"
+        }, {
+            "id": "build_8_id",
+            "name": "build 8",
+            "projectName": "Proj1 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_8_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_8_id"
+        }, {
+            "id": "build_9_id",
+            "name": "build 9",
+            "projectName": "Proj1 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_9_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_9_id"
+        }, {
+            "id": "build_10_id",
+            "name": "build 3",
+            "projectName": "Proj1 :: SubProj1 :: SubProj1",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_3_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_3_id"
+        }, {
+            "id": "build_25_id",
+            "name": "build 25",
+            "projectName": "Proj5",
+            "projectId": "Proj1_SubProj1",
+            "href": "/httpAuth/app/rest/buildTypes/id:build_25_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_25_id"
+        }]
+    };
+});
+define('anticorruptionlayer/teamcity-build-type-adapter',['exports', '../communicationlayer/http-client-router', 'aurelia-framework'], function (exports, _httpClientRouter, _aureliaFramework) {
+    'use strict';
 
-  var TeamcityBuildAdapter = exports.TeamcityBuildAdapter = (_dec = (0, _aureliaFramework.inject)(_httpClientRouter.HttpClientRouter), _dec(_class = function () {
-    function TeamcityBuildAdapter(clientRouter) {
-      _classCallCheck(this, TeamcityBuildAdapter);
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+    exports.TeamcityBuildTypeAdapter = undefined;
 
-      this.clientRouter = clientRouter;
+    function _classCallCheck(instance, Constructor) {
+        if (!(instance instanceof Constructor)) {
+            throw new TypeError("Cannot call a class as a function");
+        }
     }
 
-    TeamcityBuildAdapter.prototype.getAllLatestFinishedBuilds = function getAllLatestFinishedBuilds(baseUrl) {
-      var url = 'http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))';
-      return fetchBuildArray(this.clientRouter, url);
-    };
+    var _dec, _class;
 
-    TeamcityBuildAdapter.prototype.getAllLatestRunningBuilds = function getAllLatestRunningBuilds(baseUrl) {
-      var url = 'http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:true,canceled:false,count:1),build(number,status,statusText)))';
-      return fetchBuildArray(this.clientRouter, url);
-    };
+    var TeamcityBuildTypeAdapter = exports.TeamcityBuildTypeAdapter = (_dec = (0, _aureliaFramework.inject)(_httpClientRouter.HttpClientRouter), _dec(_class = function () {
+        function TeamcityBuildTypeAdapter(clientRouter) {
+            _classCallCheck(this, TeamcityBuildTypeAdapter);
 
-    return TeamcityBuildAdapter;
-  }()) || _class);
+            this.clientRouter = clientRouter;
+        }
+
+        TeamcityBuildTypeAdapter.prototype.getBuildTypes = function getBuildTypes(url) {
+            return this.clientRouter.fetch(url + "/guestAuth/app/rest/buildTypes", makeInit()).then(function (response) {
+                return response.json();
+            }).then(function (jsonResponse) {
+                return makeBuildType(jsonResponse);
+            });
+
+            function makeInit() {
+                return {
+                    method: 'GET',
+                    headers: new Headers({
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'Fetch'
+                    })
+                };
+            }
+
+            function makeBuildType(jsonResponse) {
+                return jsonResponse.buildType.map(function (buildTypeElement) {
+                    return {
+                        id: buildTypeElement.id,
+                        name: buildTypeElement.name,
+                        label: makeLabel(buildTypeElement.projectName)
+                    };
+                });
+
+                function makeLabel(projectName) {
+                    return projectName.split(" :: ").map(function (labelName) {
+                        return { name: labelName };
+                    }).reduce(function (p1, p2) {
+                        p2.parentLabel = p1;
+                        return p2;
+                    });
+                }
+            }
+        };
+
+        return TeamcityBuildTypeAdapter;
+    }()) || _class);
 });
-define('anticorruptionlayer/teamcity-build-type-adapter.',['exports', '../communicationlayer/http-client-router', 'aurelia-framework'], function (exports, _httpClientRouter, _aureliaFramework) {
-  'use strict';
+define('domain/services/build-service.1',['exports', '../../anticorruptionlayer/teamcity-build-adapter', 'aurelia-framework'], function (exports, _teamcityBuildAdapter, _aureliaFramework) {
+    'use strict';
 
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.TeamcityBuildTypeAdapter = undefined;
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+    exports.BuildService = undefined;
 
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
+    function _classCallCheck(instance, Constructor) {
+        if (!(instance instanceof Constructor)) {
+            throw new TypeError("Cannot call a class as a function");
+        }
     }
-  }
 
-  var _dec, _class;
+    var _dec, _class;
 
-  var TeamcityBuildTypeAdapter = exports.TeamcityBuildTypeAdapter = (_dec = (0, _aureliaFramework.inject)(_httpClientRouter.HttpClientRouter), _dec(_class = function TeamcityBuildTypeAdapter() {
-    _classCallCheck(this, TeamcityBuildTypeAdapter);
-  }) || _class);
+    var BuildService = exports.BuildService = (_dec = (0, _aureliaFramework.inject)(_teamcityBuildAdapter.TeamcityBuildAdapter), _dec(_class = function () {
+        function BuildService(teamcityBuildAdapter) {
+            _classCallCheck(this, BuildService);
+
+            this.teamcityBuildAdapter = teamcityBuildAdapter;
+        }
+
+        BuildService.prototype.getAllFailedBuilds = function getAllFailedBuilds(baseUrl) {
+            var _this = this;
+
+            return Promise.all([this.teamcityBuildAdapter.getAllLatestFinishedBuilds(baseUrl), this.teamcityBuildAdapter.getAllLatestRunningBuilds(baseUrl)]).then(function (buildArrays) {
+
+                var latestFinishedBuilds = buildArrays[0];
+                var latestRunningBuilds = buildArrays[1];
+
+                function isNotInBlackListFailedBuilds(finishedBuild) {
+                    return !this.getBlackListFailedBuilds().includes(finishedBuild.id);
+                }
+
+                return latestFinishedBuilds.filter(function (finishedBuild) {
+                    return finishedBuild.status === 'FAILURE';
+                }).filter(function (finishedBuild) {
+                    return isNotInBlackListFailedBuilds.bind(_this)(finishedBuild);
+                }).map(function (failedBuild) {
+                    failedBuild.drawAttention = isNewBuildRunning();
+                    return failedBuild;
+
+                    function isNewBuildRunning() {
+
+                        function getCorrespondingBuild() {
+                            return latestRunningBuilds.filter(function (latestRunningBuild) {
+                                return latestRunningBuild.id === failedBuild.id;
+                            })[0];
+                        }
+
+                        return getCorrespondingBuild() !== undefined && getCorrespondingBuild().buildNumber > failedBuild.buildNumber;
+                    }
+                });
+            });
+        };
+
+        BuildService.prototype.getAllLatestRunningBuilds = function getAllLatestRunningBuilds(baseUrl) {
+            var _this2 = this;
+
+            function isNotInBlacklistLatestRunningBuilds(runningBuild) {
+                return !this.getBlacklistLatestRunningBuilds().includes(runningBuild.id);
+            }
+
+            return this.teamcityBuildAdapter.getAllLatestRunningBuilds(baseUrl).then(function (latestRunningBuilds) {
+                return latestRunningBuilds.filter(function (latestRunningBuild) {
+                    return isNotInBlacklistLatestRunningBuilds.bind(_this2)(latestRunningBuild);
+                }).map(function (latestRunningBuild) {
+                    latestRunningBuild.drawAttention = true;
+                    return latestRunningBuild;
+                });
+            });
+        };
+
+        BuildService.prototype.addToBlackListFailedBuilds = function addToBlackListFailedBuilds(buildId) {
+            localStorage.blackListFailedBuilds = JSON.stringify(this.getBlackListFailedBuilds().concat(buildId));
+        };
+
+        BuildService.prototype.addToBlacklistLatestRunningBuilds = function addToBlacklistLatestRunningBuilds(buildId) {
+            localStorage.blacklistLatestRunningBuilds = JSON.stringify(this.getBlacklistLatestRunningBuilds().concat(buildId));
+        };
+
+        BuildService.prototype.getBlackListFailedBuilds = function getBlackListFailedBuilds(buildId) {
+            return localStorage.blackListFailedBuilds ? JSON.parse(localStorage.blackListFailedBuilds) : [];
+        };
+
+        BuildService.prototype.getBlacklistLatestRunningBuilds = function getBlacklistLatestRunningBuilds(buildId) {
+            return localStorage.blacklistLatestRunningBuilds ? JSON.parse(localStorage.blacklistLatestRunningBuilds) : [];
+        };
+
+        return BuildService;
+    }()) || _class);
 });
-define('text!app.html', ['module'], function(module) { module.exports = "<template>\r\n  <require from=\"css/custom.css\"></require>\r\n  <router-view></router-view>\r\n</template>"; });
-define('text!css/custom.css', ['module'], function(module) { module.exports = "@keyframes fadeIn { \r\n  from { opacity: 0; } \r\n}\r\n\r\n.draw-attention {\r\n    animation: fadeIn 1s infinite alternate;\r\n}"; });
-define('text!view/failed-build-overview.html', ['module'], function(module) { module.exports = "<template>\r\n\t<require from=\"./elements/build-overview\"></require>\r\n\t<build-overview builds.bind=\"builds\" add-to-blacklist.bind=\"addToBlackListFailedBuilds\" get-blacklist.bind=\"getBlackListFailedBuilds\"></build-overview>\r\n</template>"; });
-define('text!view/running-build-overview.html', ['module'], function(module) { module.exports = "<template>\r\n\t<require from=\"./elements/build-overview\"></require>\r\n\t<build-overview builds.bind=\"builds\" add-to-blacklist.bind=\"addToBlacklistLatestRunningBuilds\" get-blacklist.bind=\"getBlacklistLatestRunningBuilds\"></build-overview>\r\n</template>"; });
-define('text!view/elements/build-overview.html', ['module'], function(module) { module.exports = "<template>\r\n    <div class=\"container\">\r\n        <div class=\"row\">\r\n            <div id=\"${build.id}\" class=\"col-md-4 text-center ${getBuildStatusCssClass(build)} ${getDrawAttentionCssClass(build)} alert\"\r\n                role=\"alert \" draggable=\"true\" dragstart.delegate=\"startDrag($event)\" dragend.delegate=\"endDrag($event)\" repeat.for=\"build of builds\">\r\n                <h1>${build.name}</h1>\r\n                <p>${build.statusText}</p>\r\n            </div>\r\n        </div>\r\n        <div class=\"row\" show.bind=\"showBlackList\">\r\n            <div class=\"col-md-12 text-center alert alert-warning\" drop.delegate=\"drop($event)\" dragover.delegate=\"preventEventPropagation($event)\">\r\n                <h1>Blacklist</h1>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</template>"; });
+define('domain/services/build-type-service',['exports', '../../anticorruptionlayer/teamcity-build-type-adapter', 'aurelia-framework'], function (exports, _teamcityBuildTypeAdapter, _aureliaFramework) {
+    'use strict';
+
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+    exports.BuildService = undefined;
+
+    function _classCallCheck(instance, Constructor) {
+        if (!(instance instanceof Constructor)) {
+            throw new TypeError("Cannot call a class as a function");
+        }
+    }
+
+    var _dec, _class;
+
+    var BuildService = exports.BuildService = (_dec = (0, _aureliaFramework.inject)(_teamcityBuildTypeAdapter.TeamcityBuildTypeAdapter), _dec(_class = function () {
+        function BuildService(teamcityBuildTypeAdapter) {
+            _classCallCheck(this, BuildService);
+
+            this.teamcityBuildTypeAdapter = teamcityBuildTypeAdapter;
+        }
+
+        BuildService.prototype.getAllFailedBuilds = function getAllFailedBuilds(baseUrl) {
+            throw error("not yet implemented");
+        };
+
+        return BuildService;
+    }()) || _class);
+});
+define('text!app.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"css/custom.css\"></require>\n  <router-view></router-view>\n</template>"; });
+define('text!css/custom.css', ['module'], function(module) { module.exports = "@keyframes fadeIn { \n  from { opacity: 0; } \n}\n\n.draw-attention {\n    animation: fadeIn 1s infinite alternate;\n}"; });
+define('text!view/failed-build-overview.html', ['module'], function(module) { module.exports = "<template>\n\t<require from=\"./elements/build-overview\"></require>\n\t<build-overview builds.bind=\"builds\" add-to-blacklist.bind=\"addToBlackListFailedBuilds\" get-blacklist.bind=\"getBlackListFailedBuilds\"></build-overview>\n</template>"; });
+define('text!view/running-build-overview.html', ['module'], function(module) { module.exports = "<template>\n\t<require from=\"./elements/build-overview\"></require>\n\t<build-overview builds.bind=\"builds\" add-to-blacklist.bind=\"addToBlacklistLatestRunningBuilds\" get-blacklist.bind=\"getBlacklistLatestRunningBuilds\"></build-overview>\n</template>"; });
+define('text!view/elements/build-overview.html', ['module'], function(module) { module.exports = "<template>\n    <div class=\"container\">\n        <div class=\"row\">\n            <div id=\"${build.id}\" class=\"col-md-4 text-center ${getBuildStatusCssClass(build)} ${getDrawAttentionCssClass(build)} alert\"\n                role=\"alert \" draggable=\"true\" dragstart.delegate=\"startDrag($event)\" dragend.delegate=\"endDrag($event)\" repeat.for=\"build of builds\">\n                <h1>${build.name}</h1>\n                <p>${build.statusText}</p>\n            </div>\n        </div>\n        <div class=\"row\" show.bind=\"showBlackList\">\n            <div class=\"col-md-12 text-center alert alert-warning\" drop.delegate=\"drop($event)\" dragover.delegate=\"preventEventPropagation($event)\">\n                <h1>Blacklist</h1>\n            </div>\n        </div>\n    </div>\n</template>"; });
 //# sourceMappingURL=app-bundle.js.map

@@ -28,6 +28,7 @@ export class TeamcityBuildTypeAdapter {
                 .map(buildTypeElement => {
                     return {
                         id: buildTypeElement.id,
+                        name: buildTypeElement.name,
                         label: makeLabel(buildTypeElement.projectName)
                     };
                 });

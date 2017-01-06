@@ -495,7 +495,7 @@ define('communicationlayer/teamcitystub/team-city-http-client-stub',['exports', 
             return _teamCityLatestRunningBuildsResponse2.default;
           } });
       }
-      if (url === 'host/guestAuth/app/rest/buildTypes') {
+      if (url.endsWith('/guestAuth/app/rest/buildTypes')) {
         return Promise.resolve({ json: function json() {
             return _teamCityBuildTypesResponse2.default;
           } });

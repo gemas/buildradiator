@@ -10,7 +10,7 @@ export class TeamCityHttpClientStub {
     if (url.includes('running:true')) {
       return Promise.resolve({json: () => teamCitylatestRunningBuildsResponse});
     }
-    if (url === 'host/guestAuth/app/rest/buildTypes') {
+    if (url.endsWith('/guestAuth/app/rest/buildTypes')) {
       return Promise.resolve({json: () => teamCityBuildTypesResponse});
     }
     throw new Error("team city http client stub doesn't support " + url);

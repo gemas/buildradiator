@@ -39,7 +39,7 @@ export class TeamcityBuildTypeAdapter {
                         return { name: labelName };
                     })
                     .reduce((p1, p2) => {
-                        p2.parentLabel = p1;
+                        p2.label = p1;
                         return p2;
                     });
             }

@@ -934,7 +934,7 @@ define('anticorruptionlayer/teamcity-build-type-adapter',['exports', '../communi
                     return projectName.split(" :: ").map(function (labelName) {
                         return { name: labelName };
                     }).reduce(function (p1, p2) {
-                        p2.parentLabel = p1;
+                        p2.label = p1;
                         return p2;
                     });
                 }
@@ -1043,7 +1043,7 @@ define('domain/services/build-type-service',['exports', '../../anticorruptionlay
     Object.defineProperty(exports, "__esModule", {
         value: true
     });
-    exports.BuildService = undefined;
+    exports.BuildTypeService = undefined;
 
     function _classCallCheck(instance, Constructor) {
         if (!(instance instanceof Constructor)) {
@@ -1053,18 +1053,35 @@ define('domain/services/build-type-service',['exports', '../../anticorruptionlay
 
     var _dec, _class;
 
-    var BuildService = exports.BuildService = (_dec = (0, _aureliaFramework.inject)(_teamcityBuildTypeAdapter.TeamcityBuildTypeAdapter), _dec(_class = function () {
-        function BuildService(teamcityBuildTypeAdapter) {
-            _classCallCheck(this, BuildService);
+    var BuildTypeService = exports.BuildTypeService = (_dec = (0, _aureliaFramework.inject)(_teamcityBuildTypeAdapter.TeamcityBuildTypeAdapter), _dec(_class = function () {
+        function BuildTypeService(teamcityBuildTypeAdapter) {
+            _classCallCheck(this, BuildTypeService);
 
             this.teamcityBuildTypeAdapter = teamcityBuildTypeAdapter;
         }
 
-        BuildService.prototype.getAllFailedBuilds = function getAllFailedBuilds(baseUrl) {
-            throw error("not yet implemented");
+        BuildTypeService.prototype.getBuildTypesGroupedByLabel = function getBuildTypesGroupedByLabel(baseUrl) {
+            return this.teamcityBuildTypeAdapter.getBuildTypes(baseUrl).then(function (buildTypes) {
+                return buildTypes.reduce(function (root, element) {
+                    var currentRoot = root;
+                    (function addToRoot(element) {
+                        if (element.label) {
+                            addToRoot(element.label);
+                        }
+                        if (!currentRoot[element.name]) {
+                            currentRoot[element.name] = { type: "build" };
+                            if (currentRoot.type) {
+                                currentRoot.type = "label";
+                            }
+                        }
+                        currentRoot = currentRoot[element.name];
+                    })(element);
+                    return root;
+                }, {});
+            });
         };
 
-        return BuildService;
+        return BuildTypeService;
     }()) || _class);
 });
 define('text!app.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"css/custom.css\"></require>\n  <router-view></router-view>\n</template>"; });

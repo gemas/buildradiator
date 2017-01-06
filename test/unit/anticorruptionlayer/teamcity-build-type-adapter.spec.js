@@ -40,14 +40,14 @@ describe('the teamcityBuildTypeAdapter ', () => {
                     id: "build_1_id",
                     name: "build 1",
                     label: {
-                        name: "SubProj1", parentLabel: { name: "Proj1" }
+                        name: "SubProj1", label: { name: "Proj1" }
                     }
                 },
                 {
                     id: "build_2_id",
                     name: "build 2",
                     label: {
-                        name: "SubProj2", parentLabel: { name: "SubProj1", parentLabel: { name: "Proj1" } }
+                        name: "SubProj2", label: { name: "SubProj1", label: { name: "Proj1" } }
                     }
                 },
                 {

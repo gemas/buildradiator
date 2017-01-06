@@ -1064,19 +1064,33 @@ define('domain/services/build-type-service',['exports', '../../anticorruptionlay
             return this.teamcityBuildTypeAdapter.getBuildTypes(baseUrl).then(function (buildTypes) {
                 return buildTypes.reduce(function (root, element) {
                     var currentRoot = root;
-                    (function addToRoot(element) {
+                    addToCurrentRoot(element);
+                    return root;
+
+                    function addToCurrentRoot(element) {
                         if (element.label) {
-                            addToRoot(element.label);
+                            addToCurrentRoot(element.label);
                         }
-                        if (!currentRoot[element.name]) {
-                            currentRoot[element.name] = { type: "build" };
-                            if (currentRoot.type) {
-                                currentRoot.type = "label";
+                        addElementToCurrentRootIfNotYetThere(element.name);
+                        currentRoot = currentRoot[element.name];
+
+                        function addElementToCurrentRootIfNotYetThere(nameElement) {
+                            if (!currentRoot[nameElement]) {
+                                addElementToCurrentRoot(nameElement);
+                            }
+
+                            function addElementToCurrentRoot(nameElement) {
+                                currentRoot[nameElement] = { type: "build" };
+                                changeCurrentRootsTypeToLabelIfPresent();
+
+                                function changeCurrentRootsTypeToLabelIfPresent() {
+                                    if (currentRoot.type) {
+                                        currentRoot.type = "label";
+                                    }
+                                }
                             }
                         }
-                        currentRoot = currentRoot[element.name];
-                    })(element);
-                    return root;
+                    }
                 }, {});
             });
         };

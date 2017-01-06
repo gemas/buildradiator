@@ -1106,9 +1106,37 @@ define('domain/services/build-type-service',['exports', '../../anticorruptionlay
         return BuildTypeService;
     }()) || _class);
 });
+define('view/build-types-configuration',['exports', '../domain/services/build-type-service', 'aurelia-framework'], function (exports, _buildTypeService, _aureliaFramework) {
+    'use strict';
+
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+    exports.BuildTypesConfiguration = undefined;
+
+    function _classCallCheck(instance, Constructor) {
+        if (!(instance instanceof Constructor)) {
+            throw new TypeError("Cannot call a class as a function");
+        }
+    }
+
+    var _dec, _class;
+
+    var BuildTypesConfiguration = exports.BuildTypesConfiguration = (_dec = (0, _aureliaFramework.inject)(_buildTypeService.BuildTypeService), _dec(_class = function BuildTypesConfiguration(service) {
+        var _this = this;
+
+        _classCallCheck(this, BuildTypesConfiguration);
+
+        service.getBuildTypesGroupedByLabel().then(function (buildTypesGroupedByLabel) {
+            return _this.buildTypesGroupedByLabel = buildTypesGroupedByLabel;
+        });
+    }) || _class);
+});
 define('text!app.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"css/custom.css\"></require>\n  <router-view></router-view>\n</template>"; });
 define('text!css/custom.css', ['module'], function(module) { module.exports = "@keyframes fadeIn { \n  from { opacity: 0; } \n}\n\n.draw-attention {\n    animation: fadeIn 1s infinite alternate;\n}"; });
 define('text!view/failed-build-overview.html', ['module'], function(module) { module.exports = "<template>\n\t<require from=\"./elements/build-overview\"></require>\n\t<build-overview builds.bind=\"builds\" add-to-blacklist.bind=\"addToBlackListFailedBuilds\" get-blacklist.bind=\"getBlackListFailedBuilds\"></build-overview>\n</template>"; });
 define('text!view/running-build-overview.html', ['module'], function(module) { module.exports = "<template>\n\t<require from=\"./elements/build-overview\"></require>\n\t<build-overview builds.bind=\"builds\" add-to-blacklist.bind=\"addToBlacklistLatestRunningBuilds\" get-blacklist.bind=\"getBlacklistLatestRunningBuilds\"></build-overview>\n</template>"; });
 define('text!view/elements/build-overview.html', ['module'], function(module) { module.exports = "<template>\n    <div class=\"container\">\n        <div class=\"row\">\n            <div id=\"${build.id}\" class=\"col-md-4 text-center ${getBuildStatusCssClass(build)} ${getDrawAttentionCssClass(build)} alert\"\n                role=\"alert \" draggable=\"true\" dragstart.delegate=\"startDrag($event)\" dragend.delegate=\"endDrag($event)\" repeat.for=\"build of builds\">\n                <h1>${build.name}</h1>\n                <p>${build.statusText}</p>\n            </div>\n        </div>\n        <div class=\"row\" show.bind=\"showBlackList\">\n            <div class=\"col-md-12 text-center alert alert-warning\" drop.delegate=\"drop($event)\" dragover.delegate=\"preventEventPropagation($event)\">\n                <h1>Blacklist</h1>\n            </div>\n        </div>\n    </div>\n</template>"; });
+define('text!view/build-types.html', ['module'], function(module) { module.exports = ""; });
+define('text!view/build-types-configuration.html', ['module'], function(module) { module.exports = "<template>\n\ttest\n</template>"; });
 //# sourceMappingURL=app-bundle.js.map

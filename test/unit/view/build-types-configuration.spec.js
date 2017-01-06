@@ -6,8 +6,16 @@ describe('the buildTypesConfiguration', () => {
         Promise.resolve().then(expectFunction);
     }
 
-    it('should initialize a buildTypesGroupedByLabel property with the object the getBuildTypesGroupedByLabel from the buildTypeService returns', (done) => {
-        let buildTypesConfiguration = new BuildTypesConfiguration({ getBuildTypesGroupedByLabel: () => Promise.resolve(['a1', 'b1', 'c1'])});
+    it('activate function should should ask and save the buildTypes from the buildTypesService using the baseUrl from the parameters', (done) => {
+        let buildTypesConfiguration = new BuildTypesConfiguration({
+            getBuildTypesGroupedByLabel: (baseUrl) => {
+                expect(baseUrl).toEqual("baseUrl");
+                return Promise.resolve(['a1', 'b1', 'c1']);
+            }
+        });
+
+        buildTypesConfiguration.activate({ baseUrl: "baseUrl" }); 
+
         putFunctionOnJobQueue(() => expect(buildTypesConfiguration.buildTypesGroupedByLabel).toEqual(['a1', 'b1', 'c1']));
         putFunctionOnJobQueue(done);
     });

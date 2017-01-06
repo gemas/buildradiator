@@ -1068,19 +1068,27 @@ define('domain/services/build-type-service',['exports', '../../anticorruptionlay
                     return root;
 
                     function addToCurrentRoot(element) {
-                        if (element.label) {
-                            addToCurrentRoot(element.label);
-                        }
-                        addElementToCurrentRootIfNotYetThere(element.name);
-                        currentRoot = currentRoot[element.name];
+                        addLabelToCurrentRootRecursivelyIfThereIsOne();
+                        addElementToCurrentRootIfNotYetThere();
+                        changeCurrentRootToNewElement();
 
-                        function addElementToCurrentRootIfNotYetThere(nameElement) {
-                            if (!currentRoot[nameElement]) {
-                                addElementToCurrentRoot(nameElement);
+                        function changeCurrentRootToNewElement() {
+                            currentRoot = currentRoot[element.name];
+                        }
+
+                        function addLabelToCurrentRootRecursivelyIfThereIsOne() {
+                            if (element.label) {
+                                addToCurrentRoot(element.label);
+                            }
+                        }
+
+                        function addElementToCurrentRootIfNotYetThere() {
+                            if (!currentRoot[element.name]) {
+                                addElementToCurrentRoot();
                             }
 
-                            function addElementToCurrentRoot(nameElement) {
-                                currentRoot[nameElement] = { type: "build" };
+                            function addElementToCurrentRoot() {
+                                currentRoot[element.name] = { type: "build" };
                                 changeCurrentRootsTypeToLabelIfPresent();
 
                                 function changeCurrentRootsTypeToLabelIfPresent() {

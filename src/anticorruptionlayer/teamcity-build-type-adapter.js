@@ -9,7 +9,7 @@ export class TeamcityBuildTypeAdapter {
     }
 
     getBuildTypes(url) {
-        return this.clientRouter.fetch(url + "/guestAuth/app/rest/buildTypes", makeInit())
+        return this.clientRouter.fetch('http://' + url + "/guestAuth/app/rest/buildTypes", makeInit())
             .then(response => response.json())
             .then(jsonResponse => makeBuildType(jsonResponse));
 

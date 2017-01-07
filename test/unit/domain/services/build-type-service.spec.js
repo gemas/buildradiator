@@ -40,6 +40,7 @@ describe('the buildTypeService', () => {
             new BuildTypeService(teamcityBuildTypeAdapterStub).getBuildTypesGroupedByLabel("test.com")
                 .then(returnedBuilds => expect(returnedBuilds).toEqual(
                     {
+                        type: "label",
                         "build 55": {
                             type: "build"
                         },

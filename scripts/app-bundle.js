@@ -161,7 +161,7 @@ define('anticorruptionlayer/teamcity-build-type-adapter',['exports', '../communi
         }
 
         TeamcityBuildTypeAdapter.prototype.getBuildTypes = function getBuildTypes(url) {
-            return this.clientRouter.fetch(url + "/guestAuth/app/rest/buildTypes", makeInit()).then(function (response) {
+            return this.clientRouter.fetch('http://' + url + "/guestAuth/app/rest/buildTypes", makeInit()).then(function (response) {
                 return response.json();
             }).then(function (jsonResponse) {
                 return makeBuildType(jsonResponse);
@@ -813,17 +813,15 @@ define('domain/services/build-type-service',['exports', '../../anticorruptionlay
 
                             function addElementToCurrentRoot() {
                                 currentRoot[element.name] = { type: "build" };
-                                changeCurrentRootsTypeToLabelIfPresent();
+                                changeCurrentRootsTypeToLabel();
 
-                                function changeCurrentRootsTypeToLabelIfPresent() {
-                                    if (currentRoot.type) {
-                                        currentRoot.type = "label";
-                                    }
+                                function changeCurrentRootsTypeToLabel() {
+                                    currentRoot.type = "label";
                                 }
                             }
                         }
                     }
-                }, {});
+                }, { type: "build" });
             });
         };
 
@@ -958,10 +956,108 @@ define('view/elements/build-overview',['exports', 'aurelia-framework'], function
         initializer: null
     })), _class);
 });
+define('view/elements/build-type-label',['exports', 'aurelia-framework'], function (exports, _aureliaFramework) {
+    'use strict';
+
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+    exports.BuildTypeLabel = undefined;
+
+    function _initDefineProp(target, property, descriptor, context) {
+        if (!descriptor) return;
+        Object.defineProperty(target, property, {
+            enumerable: descriptor.enumerable,
+            configurable: descriptor.configurable,
+            writable: descriptor.writable,
+            value: descriptor.initializer ? descriptor.initializer.call(context) : void 0
+        });
+    }
+
+    function _classCallCheck(instance, Constructor) {
+        if (!(instance instanceof Constructor)) {
+            throw new TypeError("Cannot call a class as a function");
+        }
+    }
+
+    var _createClass = function () {
+        function defineProperties(target, props) {
+            for (var i = 0; i < props.length; i++) {
+                var descriptor = props[i];
+                descriptor.enumerable = descriptor.enumerable || false;
+                descriptor.configurable = true;
+                if ("value" in descriptor) descriptor.writable = true;
+                Object.defineProperty(target, descriptor.key, descriptor);
+            }
+        }
+
+        return function (Constructor, protoProps, staticProps) {
+            if (protoProps) defineProperties(Constructor.prototype, protoProps);
+            if (staticProps) defineProperties(Constructor, staticProps);
+            return Constructor;
+        };
+    }();
+
+    function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
+        var desc = {};
+        Object['ke' + 'ys'](descriptor).forEach(function (key) {
+            desc[key] = descriptor[key];
+        });
+        desc.enumerable = !!desc.enumerable;
+        desc.configurable = !!desc.configurable;
+
+        if ('value' in desc || desc.initializer) {
+            desc.writable = true;
+        }
+
+        desc = decorators.slice().reverse().reduce(function (desc, decorator) {
+            return decorator(target, property, desc) || desc;
+        }, desc);
+
+        if (context && desc.initializer !== void 0) {
+            desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
+            desc.initializer = undefined;
+        }
+
+        if (desc.initializer === void 0) {
+            Object['define' + 'Property'](target, property, desc);
+            desc = null;
+        }
+
+        return desc;
+    }
+
+    function _initializerWarningHelper(descriptor, context) {
+        throw new Error('Decorating class property failed. Please ensure that transform-class-properties is enabled.');
+    }
+
+    var _desc, _value, _class, _descriptor;
+
+    var BuildTypeLabel = exports.BuildTypeLabel = (_class = function () {
+        function BuildTypeLabel() {
+            _classCallCheck(this, BuildTypeLabel);
+
+            _initDefineProp(this, 'buildTypesGroupedByLabel', _descriptor, this);
+        }
+
+        _createClass(BuildTypeLabel, [{
+            key: 'keysBuildTypeLabel',
+            get: function get() {
+                return Object.keys(this.buildTypesGroupedByLabel);
+            }
+        }]);
+
+        return BuildTypeLabel;
+    }(), (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'buildTypesGroupedByLabel', [_aureliaFramework.bindable], {
+        enumerable: true,
+        initializer: null
+    })), _class);
+});
 define('text!app.html', ['module'], function(module) { module.exports = "<template>\n  <require from=\"css/custom.css\"></require>\n  <router-view></router-view>\n</template>"; });
 define('text!css/custom.css', ['module'], function(module) { module.exports = "@keyframes fadeIn { \n  from { opacity: 0; } \n}\n\n.draw-attention {\n    animation: fadeIn 1s infinite alternate;\n}"; });
-define('text!view/build-types-configuration.html', ['module'], function(module) { module.exports = "<template>\n    <div class=\"col-md-12 text-center\">\n test       <p>${buildTypesGroupedByLabel}</p>\n    </div>\n</template>"; });
+define('text!view/build-types-configuration.html', ['module'], function(module) { module.exports = "<template>\n    <require from=\"./elements/build-type-label\"></require>\n\t<build-type-label build-types-grouped-by-label.bind=\"buildTypesGroupedByLabel\"></build-type-label>\n</template>"; });
 define('text!view/failed-build-overview.html', ['module'], function(module) { module.exports = "<template>\n\t<require from=\"./elements/build-overview\"></require>\n\t<build-overview builds.bind=\"builds\" add-to-blacklist.bind=\"addToBlackListFailedBuilds\" get-blacklist.bind=\"getBlackListFailedBuilds\"></build-overview>\n</template>"; });
 define('text!view/running-build-overview.html', ['module'], function(module) { module.exports = "<template>\n\t<require from=\"./elements/build-overview\"></require>\n\t<build-overview builds.bind=\"builds\" add-to-blacklist.bind=\"addToBlacklistLatestRunningBuilds\" get-blacklist.bind=\"getBlacklistLatestRunningBuilds\"></build-overview>\n</template>"; });
 define('text!view/elements/build-overview.html', ['module'], function(module) { module.exports = "<template>\n    <div class=\"container\">\n        <div class=\"row\">\n            <div id=\"${build.id}\" class=\"col-md-4 text-center ${getBuildStatusCssClass(build)} ${getDrawAttentionCssClass(build)} alert\"\n                role=\"alert \" draggable=\"true\" dragstart.delegate=\"startDrag($event)\" dragend.delegate=\"endDrag($event)\" repeat.for=\"build of builds\">\n                <h1>${build.name}</h1>\n                <p>${build.statusText}</p>\n            </div>\n        </div>\n        <div class=\"row\" show.bind=\"showBlackList\">\n            <div class=\"col-md-12 text-center alert alert-warning\" drop.delegate=\"drop($event)\" dragover.delegate=\"preventEventPropagation($event)\">\n                <h1>Blacklist</h1>\n            </div>\n        </div>\n    </div>\n</template>"; });
+define('text!view/elements/build-type-label.html', ['module'], function(module) { module.exports = "<template>\n    <require from=\"./build-type-label\"></require>\n    <ul>\n        <div class=\"col-md-12\" repeat.for=\"key of keysBuildTypeLabel\">\n            <li if.bind=\"key !== 'type'\">\n                ${key}\n                <build-type-label if.bind=\"buildTypesGroupedByLabel[key].type === 'label'\" build-types-grouped-by-label.bind=\"buildTypesGroupedByLabel[key]\"></build-type-label>\n            </li>\n        </div>\n    </ul>\n\n</template>"; });
 //# sourceMappingURL=app-bundle.js.map

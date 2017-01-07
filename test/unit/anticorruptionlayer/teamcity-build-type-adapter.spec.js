@@ -33,8 +33,8 @@ describe('the teamcityBuildTypeAdapter ', () => {
                 }]
         };
 
-        new TeamcityBuildTypeAdapter(makeClientStub("teamcityUrl.com/guestAuth/app/rest/buildTypes", fetchResponse))
-            .getBuildTypes("teamcityUrl.com")
+        new TeamcityBuildTypeAdapter(makeClientStub("http://teamcityUrl.com/guestAuth/app/rest/buildTypes", fetchResponse))
+            .getBuildTypes("teamcityUrl.com") 
             .then(returnedBuildTypes => expect(returnedBuildTypes).toEqual([
                 {
                     id: "build_1_id",

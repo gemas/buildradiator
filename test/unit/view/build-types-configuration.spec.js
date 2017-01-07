@@ -20,4 +20,10 @@ describe('the buildTypesConfiguration', () => {
         putFunctionOnJobQueue(done);
     });
 
+    it('is initialized with empty buildTypesGroupedByLabel property', () => {
+        let buildTypesConfiguration = new BuildTypesConfiguration();
+
+        expect(buildTypesConfiguration.buildTypesGroupedByLabel).toEqual({});
+    });
+
 });

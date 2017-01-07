@@ -261,6 +261,7 @@ define('view/build-types-configuration',['exports', '../domain/services/build-ty
             _classCallCheck(this, BuildTypesConfiguration);
 
             this.service = service;
+            this.buildTypesGroupedByLabel = {};
         }
 
         BuildTypesConfiguration.prototype.activate = function activate(params) {
@@ -479,6 +480,14 @@ define('communicationlayer/teamcitystub/team-city-http-client-stub',['exports', 
     }
   }
 
+  function makePromise(result) {
+    return new Promise(function (resolve, reject) {
+      setTimeout(function () {
+        resolve(result);
+      }, 500);
+    });
+  }
+
   var TeamCityHttpClientStub = exports.TeamCityHttpClientStub = function () {
     function TeamCityHttpClientStub() {
       _classCallCheck(this, TeamCityHttpClientStub);
@@ -486,17 +495,17 @@ define('communicationlayer/teamcitystub/team-city-http-client-stub',['exports', 
 
     TeamCityHttpClientStub.prototype.fetch = function fetch(url) {
       if (url.includes('running:false')) {
-        return Promise.resolve({ json: function json() {
+        return makePromise({ json: function json() {
             return _teamCityLatestBuildsResponse2.default;
           } });
       }
       if (url.includes('running:true')) {
-        return Promise.resolve({ json: function json() {
+        return makePromise({ json: function json() {
             return _teamCityLatestRunningBuildsResponse2.default;
           } });
       }
       if (url.endsWith('/guestAuth/app/rest/buildTypes')) {
-        return Promise.resolve({ json: function json() {
+        return makePromise({ json: function json() {
             return _teamCityBuildTypesResponse2.default;
           } });
       }

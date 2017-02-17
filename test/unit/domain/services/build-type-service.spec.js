@@ -42,24 +42,28 @@ describe('the buildTypeService', () => {
                     {
                         type: "label",
                         "build 55": {
-                            type: "build"
+                            type: "build",
+                            id: "build_55_id"
                         },
                         "Proj1": {
                             type: "label",
                             "SubProj1": {
                                 type: "label",
                                 "build 1": {
-                                    type: "build"
+                                    type: "build",
+                                    id: "build_1_id"
                                 },
                                 "SubProj2": {
                                     type: "label",
                                     "build 2": {
-                                        type: "build"
+                                        type: "build",
+                                        id: "build_2_id"
                                     }
                                 }
                             },
                             "build 3": {
-                                type: "build"
+                                type: "build",
+                                id: "build_3_id"
                             }
                         }
                     }

@@ -36,16 +36,25 @@ export class BuildTypeService {
                             }
 
                             function addElementToCurrentRoot() {
-                                currentRoot[element.name] = { type: "build" };
-                                changeCurrentRootsTypeToLabel();
+                                currentRoot[element.name] = isElementTypeBuild() ?  
+                                makeBuildElement():
+                                makeLabelElement();
 
-                                function changeCurrentRootsTypeToLabel() {
-                                    currentRoot.type = "label";
+                                function isElementTypeBuild() {
+                                    return element.id;
+                                }
+
+                                function makeBuildElement() {
+                                    return { id: element.id, type: "build" };
+                                }
+
+                                function makeLabelElement() {
+                                    return  { type: "label" };
                                 }
                             }
                         }
                     }
-                }, {type: "build"});
+                }, {type: "label"});
             });
     }
 }

@@ -4,7 +4,7 @@
         <div class="col-md-12" repeat.for="label of labelsBuildTypeGroupedByLabel">
             <li>
                 ${label}
-                <build-type-label if.bind="buildTypesGroupedByLabel[label].type === 'label'" build-types-grouped-by-label.bind="buildTypesGroupedByLabel[label]"></build-type-label>
+                <build-type-label if.bind="isNotABuildType(label)" build-types-grouped-by-label.bind="buildTypesGroupedByLabel[label]"></build-type-label>
             </li>
         </div>
     </ul>

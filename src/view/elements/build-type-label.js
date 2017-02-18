@@ -32,6 +32,10 @@ export class BuildTypeLabel {
     }
 
     changeStatusBuildType(event) {
-        this.buildService.addToBlackListBuilds(event.target.id);
+        var checkedBlackListActions = {
+            true: () => this.buildService.addToBlackListBuilds(event.target.id),
+            false: () => this.buildService.removeFromBlackListBuilds(event.target.id)
+}
+        checkedBlackListActions[event.target.checked]();
     }
 }

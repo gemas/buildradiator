@@ -83,5 +83,14 @@ describe('the BuildTypeLabel', () => {
 
             expect(passedId).toBe("some id");
         });
+
+        it('given checked is false removeFromBlackListBuilds of buildservice is called with id of element', () => {
+            let buildTypeLabel = new BuildTypeLabel({removeFromBlackListBuilds: _passedId => passedId = _passedId});
+            var passedId;
+
+            buildTypeLabel.changeStatusBuildType({target: {id: "some id", checked: false}});
+
+            expect(passedId).toBe("some id");
+        });
     });
 });

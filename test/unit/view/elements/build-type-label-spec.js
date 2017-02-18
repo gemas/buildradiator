@@ -75,22 +75,47 @@ describe('the BuildTypeLabel', () => {
 
     describe('changeStatusBuildType', () => {
 
-        it('given checked is true addToBlackListBuilds of buildservice is called with id of element', () => {
+        it('given checked is false addToBlackListBuilds of buildservice is called with id of element', () => {
             let buildTypeLabel = new BuildTypeLabel({addToBlackListBuilds: _passedId => passedId = _passedId});
+            var passedId;
+
+            buildTypeLabel.changeStatusBuildType({target: {id: "some id", checked: false}});
+
+            expect(passedId).toBe("some id");
+        });
+
+        it('given checked is true removeFromBlackListBuilds of buildservice is called with id of element', () => {
+            let buildTypeLabel = new BuildTypeLabel({removeFromBlackListBuilds: _passedId => passedId = _passedId});
             var passedId;
 
             buildTypeLabel.changeStatusBuildType({target: {id: "some id", checked: true}});
 
             expect(passedId).toBe("some id");
         });
+    });
 
-        it('given checked is false removeFromBlackListBuilds of buildservice is called with id of element', () => {
-            let buildTypeLabel = new BuildTypeLabel({removeFromBlackListBuilds: _passedId => passedId = _passedId});
-            var passedId;
+    describe('isChecked', () => {
 
-            buildTypeLabel.changeStatusBuildType({target: {id: "some id", checked: false}});
+        let buildTypeLabel = new BuildTypeLabel({isInBlackListBuilds: id => id === "someId"});
 
-            expect(passedId).toBe("some id");
+        buildTypeLabel.buildTypesGroupedByLabel = {
+            type: "label",
+            "build 55": {
+                type: "build",
+                id: "someId"
+            },
+            "build 1": {
+                type: "build",
+                id: "someOtherId"
+            },
+        };
+
+        it('given id that belongs to label is in blacklist returns false', () => {
+            expect(buildTypeLabel.isChecked("build 55")).toBe(false);
+        });
+
+        it('given id that belongs to label is not blacklist returns true', () => {
+            expect(buildTypeLabel.isChecked("build 1")).toBe(true);
         });
     });
 });

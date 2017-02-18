@@ -332,7 +332,7 @@ describe('the buildService', () => {
         });
     });
 
-    describe('getBlackListBuilds method', () => {
+    describe('getBlackListBuilds', () => {
         it('returns the buildIds from the blacklist with failed builds in the localStorage', () => {
             localStorage.blackListBuilds = JSON.stringify(['31', '28', 'een_tekst_id']);
 
@@ -341,6 +341,18 @@ describe('the buildService', () => {
 
         it('returns an empty array when there is now blacklist with failed builds in the localStorage', () => {
             expect(new BuildService().getBlackListBuilds()).toEqual([]);
+        });
+    });
+
+    describe('isInBlackListBuilds', () => {
+        it('returns true if id is in blaclist', () => {
+            localStorage.blackListBuilds = JSON.stringify(['31', '28', 'een_tekst_id']);
+
+            expect(new BuildService().isInBlackListBuilds('31')).toBe(true);
+        });
+
+        it('returns false if id is not in blacklist', () => {
+            expect(new BuildService().isInBlackListBuilds('85')).toBe(false);
         });
     });
 

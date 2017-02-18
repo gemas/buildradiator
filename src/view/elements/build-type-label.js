@@ -27,14 +27,13 @@ export class BuildTypeLabel {
     }
 
     isChecked(labelElement) {
-        console.log("test");
-        return true;
+        return !this.buildService.isInBlackListBuilds(this.getId(labelElement));
     }
 
     changeStatusBuildType(event) {
         var checkedBlackListActions = {
-            true: () => this.buildService.addToBlackListBuilds(event.target.id),
-            false: () => this.buildService.removeFromBlackListBuilds(event.target.id)
+            false: () => this.buildService.addToBlackListBuilds(event.target.id),
+            true: () => this.buildService.removeFromBlackListBuilds(event.target.id)
 }
         checkedBlackListActions[event.target.checked]();
     }

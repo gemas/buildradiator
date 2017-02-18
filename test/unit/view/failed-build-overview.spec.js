@@ -48,29 +48,4 @@ describe('the failed build overview', () => {
       putFunctionOnJobQueue(done);
     });
   });
-
-  describe('addToBlackListFailedBuilds method', () => {
-    it('should call addToBlackListFailedBuilds on the buildService even when "this" is not the FailedBuildOverview', () => {
-      var addedId;
-      var buildServiceStub = { addToBlackListFailedBuilds: (buildId) => addedId = buildId };
-      var buildOverview = new FailedBuildOverview(buildServiceStub);
-
-      buildOverview.addToBlackListFailedBuilds.apply({}, ["random_id"]);
-
-      expect(addedId).toBe("random_id");
-    });
-  });
-
-
-  describe('getBlackListFailedBuilds method', () => {
-    it('should call getBlackListFailedBuilds on the buildService even when "this" is not the FailedBuildOverview', () => {
-      var addedId;
-      var buildServiceStub = { getBlackListFailedBuilds: () => [1, 3, 5] };
-      var buildOverview = new FailedBuildOverview(buildServiceStub);
-
-      var blacklist = buildOverview.getBlackListFailedBuilds.apply({});
-
-      expect(blacklist).toEqual([1, 3, 5]);
-    });
-  });
 });

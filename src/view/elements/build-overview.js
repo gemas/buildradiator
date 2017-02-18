@@ -1,11 +1,13 @@
 import { bindable } from 'aurelia-framework';
+import { BuildService } from '../../domain/services/build-service';
+import { inject } from 'aurelia-framework';
 
+@inject(BuildService)
 export class BuildOverview {
     @bindable builds;
-    @bindable addToBlacklist;
-    @bindable getBlacklist;
 
-    constructor() {
+    constructor(buildService) {
+        this.buildService = buildService;
         this.showBlackList = false;
     }
 
@@ -44,8 +46,8 @@ export class BuildOverview {
     }
 
     drop(event) {
-        this.addToBlacklist(event.dataTransfer.getData("id"));
-        this.builds = this.builds.filter(build => !this.getBlacklist().includes(build.id));
+        this.buildService.addToBlackListBuilds(event.dataTransfer.getData("id"));
+        this.builds = this.builds.filter(build => !this.buildService.getBlackListBuilds().includes(build.id));
         this.showBlackList = false;
     }
 }

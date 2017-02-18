@@ -138,7 +138,7 @@ describe('the buildService', () => {
                 .finally(done);
         });
 
-        it('returns only builds that are not in the blackListFailedBuilds from the localStorage', (done) => {
+        it('returns only builds that are not in the blackListBuilds from the localStorage', (done) => {
             let teamcityBuildAdapterStub = {
                 getAllLatestFinishedBuilds: function getAllLatestFinishedBuilds(baseUrl) {
                     expect(baseUrl).toEqual("test.com");
@@ -175,7 +175,7 @@ describe('the buildService', () => {
                 }
             };
 
-            localStorage.blackListFailedBuilds = JSON.stringify(["build2_id", "build3_id"]);
+            localStorage.blackListBuilds = JSON.stringify(["build2_id", "build3_id"]);
 
             new BuildService(teamcityBuildAdapterStub).getAllFailedBuilds("test.com")
                 .then(returnedBuilds => expect(returnedBuilds).toEqual([
@@ -253,7 +253,7 @@ describe('the buildService', () => {
 
         });
 
-        it('returns only builds that are not in the blackListLatestRunningBuilds from the localStorage', (done) => {
+        it('returns only builds that are not in the blackListBuilds from the localStorage', (done) => {
             let teamcityBuildAdapterStub = {
                 getAllLatestRunningBuilds: function getAllLatestRunningBuilds(baseUrl) {
                     expect(baseUrl).toEqual("test.com");
@@ -286,7 +286,7 @@ describe('the buildService', () => {
                 }
             };
 
-            localStorage.blacklistLatestRunningBuilds = JSON.stringify(["build2_id", "build3_id"]);
+            localStorage.blackListBuilds = JSON.stringify(["build2_id", "build3_id"]);
 
             new BuildService(teamcityBuildAdapterStub).getAllLatestRunningBuilds("test.com")
                 .then(returnedBuilds => expect(returnedBuilds).toEqual([
@@ -304,47 +304,27 @@ describe('the buildService', () => {
         });
     });
 
-    describe('addToBlackListFailedBuilds method', () => {
+    describe('addToBlackListBuilds method', () => {
         it('adds the buildId to the blacklist with failed builds in the localStorage', () => {
-            new BuildService().addToBlackListFailedBuilds('31');
-            new BuildService().addToBlackListFailedBuilds('28');
-            new BuildService().addToBlackListFailedBuilds('een_tekst_id');
+            new BuildService().addToBlackListBuilds('31');
+            new BuildService().addToBlackListBuilds('28');
+            new BuildService().addToBlackListBuilds('een_tekst_id');
 
-            expect(localStorage.blackListFailedBuilds).toBe(JSON.stringify(['31', '28', 'een_tekst_id']));
+            expect(localStorage.blackListBuilds).toBe(JSON.stringify(['31', '28', 'een_tekst_id']));
         });
     });
 
-    describe('getBlackListFailedBuilds method', () => {
+    describe('getBlackListBuilds method', () => {
         it('returns the buildIds from the blacklist with failed builds in the localStorage', () => {
-            localStorage.blackListFailedBuilds = JSON.stringify(['31', '28', 'een_tekst_id']);
+            localStorage.blackListBuilds = JSON.stringify(['31', '28', 'een_tekst_id']);
 
-            expect(new BuildService().getBlackListFailedBuilds()).toEqual(['31', '28', 'een_tekst_id']);
+            expect(new BuildService().getBlackListBuilds()).toEqual(['31', '28', 'een_tekst_id']);
         });
 
         it('returns an empty array when there is now blacklist with failed builds in the localStorage', () => {
-            expect(new BuildService().getBlackListFailedBuilds()).toEqual([]);
+            expect(new BuildService().getBlackListBuilds()).toEqual([]);
         });
     });
 
-    describe('addToBlacklistLatestRunningBuilds method', () => {
-        it('adds the buildId to the blacklist with latest running builds in the localStorage', () => {
-            new BuildService().addToBlacklistLatestRunningBuilds('31');
-            new BuildService().addToBlacklistLatestRunningBuilds('28');
-            new BuildService().addToBlacklistLatestRunningBuilds('een_tekst_id');
-
-            expect(localStorage.blacklistLatestRunningBuilds).toBe(JSON.stringify(['31', '28', 'een_tekst_id']));
-        });
-    });
-
-    describe('getBlacklistLatestRunningBuilds method', () => {
-        it('returns the buildIds from the blacklist with latest running builds in the localStorage', () => {
-            localStorage.blacklistLatestRunningBuilds = JSON.stringify(['31', '28', 'een_tekst_id']);
-
-            expect(new BuildService().getBlacklistLatestRunningBuilds()).toEqual(['31', '28', 'een_tekst_id']);
-        });
-
-        it('returns an empty array when there is now blacklist with running builds in the localStorage', () => {
-            expect(new BuildService().getBlacklistLatestRunningBuilds()).toEqual([]);
-        });
-    });
+    
 });

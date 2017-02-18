@@ -5,8 +5,6 @@ import { inject } from 'aurelia-framework';
 export class RunningBuildOverview {
   constructor(buildService) {
     this.buildService = buildService;
-    this.addToBlacklistLatestRunningBuilds = buildId => buildService.addToBlacklistLatestRunningBuilds(buildId);
-    this.getBlacklistLatestRunningBuilds = () => buildService.getBlacklistLatestRunningBuilds();
   }
 
   activate(params) {

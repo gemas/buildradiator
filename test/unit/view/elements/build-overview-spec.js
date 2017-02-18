@@ -115,11 +115,10 @@ describe('the BuildOverview', () => {
     });
 
     describe('drop', () => {
-        it('calls addToBlacklist method from buildOverview with the id in the dataTransfer of the event', () => {
-            var buildOverview = new BuildOverview();
+        it('calls addToBlackListBuilds method from buildService with the id in the dataTransfer of the event', () => {
+            var buildOverview = new BuildOverview({addToBlackListBuilds: _passedId => passedId = _passedId});
             buildOverview.builds = [];
             var passedId;
-            buildOverview.addToBlacklist = _passedId => passedId = _passedId;
 
             buildOverview.drop(makeEvent().withId("").withData("id", "someId").build());
 
@@ -127,10 +126,8 @@ describe('the BuildOverview', () => {
         });
 
         it('should filter the builds with the blacklist', () => {
-            var buildOverview = new BuildOverview();
             var blacklist = ["1", "8", "4"];
-            buildOverview.getBlacklist = () => blacklist;
-            buildOverview.addToBlacklist = id => blacklist.push(id);
+            var buildOverview = new BuildOverview({getBlackListBuilds: () => blacklist, addToBlackListBuilds: id => blacklist.push(id)});
             buildOverview.builds = [{id: "5"}, {id: "8"}, {id: "1"}, {id: "2"}, {id: "someId"}];
 
             buildOverview.drop(makeEvent().withId("").withData("id", "someId").build());
@@ -139,9 +136,7 @@ describe('the BuildOverview', () => {
         });
 
         it('sets the property showBlackList on false', () => {
-            var buildOverview = new BuildOverview();
-            buildOverview.getBlacklist = () => [];
-            buildOverview.addToBlacklist = function(){};
+            var buildOverview = new BuildOverview({getBlackListBuilds: () => [], addToBlackListBuilds: function(){}});
             buildOverview.builds = [];
 
             buildOverview.drop(makeEvent().build());

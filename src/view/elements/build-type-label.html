@@ -2,7 +2,7 @@
     <require from="./build-type-label"></require>
     <ul>
         <li  repeat.for="label of labelsBuildTypeGroupedByLabel">
-            <input if.bind="isABuildType(label)" id="${getId(label)}" type="checkbox" checked/>
+            <input if.bind="isABuildType(label)" id="${getId(label)}" type="checkbox" checked.one-way="isChecked(label)" change.delegate="changeStatusBuildType($event)"/>
             <label for="${getId(label)}">${label}</label>
             <build-type-label if.bind="isNotABuildType(label)" build-types-grouped-by-label.bind="buildTypesGroupedByLabel[label]"></build-type-label>
         </li>

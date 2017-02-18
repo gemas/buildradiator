@@ -76,7 +76,7 @@ export default {
         },
         {
             "id": "build_10_id",
-            "name": "build 3",
+            "name": "build 10",
             "projectName": "Proj1 :: SubProj1 :: SubProj1",
             "projectId": "Proj1_SubProj1",
             "href": "/httpAuth/app/rest/buildTypes/id:build_3_id",

@@ -1,7 +1,14 @@
 import { bindable } from 'aurelia-framework';
+import { BuildService } from '../../domain/services/build-service';
+import { inject } from 'aurelia-framework';
 
+@inject(BuildService)
 export class BuildTypeLabel {
     @bindable buildTypesGroupedByLabel;
+
+     constructor(buildService) {
+        this.buildService = buildService;
+    }
 
     get labelsBuildTypeGroupedByLabel() {
         return Object.keys(this.buildTypesGroupedByLabel).filter(key => key !== 'type');
@@ -17,5 +24,14 @@ export class BuildTypeLabel {
 
     getId(labelElement) {
         return this.isABuildType(labelElement) ? this.buildTypesGroupedByLabel[labelElement].id : '';
+    }
+
+    isChecked(labelElement) {
+        console.log("test");
+        return true;
+    }
+
+    changeStatusBuildType(event) {
+        this.buildService.addToBlackListBuilds(event.target.id);
     }
 }

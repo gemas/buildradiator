@@ -72,4 +72,16 @@ describe('the BuildTypeLabel', () => {
             expect(buildTypeLabel.getId("Proj1")).toBe("");
         });
     });
+
+    describe('changeStatusBuildType', () => {
+
+        it('given checked is true addToBlackListBuilds of buildservice is called with id of element', () => {
+            let buildTypeLabel = new BuildTypeLabel({addToBlackListBuilds: _passedId => passedId = _passedId});
+            var passedId;
+
+            buildTypeLabel.changeStatusBuildType({target: {id: "some id", checked: true}});
+
+            expect(passedId).toBe("some id");
+        });
+    });
 });

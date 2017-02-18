@@ -1,10 +1,10 @@
 <template>
     <require from="./build-type-label"></require>
     <ul>
-        <div class="col-md-12" repeat.for="key of keysBuildTypeLabel">
-            <li if.bind="key !== 'type'">
-                ${key}
-                <build-type-label if.bind="buildTypesGroupedByLabel[key].type === 'label'" build-types-grouped-by-label.bind="buildTypesGroupedByLabel[key]"></build-type-label>
+        <div class="col-md-12" repeat.for="label of labelsBuildTypeGroupedByLabel">
+            <li>
+                ${label}
+                <build-type-label if.bind="buildTypesGroupedByLabel[label].type === 'label'" build-types-grouped-by-label.bind="buildTypesGroupedByLabel[label]"></build-type-label>
             </li>
         </div>
     </ul>

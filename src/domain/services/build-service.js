@@ -51,6 +51,10 @@ export class BuildService {
         localStorage.blackListBuilds = JSON.stringify(this.getBlackListBuilds().concat(buildId));
     }
 
+    removeFromBlackListBuilds(buildId) {
+        localStorage.blackListBuilds = JSON.stringify(this.getBlackListBuilds().filter(blacklistBuildId => blacklistBuildId !== buildId));
+    }
+
     getBlackListBuilds(buildId) {
         return localStorage.blackListBuilds ? JSON.parse(localStorage.blackListBuilds) : [];
     }

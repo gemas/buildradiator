@@ -314,6 +314,24 @@ describe('the buildService', () => {
         });
     });
 
+    describe('addToBlackListBuilds method', () => {
+        it('removes the given buildId from the blacklist', () => {
+            localStorage.blackListBuilds = JSON.stringify(['12', '23', '10', '23']);
+
+            new BuildService().removeFromBlackListBuilds("23");
+
+            expect(localStorage.blackListBuilds).toBe(JSON.stringify(['12', '10',]));
+        });
+
+         it('removes nothing if the id does not exist in the blacklist', () => {
+            localStorage.blackListBuilds = JSON.stringify(['12', '23', '10', '23']);
+
+            new BuildService().removeFromBlackListBuilds("89");
+
+            expect(localStorage.blackListBuilds).toBe(JSON.stringify(['12', '23', '10', '23']));
+        });
+    });
+
     describe('getBlackListBuilds method', () => {
         it('returns the buildIds from the blacklist with failed builds in the localStorage', () => {
             localStorage.blackListBuilds = JSON.stringify(['31', '28', 'een_tekst_id']);

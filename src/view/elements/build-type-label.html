@@ -1,12 +1,9 @@
 <template>
     <require from="./build-type-label"></require>
     <ul>
-        <div class="col-md-12" repeat.for="label of labelsBuildTypeGroupedByLabel">
-            <li>
-                ${label}
-                <build-type-label if.bind="isNotABuildType(label)" build-types-grouped-by-label.bind="buildTypesGroupedByLabel[label]"></build-type-label>
-            </li>
-        </div>
+        <li id="${getId(label)}" repeat.for="label of labelsBuildTypeGroupedByLabel">
+            ${label}
+            <build-type-label if.bind="isNotABuildType(label)" build-types-grouped-by-label.bind="buildTypesGroupedByLabel[label]"></build-type-label>
+        </li>
     </ul>
-
 </template>

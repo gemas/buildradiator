@@ -1,6 +1,6 @@
 import { BuildTypeLabel } from '../../../../src/view/elements/build-type-label';
 
-describe('the BuildTypeLabel', () => {
+fdescribe('the BuildTypeLabel', () => {
 
     describe('labelsBuildTypeGroupedByLabel', () => {
         it('returns an array with all the labels', () => {
@@ -12,13 +12,13 @@ describe('the BuildTypeLabel', () => {
                     "SubProj1": {},
                     "build 3": {}
                 }
-            }
+            };
 
             expect(buildTypeLabel.labelsBuildTypeGroupedByLabel).toEqual(["build 55", "Proj1"]);
         });
     });
 
-    describe('isNotABuildType', () => {
+    describe('given certain buildTypesGroupedByLabel', () => {
         let buildTypeLabel = new BuildTypeLabel();
         buildTypeLabel.buildTypesGroupedByLabel = {
             type: "label",
@@ -28,14 +28,38 @@ describe('the BuildTypeLabel', () => {
             "Proj1": {
                 type: "label"
             }
-        }
+        };
 
-        it('returns false when element has "build" as a type', () => {
-            expect(buildTypeLabel.isNotABuildType("build 55")).toBe(false);
+        describe('isNotABuildType', () => {
+            it('returns false when element has "build" as a type', () => {
+                expect(buildTypeLabel.isNotABuildType("build 55")).toBe(false);
+            });
+
+            it('returns true when element has not "build" as a type', () => {
+                expect(buildTypeLabel.isNotABuildType("Proj1")).toBe(true);
+            });
+        });
+    });
+
+    describe('getId', () => {
+        let buildTypeLabel = new BuildTypeLabel();
+        buildTypeLabel.buildTypesGroupedByLabel = {
+            type: "label",
+            "build 55": {
+                type: "build",
+                id: "someId"
+            },
+            "Proj1": {
+                type: "label"
+            }
+        };
+
+        it('given an element of the type build retuns his id', () => {
+            expect(buildTypeLabel.getId("build 55")).toBe("someId");
         });
 
-        it('returns true when element has not "build" as a type', () => {
-            expect(buildTypeLabel.isNotABuildType("Proj1")).toBe(true);
+        it('given an element not of the type build returns an empty id', () => {
+            expect(buildTypeLabel.getId("Proj1")).toBe("");
         });
     });
 });

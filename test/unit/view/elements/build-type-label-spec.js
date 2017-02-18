@@ -1,6 +1,6 @@
 import { BuildTypeLabel } from '../../../../src/view/elements/build-type-label';
 
-fdescribe('the BuildTypeLabel', () => {
+describe('the BuildTypeLabel', () => {
 
     describe('labelsBuildTypeGroupedByLabel', () => {
         it('returns an array with all the labels', () => {
@@ -37,6 +37,16 @@ fdescribe('the BuildTypeLabel', () => {
 
             it('returns true when element has not "build" as a type', () => {
                 expect(buildTypeLabel.isNotABuildType("Proj1")).toBe(true);
+            });
+        });
+
+        describe('isABuildType', () => {
+            it('returns true when element has "build" as a type', () => {
+                expect(buildTypeLabel.isABuildType("build 55")).toBe(true);
+            });
+
+            it('returns false when element has not "build" as a type', () => {
+                expect(buildTypeLabel.isABuildType("Proj1")).toBe(false);
             });
         });
     });

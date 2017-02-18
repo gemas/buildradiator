@@ -1,9 +1,5 @@
 import { bindable } from 'aurelia-framework';
 
-function  isABuildType(labelElement) {
-        return this.buildTypesGroupedByLabel[labelElement].type === 'build';
-    }
-
 export class BuildTypeLabel {
     @bindable buildTypesGroupedByLabel;
 
@@ -12,10 +8,14 @@ export class BuildTypeLabel {
     }
 
     isNotABuildType(labelElement) {
-        return !isABuildType.bind(this)(labelElement);
+        return !this.isABuildType(labelElement);
+    }
+
+    isABuildType(labelElement) {
+        return this.buildTypesGroupedByLabel[labelElement].type === 'build';
     }
 
     getId(labelElement) {
-        return isABuildType.bind(this)(labelElement) ? this.buildTypesGroupedByLabel[labelElement].id : '';
+        return this.isABuildType(labelElement) ? this.buildTypesGroupedByLabel[labelElement].id : '';
     }
 }

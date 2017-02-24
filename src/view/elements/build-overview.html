@@ -1,16 +1,18 @@
 <template>
     <div class="container">
         <div class="row">
-            <div id="${build.id}" class="col-md-4 text-center ${getBuildStatusCssClass(build)} ${getDrawAttentionCssClass(build)} alert"
-                role="alert " draggable="true" dragstart.delegate="startDrag($event)" dragend.delegate="endDrag($event)" repeat.for="build of builds">
-                <h1>${build.name}</h1>
-                <p>${build.statusText}</p>
-            </div>
+            <a href="${build.url}" target="_blank" repeat.for="build of builds">
+                <div id="${build.id}" class="col-md-4 text-center ${getBuildStatusCssClass(build)} ${getDrawAttentionCssClass(build)} alert"
+                    role="alert " draggable="true" dragstart.delegate="startDrag($event)" dragend.delegate="endDrag($event)">
+                    <h1>${build.name}</h1>
+                    <p>${build.statusText}</p>
         </div>
-        <div class="row" show.bind="showBlackList">
-            <div class="col-md-12 text-center alert alert-warning" drop.delegate="drop($event)" dragover.delegate="preventEventPropagation($event)">
-                <h1>Blacklist</h1>
-            </div>
+        </a>
+    </div>
+    <div class="row" show.bind="showBlackList">
+        <div class="col-md-12 text-center alert alert-warning" drop.delegate="drop($event)" dragover.delegate="preventEventPropagation($event)">
+            <h1>Blacklist</h1>
         </div>
+    </div>
     </div>
 </template>

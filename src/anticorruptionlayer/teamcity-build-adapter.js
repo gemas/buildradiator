@@ -19,6 +19,7 @@ function fetchBuildArray(clientRouter, url) {
           return {
             "id": buildTypeElement.id,
             "name": buildTypeElement.name,
+            "url": buildTypeElement.webUrl,
             "buildNumber": buildTypeElement.builds.build[0].number,
             "status": buildTypeElement.builds.build[0].status,
             "statusText": buildTypeElement.builds.build[0].statusText,
@@ -35,12 +36,12 @@ export class TeamcityBuildAdapter {
   }
 
   getAllLatestFinishedBuilds(baseUrl) {
-    let url = 'http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))';
+    let url = 'http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,webUrl,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))';
     return fetchBuildArray(this.clientRouter, url);
   }
 
   getAllLatestRunningBuilds(baseUrl) {
-    let url = 'http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:true,canceled:false,count:1),build(number,status,statusText)))';
+    let url = 'http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,webUrl,name,builds($locator(running:true,canceled:false,count:1),build(number,status,statusText)))';
     return fetchBuildArray(this.clientRouter, url);
   }
 }

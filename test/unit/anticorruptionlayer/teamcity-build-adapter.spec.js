@@ -2,11 +2,11 @@ import { TeamcityBuildAdapter } from '../../../src/anticorruptionlayer/teamcity-
 import makeClientStub from './client-stub-factory.js'
 
 function makeClientStubForGettingAllLatestFinishedBuilds(baseUrl, fetchResponse) {
-    return makeClientStub('http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))', fetchResponse);
+    return makeClientStub('http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,webUrl,name,builds($locator(running:false,canceled:false,count:1),build(number,status,statusText)))', fetchResponse);
 }
 
 function makeClientStubForGettingAllLatestRunningBuilds(baseUrl, fetchResponse) {
-    return makeClientStub('http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,name,builds($locator(running:true,canceled:false,count:1),build(number,status,statusText)))', fetchResponse);
+    return makeClientStub('http://' + baseUrl + '/guestAuth/app/rest/buildTypes?locator=affectedProject:(id:_Root)&fields=buildType(id,webUrl,name,builds($locator(running:true,canceled:false,count:1),build(number,status,statusText)))', fetchResponse);
 }
 
 describe('the teamcityBuildAdapter ', () => {
@@ -16,6 +16,7 @@ describe('the teamcityBuildAdapter ', () => {
                 "buildType": [{
                     "id": "build_1_id",
                     "name": "Build1",
+                    "webUrl": "A testUrl 1",
                     "builds": {
                         "build": [
                             {
@@ -29,6 +30,7 @@ describe('the teamcityBuildAdapter ', () => {
                 {
                     "id": "build_2_id",
                     "name": "Build2",
+                    "webUrl": "A testUrl 2",
                     "builds": {
                         "build": [
                             {
@@ -42,6 +44,7 @@ describe('the teamcityBuildAdapter ', () => {
                 {
                     "id": "build_3_id",
                     "name": "Build3",
+                    "webUrl": "A testUrl 3",
                     "builds": {
                         "build": [
                             {
@@ -59,6 +62,7 @@ describe('the teamcityBuildAdapter ', () => {
                 {
                     "id": "build_1_id",
                     "name": "Build1",
+                    "url": "A testUrl 1",
                     "buildNumber": "183",
                     "status": "SUCCESS",
                     "statusText": "Tests passed: 198, ignored: 9",
@@ -67,6 +71,7 @@ describe('the teamcityBuildAdapter ', () => {
                 {
                     "id": "build_2_id",
                     "name": "Build2",
+                    "url": "A testUrl 2",
                     "buildNumber": "2931",
                     "status": "FAILURE",
                     "statusText": "Tests failed: 4 (1 new), passed: 31",
@@ -75,6 +80,7 @@ describe('the teamcityBuildAdapter ', () => {
                 {
                     "id": "build_3_id",
                     "name": "Build3",
+                    "url": "A testUrl 3",
                     "buildNumber": "121",
                     "status": "FAILURE",
                     "statusText": "Tests failed: 8 (2 new), passed: 29",
@@ -107,6 +113,7 @@ describe('the teamcityBuildAdapter ', () => {
                     {
                         "id": "build_1_id",
                         "name": "Build1",
+                        "webUrl": "A testUrl 1",
                         "builds": {
                             "build": []
                         }
@@ -114,6 +121,7 @@ describe('the teamcityBuildAdapter ', () => {
                     {
                         "id": "build_2_id",
                         "name": "Build2",
+                        "webUrl": "A testUrl 2",
                         "builds": {
                             "build": [
                                 {
@@ -131,6 +139,7 @@ describe('the teamcityBuildAdapter ', () => {
                 {
                     "id": "build_2_id",
                     "name": "Build2",
+                    "url": "A testUrl 2",
                     "buildNumber": "123",
                     "status": "FAILURE",
                     "statusText": "Tests failed: 8 (2 new), passed: 29",
@@ -152,6 +161,7 @@ describe('the teamcityBuildAdapter ', () => {
                 "buildType": [{
                     "id": "build_1_id",
                     "name": "Build1",
+                    "webUrl": "A testUrl 1",
                     "builds": {
                         "build": [
                             {
@@ -165,6 +175,7 @@ describe('the teamcityBuildAdapter ', () => {
                 {
                     "id": "build_2_id",
                     "name": "Build2",
+                    "webUrl": "A testUrl 2",
                     "builds": {
                         "build": []
                     }
@@ -172,6 +183,7 @@ describe('the teamcityBuildAdapter ', () => {
                 {
                     "id": "build_3_id",
                     "name": "Build3",
+                    "webUrl": "A testUrl 3",
                     "builds": {
                         "build": [
                             {
@@ -189,6 +201,7 @@ describe('the teamcityBuildAdapter ', () => {
                 {
                     "id": "build_1_id",
                     "name": "Build1",
+                    "url": "A testUrl 1",
                     "buildNumber": "183",
                     "status": "SUCCESS",
                     "statusText": "Tests passed: 198, ignored: 9",
@@ -197,6 +210,7 @@ describe('the teamcityBuildAdapter ', () => {
                 {
                     "id": "build_3_id",
                     "name": "Build3",
+                    "url": "A testUrl 3",
                     "buildNumber": "121",
                     "status": "FAILURE",
                     "statusText": "Tests failed: 8 (2 new), passed: 29",
@@ -215,6 +229,7 @@ describe('the teamcityBuildAdapter ', () => {
             let fetchResponse = {
                 "buildType": [{
                     "id": "build_1_id",
+                    "webUrl": "A testUrl 1",
                     "name": "Build1",
                     "builds": {
                         "build": []

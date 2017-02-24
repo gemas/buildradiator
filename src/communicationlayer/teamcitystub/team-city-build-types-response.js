@@ -79,8 +79,8 @@ export default {
             "name": "build 10",
             "projectName": "Proj1 :: SubProj1 :: SubProj1",
             "projectId": "Proj1_SubProj1",
-            "href": "/httpAuth/app/rest/buildTypes/id:build_3_id",
-            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_3_id"
+            "href": "/httpAuth/app/rest/buildTypes/id:build_10_id",
+            "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_10_id"
         },
         {
             "id": "build_25_id",

@@ -3,6 +3,7 @@ export default {
     {
       "id": "build_1_id",
       "name": "build 1",
+      "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_1_id",
       "builds": {
         "build": [
           {
@@ -16,6 +17,7 @@ export default {
     {
       "id": "build_2_id",
       "name": "build 2",
+      "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_2_id",
       "builds": {
         "build": [
           {
@@ -29,6 +31,7 @@ export default {
     {
       "id": "build_3_id",
       "name": "build 3",
+      "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_3_id",
       "builds": {
         "build": [
           {
@@ -42,6 +45,7 @@ export default {
     {
       "id": "build_4_id",
       "name": "build 4",
+      "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_4_id",
       "builds": {
         "build": [
           {
@@ -55,6 +59,7 @@ export default {
     {
       "id": "build_5_id",
       "name": "same name as other build",
+      "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_5_id",
       "builds": {
         "build": [
           {
@@ -68,6 +73,7 @@ export default {
     {
       "id": "build_6_id",
       "name": "same name as other build",
+      "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_6_id",
       "builds": {
         "build": [
           {
@@ -81,6 +87,7 @@ export default {
     {
       "id": "build_7_id",
       "name": "build 7",
+      "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_7_id",
       "builds": {
         "build": [
           {
@@ -94,6 +101,7 @@ export default {
     {
       "id": "build_8_id",
       "name": "build 8",
+      "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_8_id",
       "builds": {
         "build": [
           {
@@ -107,6 +115,7 @@ export default {
     {
       "id": "build_9_id",
       "name": "build 9",
+      "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_9_id",
       "builds": {
         "build": [
           {
@@ -120,6 +129,7 @@ export default {
     {
       "id": "build_10_id",
       "name": "build 10",
+      "webUrl": "http://testurl.com/viewType.html?buildTypeId=build_3_id",
       "builds": {
         "build": [
           {

@@ -4,7 +4,7 @@
 
 ## Getting started
 
-Make sure you have [nodejs](https://nodejs.org/) installed (at this moment buildradiotor does not work on version >7).  
+Make sure you have [nodejs](https://nodejs.org/) installed. 
 Open up a shell and type the following commands:
 
 ```shell

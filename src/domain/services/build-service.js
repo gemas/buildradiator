@@ -20,18 +20,22 @@ export class BuildService {
 
                 return latestFinishedBuilds
                     .filter(finishedBuild => finishedBuild.status === 'FAILURE')
-                    .filter(finishedBuild => isNotInBlackListBuilds.bind(this)(finishedBuild))
+                    .filter(failedBuild => isNotInBlackListBuilds.bind(this)(failedBuild))
                     .map(failedBuild => {
-                        failedBuild.drawAttention = isNewBuildRunning();
+                        if(isNewBuildRunning()) {
+                            var runningBuild = getCorrespondingRunningBuild();
+                            runningBuild.drawAttention = true;
+                            return runningBuild;
+                        } 
+
                         return failedBuild;
 
                         function isNewBuildRunning() {
+                            return getCorrespondingRunningBuild() !== undefined && getCorrespondingRunningBuild().buildNumber > failedBuild.buildNumber;
+                        }
 
-                            function getCorrespondingBuild() {
-                                return latestRunningBuilds.filter(latestRunningBuild => latestRunningBuild.id === failedBuild.id)[0];
-                            }
-
-                            return getCorrespondingBuild() !== undefined && getCorrespondingBuild().buildNumber > failedBuild.buildNumber;
+                        function getCorrespondingRunningBuild() { 
+                            return latestRunningBuilds.filter(latestRunningBuild => latestRunningBuild.id === failedBuild.id)[0];
                         }
                     });
             });

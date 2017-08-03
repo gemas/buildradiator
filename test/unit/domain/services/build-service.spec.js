@@ -68,7 +68,7 @@ describe('the buildService', () => {
                             "name": "Build2",
                             "buildNumber": "2.1.75.17325",
                             "status": "SUCCESS",
-                            "statusText": "Tests failed: 8 (2 new), passed: 29",
+                            "statusText": "Tests failed: 0",
                             "drawAttention": false
                         },
                         {
@@ -76,7 +76,7 @@ describe('the buildService', () => {
                             "name": "Build3",
                             "buildNumber": "124",
                             "status": "SUCCESS",
-                            "statusText": "Tests failed: 6 (2 new), passed: 10",
+                            "statusText": "Tests failed: 0",
                             "drawAttention": false
                         },
                         {
@@ -84,7 +84,7 @@ describe('the buildService', () => {
                             "name": "Build4",
                             "buildNumber": "3.1.70.25",
                             "status": "FAILURE",
-                            "statusText": "Tests failed: 8 (1 new), passed: 60",
+                            "statusText": "Tests failed: 18 (1 new), passed: 60",
                             "drawAttention": false
                         }
                     ]);
@@ -112,9 +112,9 @@ describe('the buildService', () => {
                     {
                         "id": "build3_id",
                         "name": "Build3",
-                        "buildNumber": "123",
-                        "status": "FAILURE",
-                        "statusText": "Tests failed: 8 (2 new), passed: 29",
+                        "buildNumber": "124",
+                        "status": "SUCCESS",
+                        "statusText": "Tests failed: 0",
                         "drawAttention": true
                     },
                     {
@@ -128,9 +128,9 @@ describe('the buildService', () => {
                     {
                         "id": "build4_id",
                         "name": "Build4",
-                        "buildNumber": "3.1.70.23",
+                        "buildNumber": "3.1.70.25",
                         "status": "FAILURE",
-                        "statusText": "Tests failed: 8 (2 new), passed: 29",
+                        "statusText": "Tests failed: 18 (1 new), passed: 60",
                         "drawAttention": true
                     }
                 ]))

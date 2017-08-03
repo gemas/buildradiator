@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container ${builds && builds.length > 0 ? '' : 'nobuilds'}">
         <div class="row">
             <a href="${build.url}" target="_blank" repeat.for="build of builds">
                 <div id="${build.id}" class="col-md-4 text-center ${getBuildStatusCssClass(build)} ${getDrawAttentionCssClass(build)} alert"

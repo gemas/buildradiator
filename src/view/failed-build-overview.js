@@ -8,6 +8,7 @@ export class FailedBuildOverview {
   }
 
   activate(params) {
+    this.url = params.baseUrl;
     setAllFailedBuilds.bind(this)(params);
     setInterval(setAllFailedBuilds.bind(this), 30000, params);
 
@@ -16,6 +17,10 @@ export class FailedBuildOverview {
         .getAllFailedBuilds(params.baseUrl)
         .then(builds => { this.builds = builds; });
     }
+  }
+
+  get baseUrl() {
+    return this.url;
   }
 
   get hasFailedBuilds() {

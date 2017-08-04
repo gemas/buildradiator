@@ -49,7 +49,7 @@ describe('the failed build overview', () => {
     });
   });
 
-  fdescribe('hasFailedBuilds', () => {
+  describe('hasFailedBuilds', () => {
     it('returns true when buildService returns builds', (done) => {
       var failedBuildOverview = new FailedBuildOverview({ getAllFailedBuilds: () => Promise.resolve(['A', 'B']) });
       failedBuildOverview.activate({ baseUrl: "baseUrl" });
@@ -79,6 +79,16 @@ describe('the failed build overview', () => {
       failedBuildOverview.activate({ baseUrl: "baseUrl" });
 
       putFunctionOnJobQueue(() => expect(failedBuildOverview.hasFailedBuilds()).toEqual(false));
+      putFunctionOnJobQueue(done);
+    });
+  });
+
+  describe('property baseUrl', () => {
+    it('returns the baseUrl given as parameter', (done) => {
+      var failedBuildOverview = new FailedBuildOverview({ getAllFailedBuilds: () => Promise.resolve(['A', 'B']) });
+      failedBuildOverview.activate({ baseUrl: "baseUrl" });
+
+      putFunctionOnJobQueue(() => expect(failedBuildOverview.baseUrl).toEqual("baseUrl"));
       putFunctionOnJobQueue(done);
     });
   });

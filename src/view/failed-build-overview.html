@@ -1,6 +1,8 @@
 <template>
-	<div class="container ${hasFailedBuilds ? 'red' : 'green'}">
-		<require from="./elements/build-overview"></require>
-		<build-overview class="nobuilds" builds.bind="builds"></build-overview>
-	</div>
+	<a href="http://${baseUrl}" target="_blank">
+		<div class="container ${hasFailedBuilds ? 'red' : 'green'}">
+			<require from="./elements/build-overview"></require>
+			<build-overview class="nobuilds" builds.bind="builds"></build-overview>
+		</div>
+	</a>
 </template>

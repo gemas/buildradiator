@@ -1,4 +1,6 @@
 <template>
-	<require from="./elements/build-overview"></require>
-	<build-overview builds.bind="builds"></build-overview>
+	<div class="nobuilds">
+		<require from="./elements/build-overview"></require>
+		<build-overview class="nobuilds" builds.bind="builds"></build-overview>
+	</div>
 </template>

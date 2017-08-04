@@ -6,17 +6,6 @@ describe('the failed build overview', () => {
     Promise.resolve().then(expectFunction);
   }
 
-  function makeBuildServiceStub() {
-    let count = 0;
-
-    function getAllFailedBuilds(baseUrl) {
-      count++;
-      expect(baseUrl).toEqual("baseUrl");
-      return Promise.resolve(['a' + count, 'b' + count, 'c' + count]);
-    }
-    return { getAllFailedBuilds: getAllFailedBuilds };
-  }
-
   beforeEach(() => {
     jasmine.clock().install();
   });
@@ -26,6 +15,17 @@ describe('the failed build overview', () => {
   });
 
   describe('activate function', () => {
+    function makeBuildServiceStub() {
+
+      let count = 0;
+
+      function getAllFailedBuilds(baseUrl) {
+        count++;
+        expect(baseUrl).toEqual("baseUrl");
+        return Promise.resolve(['a' + count, 'b' + count, 'c' + count]);
+      }
+      return { getAllFailedBuilds: getAllFailedBuilds };
+    }
     it('should ask and save the failedbuilds from the buildService using the baseUrl from the parameters every 30 seconds', (done) => {
 
       let failedBuildOverview = new FailedBuildOverview(makeBuildServiceStub());
@@ -45,6 +45,40 @@ describe('the failed build overview', () => {
 
       putFunctionOnJobQueue(() => expect(failedBuildOverview.builds).toEqual(['a3', 'b3', 'c3']));
 
+      putFunctionOnJobQueue(done);
+    });
+  });
+
+  fdescribe('hasFailedBuilds', () => {
+    it('returns true when buildService returns builds', (done) => {
+      var failedBuildOverview = new FailedBuildOverview({ getAllFailedBuilds: () => Promise.resolve(['A', 'B']) });
+      failedBuildOverview.activate({ baseUrl: "baseUrl" });
+
+      putFunctionOnJobQueue(() => expect(failedBuildOverview.hasFailedBuilds()).toEqual(true));
+      putFunctionOnJobQueue(done);
+    });
+
+    it('returns false when buildService returns no builds', (done) => {
+      var failedBuildOverview = new FailedBuildOverview({ getAllFailedBuilds: () => Promise.resolve([]) });
+      failedBuildOverview.activate({ baseUrl: "baseUrl" });
+
+      putFunctionOnJobQueue(() => expect(failedBuildOverview.hasFailedBuilds()).toEqual(false));
+      putFunctionOnJobQueue(done);
+    });
+
+    it('returns false when buildService returns undefined', (done) => {
+      var failedBuildOverview = new FailedBuildOverview({ getAllFailedBuilds: () => Promise.resolve(undefined) });
+      failedBuildOverview.activate({ baseUrl: "baseUrl" });
+
+      putFunctionOnJobQueue(() => expect(failedBuildOverview.hasFailedBuilds()).toEqual(false));
+      putFunctionOnJobQueue(done);
+    });
+
+    it('returns false when buildService returns null', (done) => {
+      var failedBuildOverview = new FailedBuildOverview({ getAllFailedBuilds: () => Promise.resolve(null) });
+      failedBuildOverview.activate({ baseUrl: "baseUrl" });
+
+      putFunctionOnJobQueue(() => expect(failedBuildOverview.hasFailedBuilds()).toEqual(false));
       putFunctionOnJobQueue(done);
     });
   });

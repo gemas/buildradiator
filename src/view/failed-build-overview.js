@@ -8,13 +8,17 @@ export class FailedBuildOverview {
   }
 
   activate(params) {
+    setAllFailedBuilds.bind(this)(params);
+    setInterval(setAllFailedBuilds.bind(this), 30000, params);
+
     function setAllFailedBuilds(params) {
       this.service
         .getAllFailedBuilds(params.baseUrl)
         .then(builds => { this.builds = builds; });
     }
+  }
 
-    setAllFailedBuilds.bind(this)(params);
-    setInterval(setAllFailedBuilds.bind(this), 30000, params);
+  get hasFailedBuilds() {
+    return this.builds && this.builds.length > 0 ? true : false;
   }
 }

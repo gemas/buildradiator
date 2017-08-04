@@ -8,13 +8,19 @@ export class RunningBuildOverview {
   }
 
   activate(params) {
+    this.url = params.baseUrl;
+
+    setAllRunningBuilds.bind(this)(params);
+    setInterval(setAllRunningBuilds.bind(this), 30000, params);
+    
     function setAllRunningBuilds(params) {
       this.buildService
         .getAllLatestRunningBuilds(params.baseUrl)
         .then(builds => { this.builds = builds; });
     }
+  }
 
-    setAllRunningBuilds.bind(this)(params);
-    setInterval(setAllRunningBuilds.bind(this), 30000, params);
+  get baseUrl() {
+    return this.url;
   }
 }

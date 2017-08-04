@@ -22,22 +22,19 @@ a:active {
     text-decoration: none;
 }
 
-.green {
+.fullScreen {
     position: fixed;
     width: 100%;
     height: 100%;
     left: 0;
     top: 0;
+    z-index: 10; 
+}
+
+.green {
     background: green;
-    z-index: 10;
 }
 
 .red {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
     background: red;
-    z-index: 10;
 }

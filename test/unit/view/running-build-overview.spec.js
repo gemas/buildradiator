@@ -45,5 +45,15 @@ describe('the running build overview', () => {
 
     putFunctionOnJobQueue(done);
   });
+
+  describe('property baseUrl', () => {
+    it('returns the baseUrl given as parameter', (done) => {
+      let runningBuildOverview = new RunningBuildOverview(makeBuildServiceStub());
+      runningBuildOverview.activate({ baseUrl: "baseUrl" });
+
+      putFunctionOnJobQueue(() => expect(runningBuildOverview.baseUrl).toEqual("baseUrl"));
+      putFunctionOnJobQueue(done);
+    });
+  });
 });
 

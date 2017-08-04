@@ -1,6 +1,6 @@
 <template>
 	<a href="http://${baseUrl}" target="_blank">
-		<div class="container ${hasFailedBuilds ? 'red' : 'green'}">
+		<div class="fullScreen ${hasFailedBuilds ? 'red' : 'green'}">
 			<require from="./elements/build-overview"></require>
 			<build-overview class="nobuilds" builds.bind="builds"></build-overview>
 		</div>

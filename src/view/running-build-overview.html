@@ -1,4 +1,8 @@
 <template>
-	<require from="./elements/build-overview"></require>
-	<build-overview builds.bind="builds"></build-overview>
+	<a href="http://${baseUrl}" target="_blank">
+		<div class="fullScreen">
+			<require from="./elements/build-overview"></require>
+			<build-overview builds.bind="builds"></build-overview>
+		</div>
+	</a>
 </template>

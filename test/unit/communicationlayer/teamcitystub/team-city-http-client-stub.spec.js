@@ -1,6 +1,8 @@
 import teamCitylatestBuildsResponse from '../../../../src/communicationlayer/teamcitystub/team-city-latest-builds-response';
 import teamCitylatestRunningBuildsResponse from '../../../../src/communicationlayer/teamcitystub/team-city-latest-running-builds-response';
 import teamCityBuildTypesResponse from '../../../../src/communicationlayer/teamcitystub/team-city-build-types-response';
+import teamCityAllAgentsResponse from '../../../../src/communicationlayer/teamcitystub/team-city-all-agents-response';
+import teamCityNotConnectedAgentsResponse from '../../../../src/communicationlayer/teamcitystub/team-city-not-connected-agents-response';
 import { TeamCityHttpClientStub } from '../../../../src/communicationlayer/teamcitystub/team-city-http-client-stub';
 
 describe('the teamCityHttpClientStub fetch method', () => {
@@ -34,6 +36,34 @@ describe('the teamCityHttpClientStub fetch method', () => {
         new TeamCityHttpClientStub()
             .fetch("somethingElse/guestAuth/app/rest/buildTypes")
             .then(promiseResult => expect(promiseResult.json()).toBe(teamCityBuildTypesResponse))
+            .catch(error => expect(error).toBeUndefined())
+            .finally(done);
+    });
+
+    it('given a url ends with /guestAuth/app/rest/agents?locator=connected:false returns a promise with an object with a json method that returns the agents that are not connected', (done) => {
+        new TeamCityHttpClientStub()
+            .fetch("something/guestAuth/app/rest/agents?locator=connected:false")
+            .then(promiseResult => expect(promiseResult.json()).toBe(teamCityNotConnectedAgentsResponse))
+            .catch(error => expect(error).toBeUndefined())
+            .finally(done);
+
+        new TeamCityHttpClientStub()
+            .fetch("somethingElse/guestAuth/app/rest/agents?locator=connected:false")
+            .then(promiseResult => expect(promiseResult.json()).toBe(teamCityNotConnectedAgentsResponse))
+            .catch(error => expect(error).toBeUndefined())
+            .finally(done);
+    });
+
+    it('given a url ends with /guestAuth/app/rest/agents returns a promise with an object with a json method that returns all the agents', (done) => {
+        new TeamCityHttpClientStub()
+            .fetch("something/guestAuth/app/rest/agents")
+            .then(promiseResult => expect(promiseResult.json()).toBe(teamCityAllAgentsResponse))
+            .catch(error => expect(error).toBeUndefined())
+            .finally(done);
+
+        new TeamCityHttpClientStub()
+            .fetch("somethingElse/guestAuth/app/rest/agents")
+            .then(promiseResult => expect(promiseResult.json()).toBe(teamCityAllAgentsResponse))
             .catch(error => expect(error).toBeUndefined())
             .finally(done);
     });

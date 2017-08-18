@@ -54,7 +54,7 @@ describe('the failed build overview', () => {
       var failedBuildOverview = new FailedBuildOverview({ getAllFailedBuilds: () => Promise.resolve(['A', 'B']) });
       failedBuildOverview.activate({ baseUrl: "baseUrl" });
 
-      putFunctionOnJobQueue(() => expect(failedBuildOverview.hasFailedBuilds()).toEqual(true));
+      putFunctionOnJobQueue(() => expect(failedBuildOverview.hasFailedBuilds).toEqual(true));
       putFunctionOnJobQueue(done);
     });
 
@@ -62,7 +62,7 @@ describe('the failed build overview', () => {
       var failedBuildOverview = new FailedBuildOverview({ getAllFailedBuilds: () => Promise.resolve([]) });
       failedBuildOverview.activate({ baseUrl: "baseUrl" });
 
-      putFunctionOnJobQueue(() => expect(failedBuildOverview.hasFailedBuilds()).toEqual(false));
+      putFunctionOnJobQueue(() => expect(failedBuildOverview.hasFailedBuilds).toEqual(false));
       putFunctionOnJobQueue(done);
     });
 
@@ -70,7 +70,7 @@ describe('the failed build overview', () => {
       var failedBuildOverview = new FailedBuildOverview({ getAllFailedBuilds: () => Promise.resolve(undefined) });
       failedBuildOverview.activate({ baseUrl: "baseUrl" });
 
-      putFunctionOnJobQueue(() => expect(failedBuildOverview.hasFailedBuilds()).toEqual(false));
+      putFunctionOnJobQueue(() => expect(failedBuildOverview.hasFailedBuilds).toEqual(false));
       putFunctionOnJobQueue(done);
     });
 
@@ -78,7 +78,7 @@ describe('the failed build overview', () => {
       var failedBuildOverview = new FailedBuildOverview({ getAllFailedBuilds: () => Promise.resolve(null) });
       failedBuildOverview.activate({ baseUrl: "baseUrl" });
 
-      putFunctionOnJobQueue(() => expect(failedBuildOverview.hasFailedBuilds()).toEqual(false));
+      putFunctionOnJobQueue(() => expect(failedBuildOverview.hasFailedBuilds).toEqual(false));
       putFunctionOnJobQueue(done);
     });
   });

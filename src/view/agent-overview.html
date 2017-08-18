@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-1 text-center ${getConnectedCssClass(agent)} tableblock" repeat.for="agent of agents">
+            <div class="col-xs-4 col-sm-2 col-md-2 text-center ${getConnectedCssClass(agent)} tableblock" repeat.for="agent of agents">
                 <p>${agent.name}</p>
             </div>
         </div>

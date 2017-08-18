@@ -5,6 +5,7 @@ export class App {
     config.map([
       { route: 'failed/:baseUrl', name: 'Faled Build Overview', moduleId: 'view/failed-build-overview' },
       { route: 'running/:baseUrl', name: 'Running Build Overview', moduleId: 'view/running-build-overview' },
+      { route: 'agents/:baseUrl', name: 'Agent Overview', moduleId: 'view/agent-overview' },
       { route: 'config/:baseUrl', name: 'Build Type Configuration', moduleId: 'view/build-types-configuration' }
     ]);
   }

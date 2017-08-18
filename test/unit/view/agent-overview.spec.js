@@ -48,4 +48,19 @@ describe('the agent build overview', () => {
             putFunctionOnJobQueue(done);
         });
     });
+
+    describe('getConnectedCssClass', () => {
+        it('returns alert-success when agent is connected', () => {
+            expect(new AgentOverview().getConnectedCssClass({ connected: true })).toEqual('alert-success');
+        });
+
+        it('returns alert-danger when agent is not connected', () => {
+            expect(new AgentOverview().getConnectedCssClass({ connected: false })).toEqual('alert-danger');
+        });
+
+        it('throws an error when buildStatus is something Random', () => {
+            expect(() => new AgentOverview().getConnectedCssClass({ connected: 'random' })).toThrow(new Error('The connected property "random" is invalid'));
+            expect(() => new AgentOverview().getConnectedCssClass({})).toThrow(new Error('The connected property "undefined" is invalid'));
+        });
+    });
 });

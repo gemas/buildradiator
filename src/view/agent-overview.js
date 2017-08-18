@@ -7,6 +7,16 @@ export class AgentOverview {
         this.service = service;
     }
 
+    getConnectedCssClass(agent) {
+        if (agent.connected == true) {
+            return 'alert-success';
+        }
+        if (agent.connected === false) {
+            return 'alert-danger';
+        }
+        throw new Error('The connected property "' + agent.connected + '" is invalid')
+    }
+
     activate(params) {
         this.url = params.baseUrl;
         setAgents.bind(this)(params);

@@ -1,6 +1,6 @@
 import { AgentOverview } from '../../../src/view/agent-overview';
 
-fdescribe('the agent build overview', () => {
+describe('the agent build overview', () => {
 
     function putFunctionOnJobQueue(expectFunction) {
         Promise.resolve().then(expectFunction);
